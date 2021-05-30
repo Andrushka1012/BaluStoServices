@@ -1,3 +1,4 @@
+import 'package:balu_sto/screens/mobile/home/view/home_page.dart';
 import 'package:balu_sto/screens/mobile/login/view/login_page.dart';
 import 'package:balu_sto/screens/mobile/splashScreen/bloc/splash_screen_bloc.dart';
 import 'package:balu_sto/widgets/pages/koin_page.dart';
@@ -5,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SplashScreenPage extends KoinPage<SplashScreenBloc> {
-  static const PAGE_NAME = 'SplashScreenPage';
+  static const PAGE_NAME = '';
 
   @override
   void initBloc(SplashScreenBloc bloc) {
@@ -26,6 +27,12 @@ class SplashScreenPage extends KoinPage<SplashScreenBloc> {
       case SplashScreenStateNotLogged:
         Navigator.of(context).pushNamedAndRemoveUntil(
           LoginPage.PAGE_NAME,
+          (Route<dynamic> route) => false,
+        );
+        break;
+      case SplashScreenStateLogged:
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          HomePage.PAGE_NAME,
           (Route<dynamic> route) => false,
         );
         break;

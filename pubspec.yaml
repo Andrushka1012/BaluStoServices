@@ -16,7 +16,8 @@ dependencies:
 
   firebase_core: 1.2.0
   firebase: 9.0.1
-  firebase_database: 7.0.0
+  cloud_firestore: 2.2.0
+  firebase_auth: 1.2.0
 
   flutter_bloc: 7.0.1
   koin_flutter: 0.11.0-nullsafety.0

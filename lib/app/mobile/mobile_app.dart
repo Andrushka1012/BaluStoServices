@@ -1,7 +1,10 @@
+import 'package:balu_sto/screens/mobile/formgotPassword/view/forgot_password_page.dart';
 import 'package:balu_sto/screens/mobile/home/view/home_page.dart';
 import 'package:balu_sto/screens/mobile/login/view/login_page.dart';
 import 'package:balu_sto/screens/mobile/mobile_module.dart';
+import 'package:balu_sto/screens/mobile/registration/view/registration_page.dart';
 import 'package:balu_sto/screens/mobile/splashScreen/view/splash_screen_page.dart';
+import 'package:balu_sto/screens/shared/sharedModule.dart';
 import 'package:flutter/material.dart';
 import 'package:koin/koin.dart';
 
@@ -30,6 +33,7 @@ class MobileApp extends StatelessWidget {
       app.modules([
         appModule,
         mobileModule,
+        sharedModule
       ]);
     });
   }
@@ -38,6 +42,8 @@ class MobileApp extends StatelessWidget {
 final routes = <String, WidgetBuilder>{
   SplashScreenPage.PAGE_NAME: (context) => SplashScreenPage(),
   LoginPage.PAGE_NAME: (context) => LoginPage(),
+  RegistrationPage.PAGE_NAME: (context) => RegistrationPage(),
+  ForgotPasswordPage.PAGE_NAME: (context) => ForgotPasswordPage(),
   HomePage.PAGE_NAME: (context) => HomePage(),
 };
 
