@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "21382866442",
+    "firebase_url": "https://balustoservices-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "balustoservices",
+    "storage_bucket": "balustoservices.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:21382866442:android:f7dc5243c4bc6e730961f3",
+        "android_client_info": {
+          "package_name": "com.sto.balu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "21382866442-h05p549quntbjc63mi2rjcctlecavg88.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM8kMwqYqW6ItctJqdwWQmUf_KEjvOa8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "21382866442-h05p549quntbjc63mi2rjcctlecavg88.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
