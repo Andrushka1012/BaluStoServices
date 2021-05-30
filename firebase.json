@@ -1,7 +1,6 @@
 {
   "hosting": {
-    "site": "balu-sto-services-ua",
-    "public": "public",
+    "public": "build/web",
     "ignore": [
       "firebase.json",
       "**/.*",
