@@ -1,3 +1,4 @@
+import 'package:balu_sto/helpers/styles/theme.dart';
 import 'package:balu_sto/screens/mobile/formgotPassword/view/forgot_password_page.dart';
 import 'package:balu_sto/screens/mobile/home/view/home_page.dart';
 import 'package:balu_sto/screens/mobile/login/view/login_page.dart';
@@ -15,14 +16,12 @@ class MobileApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      theme: createTheme(context),
       initialRoute: SplashScreenPage.PAGE_NAME,
       routes: routes,
       onGenerateRoute: (RouteSettings settings) => MaterialPageRoute(
         settings: settings,
         builder: (BuildContext context) => getGenerateRoutePage(settings),
-      ),
-      theme: ThemeData(
-        primarySwatch: Colors.green,
       ),
     );
   }

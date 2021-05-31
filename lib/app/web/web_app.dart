@@ -1,28 +1,41 @@
+import 'package:balu_sto/app/web/app_module.dart';
+import 'package:balu_sto/helpers/styles/theme.dart';
 import 'package:balu_sto/screens/mobile/home/view/home_page.dart';
+import 'package:balu_sto/screens/shared/sharedModule.dart';
 import 'package:flutter/material.dart';
+import 'package:koin/koin.dart';
 
 class WebApp extends StatelessWidget {
+  static void initKoin() {
+    startKoin((app) {
+      app.printLogger(level: Level.debug);
+      app.modules([appModule, sharedModule]);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      routes: {
-        '/': (context) => Container(),
-        HomePage.PAGE_NAME: (context) => HomePage(),
-      },
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.green,
+      theme: createTheme(context),
+      initialRoute: '',
+      routes: routes,
+      onGenerateRoute: (RouteSettings settings) => MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => getGenerateRoutePage(settings),
       ),
     );
   }
 
+  final routes = <String, WidgetBuilder>{};
+
+  final Widget Function(RouteSettings) getGenerateRoutePage = (RouteSettings settings) {
+    /*switch (settings.name) {
+    case EmailConfirmationPage.ROUTE_NAME:
+      return EmailConfirmationPage(settings.arguments! as EmailConfirmationPageArgs);
+    default:
+      throw Exception('Not screen specified to route ${settings.name}');
+  }*/
+    throw Exception('Not screen specified to route ${settings.name}');
+  };
 }
