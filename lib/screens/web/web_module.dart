@@ -1,3 +1,3 @@
 import 'package:koin/koin.dart';
 
-final mobileModule = Module();
+final webModule = Module();

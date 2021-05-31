@@ -5,7 +5,7 @@ import 'package:balu_sto/widgets/pages/koin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RegistrationPage extends KoinPage<RegistrationBloc> {
+class RegistrationMobilePage extends KoinPage<RegistrationBloc> {
   static const PAGE_NAME = 'RegistrationPage';
 
   @override
@@ -26,7 +26,7 @@ class RegistrationPage extends KoinPage<RegistrationBloc> {
   void _listenEvents(BuildContext context, RegistrationState state) {
     if (state is RegistrationStateLogged) {
       Navigator.of(context).pushNamedAndRemoveUntil(
-        HomePage.PAGE_NAME,
+        HomeMobilePage.PAGE_NAME,
         (Route<dynamic> route) => false,
       );
     }

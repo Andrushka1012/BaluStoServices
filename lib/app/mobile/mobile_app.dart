@@ -17,7 +17,7 @@ class MobileApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: createTheme(context),
-      initialRoute: SplashScreenPage.PAGE_NAME,
+      initialRoute: SplashScreenMobilePage.PAGE_NAME,
       routes: routes,
       onGenerateRoute: (RouteSettings settings) => MaterialPageRoute(
         settings: settings,
@@ -39,11 +39,11 @@ class MobileApp extends StatelessWidget {
 }
 
 final routes = <String, WidgetBuilder>{
-  SplashScreenPage.PAGE_NAME: (context) => SplashScreenPage(),
-  LoginPage.PAGE_NAME: (context) => LoginPage(),
-  RegistrationPage.PAGE_NAME: (context) => RegistrationPage(),
-  ForgotPasswordPage.PAGE_NAME: (context) => ForgotPasswordPage(),
-  HomePage.PAGE_NAME: (context) => HomePage(),
+  SplashScreenMobilePage.PAGE_NAME: (context) => SplashScreenMobilePage(),
+  LoginMobilePage.PAGE_NAME: (context) => LoginMobilePage(),
+  RegistrationMobilePage.PAGE_NAME: (context) => RegistrationMobilePage(),
+  ForgotPasswordMobilePage.PAGE_NAME: (context) => ForgotPasswordMobilePage(),
+  HomeMobilePage.PAGE_NAME: (context) => HomeMobilePage(),
 };
 
 final Widget Function(RouteSettings) getGenerateRoutePage = (RouteSettings settings) {

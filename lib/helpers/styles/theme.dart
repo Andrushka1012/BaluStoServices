@@ -1,4 +1,5 @@
 import 'package:balu_sto/helpers/styles/colors.dart';
+import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:balu_sto/helpers/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,10 @@ ThemeData createTheme(BuildContext context) => ThemeData(
       scaffoldBackgroundColor: AppColors.white,
       errorColor: AppColors.redTart,
       cardColor: AppColors.white,
+      buttonTheme: ButtonThemeData(
+            height: Dimens.spanSmallerGiant,
+            buttonColor: AppColors.primaryDark
+      ),
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: AppColors.secondary,
       ),

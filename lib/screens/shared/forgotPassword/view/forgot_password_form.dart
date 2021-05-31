@@ -14,7 +14,7 @@ class ForgotPasswordForm extends StatelessWidget {
           controller: _emailTextController,
           textInputAction: TextInputAction.next,
           keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(labelText: 'Емаил', hintText: 'example@gmail.ua'),
+          decoration: InputDecoration(labelText: 'Емейл', hintText: 'example@gmail.ua'),
           enableSuggestions: false,
           autocorrect: false,
         ),

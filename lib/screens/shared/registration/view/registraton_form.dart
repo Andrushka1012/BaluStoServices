@@ -35,7 +35,7 @@ class RegistrationForm extends StatelessWidget {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                    labelText: 'Емаил',
+                    labelText: 'Емейл',
                     hintText: 'example@gmail.ua',
                   ),
                   enableSuggestions: false,

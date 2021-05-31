@@ -23,4 +23,6 @@ class LoginStateInput extends LoginState {
       );
 }
 
+class LoginStateProcessing extends LoginState {}
+
 class LoginStateLogged extends LoginState {}

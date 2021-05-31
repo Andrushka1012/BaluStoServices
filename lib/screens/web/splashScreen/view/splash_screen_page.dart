@@ -1,11 +1,11 @@
-import 'package:balu_sto/screens/mobile/home/view/home_page.dart';
-import 'package:balu_sto/screens/mobile/login/view/login_page.dart';
 import 'package:balu_sto/screens/shared/splashScreen/bloc/splash_screen_bloc.dart';
+import 'package:balu_sto/screens/web/home/view/home_page.dart';
+import 'package:balu_sto/screens/web/login/view/login_page.dart';
 import 'package:balu_sto/widgets/pages/koin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SplashScreenMobilePage extends KoinPage<SplashScreenBloc> {
+class SplashScreenWebPage extends KoinPage<SplashScreenBloc> {
   static const PAGE_NAME = '/';
 
   @override
@@ -26,13 +26,13 @@ class SplashScreenMobilePage extends KoinPage<SplashScreenBloc> {
     switch (state.runtimeType) {
       case SplashScreenStateNotLogged:
         Navigator.of(context).pushNamedAndRemoveUntil(
-          LoginMobilePage.PAGE_NAME,
+          LoginWebPage.PAGE_NAME,
           (Route<dynamic> route) => false,
         );
         break;
       case SplashScreenStateLogged:
         Navigator.of(context).pushNamedAndRemoveUntil(
-          HomeMobilePage.PAGE_NAME,
+          HomeWebPage.PAGE_NAME,
           (Route<dynamic> route) => false,
         );
         break;
