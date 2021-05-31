@@ -4,9 +4,10 @@ import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:flutter/material.dart';
 
 class IntroContainer extends StatelessWidget {
-  const IntroContainer({required this.child});
+  const IntroContainer({required this.child, this.fullScreen = true});
 
   final Widget child;
+  final bool fullScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +24,8 @@ class IntroContainer extends StatelessWidget {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
             child: FractionallySizedBox(
-              widthFactor: 0.75,
-              heightFactor: 0.8,
+              widthFactor: !fullScreen ? 0.75 : 1,
+              heightFactor: !fullScreen ? 0.8 : 1,
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.black.withOpacity(0.2),

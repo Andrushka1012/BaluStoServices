@@ -2,9 +2,10 @@ import 'package:balu_sto/helpers/preferences/preferences_provider.dart';
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:balu_sto/helpers/styles/text_styles.dart';
+import 'package:balu_sto/screens/shared/forgotPassword/view/forgot_password_page.dart';
 import 'package:balu_sto/screens/shared/login/bloc/login_bloc.dart';
 import 'package:balu_sto/widgets/containers/progress_container.dart';
-import 'package:balu_sto/widgets/input_decoration.dart';
+import 'package:balu_sto/widgets/inputs/text_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:koin_flutter/koin_flutter.dart';
@@ -21,6 +22,35 @@ class _LoginFormState extends State<LoginForm> {
 
   var _passwordVisible = false;
 
+  Widget _getResetPasswordRow(BuildContext context) => Padding(
+        padding: const EdgeInsets.only(
+          top: Dimens.spanBig,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'Забыл пароль?',
+              style: AppTextStyles.bodyText2,
+            ),
+            SizedBox(
+              width: Dimens.spanSmall,
+            ),
+            GestureDetector(
+              onTap: () => Navigator.of(context).pushNamed(ForgotPasswordPage.PAGE_NAME),
+              child: Text(
+                'Востановить',
+                style: AppTextStyles.bodyText1.copyWith(
+                  color: AppColors.primaryDark,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
@@ -33,65 +63,38 @@ class _LoginFormState extends State<LoginForm> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Войти',
-                      style: AppTextStyles.headline1.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.secondaryDark,
-                      )),
-                  SizedBox(
-                    height: Dimens.spanBig,
-                  ),
                   Text(
-                    'Емейл адрес',
-                    style: AppTextStyles.caption.copyWith(
+                    'Войти',
+                    style: AppTextStyles.headline1.copyWith(
                       fontWeight: FontWeight.bold,
                       color: AppColors.secondaryDark,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: Dimens.spanTiny,
-                      horizontal: Dimens.spanMicro,
-                    ),
-                    child: TextField(
-                      controller: _emailTextController,
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: getDecoration().copyWith(
-                        hintText: 'Введите Емейл',
-                      ),
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      onChanged: (value) => context.read<LoginBloc>().add(
-                            LoginEventEmailChanged(value),
-                          ),
-                    ),
+                  SizedBox(
+                    height: Dimens.spanBig,
+                  ),
+                  TextInput(
+                    controller: _emailTextController,
+                    label: 'Емейл',
+                    hint: 'Емейл адрес',
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.emailAddress,
+                    onChanged: (value) => context.read<LoginBloc>().add(
+                          LoginEventEmailChanged(value),
+                        ),
                   ),
                   SizedBox(
                     height: Dimens.spanSmall,
                   ),
-                  Text(
-                    'Пароль',
-                    style: AppTextStyles.caption.copyWith(fontWeight: FontWeight.bold, color: AppColors.secondaryDark),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: Dimens.spanTiny,
-                      horizontal: Dimens.spanMicro,
-                    ),
-                    child: TextField(
-                      textInputAction: TextInputAction.done,
-                      keyboardType: TextInputType.visiblePassword,
-                      obscureText: !_passwordVisible,
-                      decoration: getDecoration().copyWith(
-                        hintText: 'Введите Пароль',
-                      ),
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      onChanged: (value) => context.read<LoginBloc>().add(
-                            LoginEventPasswordChanged(value),
-                          ),
-                    ),
+                  TextInput(
+                    label: 'Пароль',
+                    hint: 'Введите Пароль',
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: !_passwordVisible,
+                    onChanged: (value) => context.read<LoginBloc>().add(
+                          LoginEventPasswordChanged(value),
+                        ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: Dimens.spanSmall),
@@ -145,6 +148,7 @@ class _LoginFormState extends State<LoginForm> {
                           ),
                     ),
                   ),
+                  _getResetPasswordRow(context),
                 ],
               ),
             ),

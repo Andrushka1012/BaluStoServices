@@ -1,4 +1,8 @@
 import 'package:balu_sto/helpers/extensions/string_extensions.dart';
+import 'package:balu_sto/helpers/styles/colors.dart';
+import 'package:balu_sto/helpers/styles/dimens.dart';
+import 'package:balu_sto/helpers/styles/text_styles.dart';
+import 'package:balu_sto/widgets/inputs/text_input.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -7,22 +11,44 @@ class ForgotPasswordForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        TextField(
-          controller: _emailTextController,
-          textInputAction: TextInputAction.next,
-          keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(labelText: 'Емейл', hintText: 'example@gmail.ua'),
-          enableSuggestions: false,
-          autocorrect: false,
+    return Card(
+      margin: EdgeInsets.all(Dimens.spanSmall),
+      child: Padding(
+        padding: const EdgeInsets.all(Dimens.spanBig),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Введите ваш адрес емейл и мы поможем Вам востановить аккаунт',
+              style: AppTextStyles.bodyText1.copyWith(
+                color: AppColors.secondaryDark,
+              ),
+            ),
+            SizedBox(
+              height: Dimens.spanHuge,
+            ),
+            TextInput(
+              controller: _emailTextController,
+              label: 'Емейл',
+              hint: 'Емейл адрес',
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.emailAddress,
+            ),
+            SizedBox(
+              height: Dimens.spanSmall,
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: Dimens.spanSmallerGiant,
+              child: ElevatedButton(
+                child: Text('Отправить ссылку сброса', style: AppTextStyles.bodyText1),
+                style: ElevatedButton.styleFrom(primary: AppColors.primaryDark),
+                onPressed: () => _resetPassword(context),
+              ),
+            ),
+          ],
         ),
-        ElevatedButton(
-          onPressed: () => _resetPassword(context),
-          child: Text('Отправить ссылку сброса'),
-        )
-      ],
+      ),
     );
   }
 

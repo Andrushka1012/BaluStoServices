@@ -1,6 +1,7 @@
 import 'package:balu_sto/app/web/app_module.dart';
 import 'package:balu_sto/helpers/styles/theme.dart';
-import 'package:balu_sto/screens/mobile/registration/view/registration_page.dart';
+import 'package:balu_sto/screens/shared/forgotPassword/view/forgot_password_page.dart';
+import 'package:balu_sto/screens/shared/registration/view/registration_page.dart';
 import 'package:balu_sto/screens/shared/sharedModule.dart';
 import 'package:balu_sto/screens/web/home/view/home_page.dart';
 import 'package:balu_sto/screens/web/login/view/login_page.dart';
@@ -44,8 +45,10 @@ class WebApp extends StatelessWidget {
         return SplashScreenWebPage();
       case LoginWebPage.PAGE_NAME:
         return LoginWebPage();
-      case RegistrationMobilePage.PAGE_NAME:
-        return RegistrationMobilePage();
+      case RegistrationPage.PAGE_NAME:
+        return RegistrationPage();
+      case ForgotPasswordPage.PAGE_NAME:
+        return ForgotPasswordPage();
       case HomeWebPage.PAGE_NAME:
         return HomeWebPage();
       default:

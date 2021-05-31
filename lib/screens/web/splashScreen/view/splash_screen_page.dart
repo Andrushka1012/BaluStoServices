@@ -1,6 +1,9 @@
+import 'package:balu_sto/helpers/styles/colors.dart';
+import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:balu_sto/screens/shared/splashScreen/bloc/splash_screen_bloc.dart';
 import 'package:balu_sto/screens/web/home/view/home_page.dart';
 import 'package:balu_sto/screens/web/login/view/login_page.dart';
+import 'package:balu_sto/widgets/logos/app_logo.dart';
 import 'package:balu_sto/widgets/pages/koin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,10 +18,14 @@ class SplashScreenWebPage extends KoinPage<SplashScreenBloc> {
 
   @override
   Widget buildPage(BuildContext context) => Scaffold(
+        backgroundColor: AppColors.background,
         body: BlocListener<SplashScreenBloc, SplashScreenState>(
             listener: _handleEvents,
-            child: Container(
-              color: Colors.red,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(Dimens.spanGiant),
+                child: AppLogo(),
+              ),
             )),
       );
 

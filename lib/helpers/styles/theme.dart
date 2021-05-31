@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 ThemeData createTheme(BuildContext context) => ThemeData(
       primaryColor: AppColors.primary,
       accentColor: AppColors.secondary,
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.background,
       scaffoldBackgroundColor: AppColors.white,
       errorColor: AppColors.redTart,
       cardColor: AppColors.white,

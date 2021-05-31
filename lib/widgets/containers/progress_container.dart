@@ -1,3 +1,4 @@
+import 'package:balu_sto/widgets/containers/invisible_container.dart';
 import 'package:flutter/material.dart';
 
 class ProgressContainer extends StatelessWidget {
@@ -12,6 +13,11 @@ class ProgressContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return isProcessing ? _progressItem : child;
+    return Stack(
+      children: [
+        InvisibleContainer(isInvisible: isProcessing, child: child),
+        if (isProcessing)Positioned(child: _progressItem, left: 0, right: 0, top: 0, bottom: 0,)
+      ],
+    );
   }
 }

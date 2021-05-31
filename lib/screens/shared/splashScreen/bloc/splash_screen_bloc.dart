@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:balu_sto/helpers/preferences/preferences_provider.dart';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:meta/meta.dart';
 
 part 'splash_screen_event.dart';
 
@@ -25,7 +25,9 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
 
   Stream<SplashScreenState> _initApp() async* {
     await initAppServices();
-    await Future.delayed(Duration(seconds: 2));
+
+    await Future.delayed(Duration(milliseconds: 750));
+
     if (_firebaseAuth.currentUser != null) {
       yield SplashScreenStateLogged();
     } else {

@@ -1,9 +1,10 @@
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:balu_sto/helpers/styles/text_styles.dart';
-import 'package:balu_sto/screens/mobile/registration/view/registration_page.dart';
 import 'package:balu_sto/screens/shared/login/view/login_form.dart';
+import 'package:balu_sto/screens/shared/registration/view/registration_page.dart';
 import 'package:balu_sto/widgets/containers/intro_container.dart';
+import 'package:balu_sto/widgets/containers/web_constraints_container.dart';
 import 'package:balu_sto/widgets/logos/app_logo.dart';
 import 'package:balu_sto/widgets/logos/app_name_logo.dart';
 import 'package:flutter/material.dart';
@@ -58,14 +59,21 @@ class LoginBody extends StatelessWidget {
               color: AppColors.white,
             ),
           ),
-          GestureDetector(
-            onTap: () => Navigator.of(context).pushNamed(RegistrationMobilePage.PAGE_NAME),
+          SizedBox(
+            height: Dimens.spanTiny,
+          ),
+          OutlinedButton(
             child: Text(
               'Зарегистрируйся',
               style: AppTextStyles.bodyText1.copyWith(
                 color: AppColors.white,
                 fontWeight: FontWeight.bold,
               ),
+            ),
+            onPressed: () => Navigator.of(context).pushNamed(RegistrationPage.PAGE_NAME),
+            style: OutlinedButton.styleFrom(
+              primary: AppColors.secondaryDark,
+              side: BorderSide(color: AppColors.white, width: 1),
             ),
           ),
         ],
@@ -74,13 +82,7 @@ class LoginBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ConstrainedBox(
-        constraints: new BoxConstraints(
-          minHeight: 500,
-          maxHeight: 600.0,
-          minWidth: 500,
-          maxWidth: 1000,
-        ),
+      child: WebConstraintsContainer(
         child: Stack(
           children: [
             Padding(
@@ -99,6 +101,7 @@ class LoginBody extends StatelessWidget {
                       flex: 4,
                       child: IntroContainer(
                         child: _getIntroItem(context),
+                        fullScreen: false,
                       ),
                     ),
                     Expanded(
@@ -114,7 +117,7 @@ class LoginBody extends StatelessWidget {
             ),
             Positioned(
               top: Dimens.spanBig,
-              left: Dimens.spanSmall,
+              right: Dimens.spanSmall,
               child: SizedBox(
                 width: Dimens.spanBiggerGiant,
                 height: Dimens.spanBiggerGiant,

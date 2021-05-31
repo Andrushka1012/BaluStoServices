@@ -1,10 +1,10 @@
 import 'package:balu_sto/helpers/styles/theme.dart';
-import 'package:balu_sto/screens/mobile/formgotPassword/view/forgot_password_page.dart';
 import 'package:balu_sto/screens/mobile/home/view/home_page.dart';
 import 'package:balu_sto/screens/mobile/login/view/login_page.dart';
 import 'package:balu_sto/screens/mobile/mobile_module.dart';
-import 'package:balu_sto/screens/mobile/registration/view/registration_page.dart';
 import 'package:balu_sto/screens/mobile/splashScreen/view/splash_screen_page.dart';
+import 'package:balu_sto/screens/shared/forgotPassword/view/forgot_password_page.dart';
+import 'package:balu_sto/screens/shared/registration/view/registration_page.dart';
 import 'package:balu_sto/screens/shared/sharedModule.dart';
 import 'package:flutter/material.dart';
 import 'package:koin/koin.dart';
@@ -41,8 +41,8 @@ class MobileApp extends StatelessWidget {
 final routes = <String, WidgetBuilder>{
   SplashScreenMobilePage.PAGE_NAME: (context) => SplashScreenMobilePage(),
   LoginMobilePage.PAGE_NAME: (context) => LoginMobilePage(),
-  RegistrationMobilePage.PAGE_NAME: (context) => RegistrationMobilePage(),
-  ForgotPasswordMobilePage.PAGE_NAME: (context) => ForgotPasswordMobilePage(),
+  RegistrationPage.PAGE_NAME: (context) => RegistrationPage(),
+  ForgotPasswordPage.PAGE_NAME: (context) => ForgotPasswordPage(),
   HomeMobilePage.PAGE_NAME: (context) => HomeMobilePage(),
 };
 
