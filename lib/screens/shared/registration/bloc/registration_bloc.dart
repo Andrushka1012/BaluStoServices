@@ -1,7 +1,11 @@
 import 'dart:async';
 
+import 'package:balu_sto/features/account/models/role.dart';
+import 'package:balu_sto/features/account/models/user.dart';
 import 'package:balu_sto/infrastructure/auth/auth_handler.dart';
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
@@ -38,10 +42,29 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
   Stream<RegistrationState> _registerAccount(RegistrationStateInput inputState) async* {
     try {
+      if (inputState.name.length <= 1) {
+        throw 'Неправильное имя';
+      }
+
       await _firebaseAuth.createUserWithEmailAndPassword(
         email: inputState.email,
         password: inputState.password,
       );
+
+      await _firebaseAuth.signInWithEmailAndPassword(
+        email: inputState.email,
+        password: inputState.password,
+      );
+
+      final AppUser user = AppUser(
+        userId: _firebaseAuth.currentUser!.uid,
+        name: inputState.name,
+        email: inputState.email,
+        role: Role.EMPLOYEE,
+      );
+
+      final result = await FirebaseFirestore.instance.collection(AppUser.COLLECTION_NAME).add(user.toJson());
+      print(result);
 
       final loginResult = await _authHandler.signInWithEmailAndPassword(
         email: inputState.email,

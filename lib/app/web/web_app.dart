@@ -1,4 +1,4 @@
-import 'package:balu_sto/app/web/app_module.dart';
+import 'package:balu_sto/core_module.dart';
 import 'package:balu_sto/helpers/styles/theme.dart';
 import 'package:balu_sto/screens/shared/forgotPassword/view/forgot_password_page.dart';
 import 'package:balu_sto/screens/shared/registration/view/registration_page.dart';
@@ -19,7 +19,7 @@ class WebApp extends StatelessWidget {
     startKoin((app) {
       app.printLogger(level: Level.debug);
       app.modules([
-        appModule,
+        coreModule,
         webModule,
         sharedModule,
       ]);
