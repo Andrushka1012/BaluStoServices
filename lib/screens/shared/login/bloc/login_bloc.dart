@@ -38,7 +38,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   Stream<LoginState> _tryToLogin(LoginStateInput inputState) async* {
     yield LoginStateProcessing();
-    await Future.delayed(Duration(seconds: 2));
     final loginResult = await _authHandler.signInWithEmailAndPassword(
       email: inputState.email,
       password: inputState.password,
@@ -47,6 +46,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (loginResult.isSuccessful) {
       yield LoginStateLogged();
     } else {
+      yield LoginStateError(loginResult.requiredError);
       yield inputState;
     }
   }

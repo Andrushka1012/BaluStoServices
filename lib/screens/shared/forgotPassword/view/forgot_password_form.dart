@@ -1,4 +1,4 @@
-import 'package:balu_sto/helpers/extensions/string_extensions.dart';
+import 'package:balu_sto/helpers/dialogs.dart';
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:balu_sto/helpers/styles/text_styles.dart';
@@ -54,15 +54,11 @@ class ForgotPasswordForm extends StatelessWidget {
 
   void _resetPassword(BuildContext context) async {
     try {
-      if (_emailTextController.text.isValidEmail) {
-        await FirebaseAuth.instance.sendPasswordResetEmail(email: _emailTextController.text);
-        Navigator.of(context).pop();
-      } else {
-        // TODO: handle errors
-      }
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: _emailTextController.text);
+      showDialogMessage(context, title: 'Отправленно', message: 'Проверте Вашу почту.');
+      Navigator.of(context).pop();
     } catch (e) {
-      print(e);
-      // TODO: handle errors
+      showErrorDialog(context, e);
     }
   }
 }

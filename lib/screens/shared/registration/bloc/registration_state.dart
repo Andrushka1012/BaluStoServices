@@ -27,3 +27,10 @@ class RegistrationStateInput extends RegistrationState {
 }
 
 class RegistrationStateLogged extends RegistrationState {}
+class RegistrationStateProcessing extends RegistrationState {}
+
+class RegistrationStateError extends RegistrationState {
+
+  RegistrationStateError(this.error);
+  final dynamic error;
+}

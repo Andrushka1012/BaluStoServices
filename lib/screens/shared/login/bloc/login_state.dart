@@ -26,3 +26,9 @@ class LoginStateInput extends LoginState {
 class LoginStateProcessing extends LoginState {}
 
 class LoginStateLogged extends LoginState {}
+
+class LoginStateError extends LoginState {
+
+  LoginStateError(this.error);
+  final dynamic error;
+}

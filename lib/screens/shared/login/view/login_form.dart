@@ -1,3 +1,4 @@
+import 'package:balu_sto/helpers/dialogs.dart';
 import 'package:balu_sto/helpers/preferences/preferences_provider.dart';
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/dimens.dart';
@@ -53,7 +54,8 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
+    return BlocConsumer<LoginBloc, LoginState>(
+        listener: _handleEvents,
         buildWhen: (_, current) => current is LoginStateProcessing || current is LoginStateInput,
         builder: (context, LoginState state) {
           return ProgressContainer(
@@ -154,5 +156,11 @@ class _LoginFormState extends State<LoginForm> {
             ),
           );
         });
+  }
+
+  void _handleEvents(BuildContext context, LoginState state) {
+    if (state is LoginStateError) {
+      showErrorDialog(context, state.error);
+    }
   }
 }

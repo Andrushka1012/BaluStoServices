@@ -51,10 +51,11 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       if (loginResult.isSuccessful) {
         yield RegistrationStateLogged();
       } else {
+        yield RegistrationStateError(loginResult.requiredError);
         yield inputState.copyWith();
       }
     } catch (e) {
-      print(e);
+      yield RegistrationStateError(e);
       yield inputState.copyWith();
     }
   }
