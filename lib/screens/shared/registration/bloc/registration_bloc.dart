@@ -5,7 +5,6 @@ import 'package:balu_sto/features/account/models/user.dart';
 import 'package:balu_sto/infrastructure/auth/auth_handler.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
@@ -63,8 +62,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         role: Role.EMPLOYEE,
       );
 
-      final result = await FirebaseFirestore.instance.collection(AppUser.COLLECTION_NAME).add(user.toJson());
-      print(result);
+      await FirebaseFirestore.instance.collection(AppUser.COLLECTION_NAME).add(user.toJson());
 
       final loginResult = await _authHandler.signInWithEmailAndPassword(
         email: inputState.email,
