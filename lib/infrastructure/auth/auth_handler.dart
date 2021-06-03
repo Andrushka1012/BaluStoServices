@@ -1,3 +1,4 @@
+import 'package:balu_sto/features/firestore/dao/services_dao.dart';
 import 'package:balu_sto/features/firestore/firestore_repository.dart';
 import 'package:balu_sto/features/firestore/dao/current_user_dao.dart';
 import 'package:balu_sto/helpers/fetch_helpers.dart';
@@ -23,6 +24,7 @@ class AuthHandler {
   final FirestoreRepository _firestoreRepository;
 
   late final CurrentUserDao _currentUserDao = _scope.get();
+  late final ServicesDao _servicesDao = _scope.get();
 
   Future<SafeResponse> signInWithEmailAndPassword({
     required String email,
@@ -77,5 +79,6 @@ class AuthHandler {
 
   Future logout() async {
     await _currentUserDao.removeAll();
+    await _servicesDao.removeAll();
   }
 }
