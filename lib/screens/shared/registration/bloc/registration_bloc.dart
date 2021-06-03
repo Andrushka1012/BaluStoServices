@@ -81,7 +81,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         );
       }
 
-      _userIdentity.obtainUserData(user);
+      _userIdentity.obtainUserData(user, false);
       yield RegistrationStateLogged();
     } catch (e) {
       print(e);

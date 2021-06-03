@@ -13,7 +13,7 @@ class AccountRepository {
           );
 
   Future<SafeResponse<AppUser>> getCurrentUser() => fetchSafety(() async {
-        final currentUser = (await _usersCollection.get())
+        final currentUser = (await _usersCollection.get(GetOptions(source: Source.server)))
             .docs
             .firstWhere((element) => element.data().userId == _firebaseAuth.currentUser!.uid);
         return currentUser.data();

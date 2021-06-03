@@ -12,6 +12,7 @@ final coreModule = Module()
   ..single((scope) => FirebaseAuth.instance)
   ..single((scope) => AccountRepository())
   ..single((scope) => AuthHandler(
+    scope,
         scope.get(),
         scope.get(),
         scope.get(),
