@@ -2,21 +2,22 @@ import 'dart:async';
 
 import 'package:balu_sto/features/account/models/role.dart';
 import 'package:balu_sto/features/account/models/user.dart';
-import 'package:balu_sto/infrastructure/auth/auth_handler.dart';
+import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 part 'registration_event.dart';
 
 part 'registration_state.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
-  RegistrationBloc(this._firebaseAuth, this._authHandler) : super(RegistrationStateInput());
+  RegistrationBloc(this._firebaseAuth, this._userIdentity) : super(RegistrationStateInput());
 
   final FirebaseAuth _firebaseAuth;
-  final AuthHandler _authHandler;
+  final UserIdentity _userIdentity;
 
   @override
   Stream<RegistrationState> mapEventToState(RegistrationEvent event) async* {
@@ -45,6 +46,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         throw 'Неправильное имя';
       }
 
+      yield RegistrationStateProcessing();
       await _firebaseAuth.createUserWithEmailAndPassword(
         email: inputState.email,
         password: inputState.password,
@@ -62,20 +64,27 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         role: Role.EMPLOYEE,
       );
 
-      await FirebaseFirestore.instance.collection(AppUser.COLLECTION_NAME).add(user.toJson());
+      FirebaseFirestore.instance
+          .collection(AppUser.COLLECTION_NAME)
+          .add(user.toJson())
+          .then((value) => print('Account created'))
+          .catchError((e) {
+        print('Account creation error $e');
+      });
 
-      final loginResult = await _authHandler.signInWithEmailAndPassword(
-        email: inputState.email,
-        password: inputState.password,
-      );
-
-      if (loginResult.isSuccessful) {
-        yield RegistrationStateLogged();
-      } else {
-        yield RegistrationStateError(loginResult.requiredError);
-        yield inputState.copyWith();
+      if (kIsWeb) {
+        await _firebaseAuth.signOut();
+        await Future.delayed(Duration(seconds: 3)); // Delay because of firebase firestore issue
+        await _firebaseAuth.signInWithEmailAndPassword(
+          email: inputState.email,
+          password: inputState.password,
+        );
       }
+
+      _userIdentity.obtainUserData(user);
+      yield RegistrationStateLogged();
     } catch (e) {
+      print(e);
       yield RegistrationStateError(e);
       yield inputState.copyWith();
     }

@@ -1,3 +1,4 @@
+import 'package:balu_sto/features/account/account_repository.dart';
 import 'package:balu_sto/infrastructure/auth/auth_handler.dart';
 import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,4 +10,10 @@ final coreModule = Module()
   ..single((scope) => UserIdentity())
   ..single((scope) => PreferencesProvider.instance)
   ..single((scope) => FirebaseAuth.instance)
-  ..single((scope) => AuthHandler(scope.get(), scope.get(), scope.get()));
+  ..single((scope) => AccountRepository())
+  ..single((scope) => AuthHandler(
+        scope.get(),
+        scope.get(),
+        scope.get(),
+        scope.get(),
+      ));

@@ -4,6 +4,10 @@ import 'package:balu_sto/screens/shared/splashScreen/bloc/splash_screen_bloc.dar
 import 'package:koin/koin.dart';
 
 final sharedModule = Module()
-  ..factory((scope) => SplashScreenBloc(scope.get(), scope.get()))
+  ..factory((scope) => SplashScreenBloc(
+        scope.get(),
+        scope.get(),
+        scope.get(),
+      ))
   ..factory((scope) => LoginBloc(scope.get(), scope.get()))
   ..factory((scope) => RegistrationBloc(scope.get(), scope.get()));

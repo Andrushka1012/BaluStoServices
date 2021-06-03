@@ -19,7 +19,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    print(event);
     if (state is! LoginStateInput) return;
     final LoginStateInput inputState = state as LoginStateInput;
 

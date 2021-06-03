@@ -23,7 +23,7 @@ class AppUser {
     role = Role.values.firstOrNull((element) => element.toString().contains(json['role'])) ?? Role.EMPLOYEE;
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, Object?> toJson() {
     final map = <String, dynamic>{};
     map['userId'] = userId;
     map['name'] = name;
