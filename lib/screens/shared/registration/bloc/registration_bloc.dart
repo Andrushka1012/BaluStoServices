@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:balu_sto/features/account/models/role.dart';
-import 'package:balu_sto/features/account/models/user.dart';
+import 'package:balu_sto/features/firestore/models/role.dart';
+import 'package:balu_sto/features/firestore/models/user.dart';
+import 'package:balu_sto/helpers/preferences/preferences_provider.dart';
 import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,10 +15,11 @@ part 'registration_event.dart';
 part 'registration_state.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
-  RegistrationBloc(this._firebaseAuth, this._userIdentity) : super(RegistrationStateInput());
+  RegistrationBloc(this._firebaseAuth, this._userIdentity, this._preferencesProvider) : super(RegistrationStateInput());
 
   final FirebaseAuth _firebaseAuth;
   final UserIdentity _userIdentity;
+  final PreferencesProvider _preferencesProvider;
 
   @override
   Stream<RegistrationState> mapEventToState(RegistrationEvent event) async* {
@@ -82,6 +84,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       }
 
       _userIdentity.obtainUserData(user, false);
+      _preferencesProvider.prefillEmail.value = inputState.email;
       yield RegistrationStateLogged();
     } catch (e) {
       print(e);

@@ -1,4 +1,4 @@
-import 'package:balu_sto/features/account/models/user.dart';
+import 'package:balu_sto/features/firestore/models/user.dart';
 
 class UserIdentity {
   AppUser? currentUser;

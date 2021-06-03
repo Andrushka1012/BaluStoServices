@@ -1,5 +1,5 @@
-import 'package:balu_sto/features/account/account_repository.dart';
-import 'package:balu_sto/features/account/dao/CurrentUserDao.dart';
+import 'package:balu_sto/features/firestore/firestore_repository.dart';
+import 'package:balu_sto/features/firestore/dao/current_user_dao.dart';
 import 'package:balu_sto/helpers/fetch_helpers.dart';
 import 'package:balu_sto/helpers/preferences/preferences_provider.dart';
 import 'package:balu_sto/infrastructure/auth/user_identity.dart';
@@ -13,14 +13,14 @@ class AuthHandler {
     this._firebaseAuth,
     this._preferencesProvider,
     this._userIdentity,
-    this._accountRepository,
+    this._firestoreRepository,
   );
 
   final Scope _scope;
   final FirebaseAuth _firebaseAuth;
   final PreferencesProvider _preferencesProvider;
   final UserIdentity _userIdentity;
-  final AccountRepository _accountRepository;
+  final FirestoreRepository _firestoreRepository;
 
   late final CurrentUserDao _currentUserDao = _scope.get();
 
@@ -53,7 +53,7 @@ class AuthHandler {
       });
 
   Future<SafeResponse> initOnlineSession() => fetchSafety(() async {
-        final currentUserResponse = await _accountRepository.getCurrentUser();
+        final currentUserResponse = await _firestoreRepository.getCurrentUser();
         currentUserResponse.throwIfNotSuccessful();
 
         if (!kIsWeb) {

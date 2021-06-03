@@ -1,4 +1,4 @@
-import 'package:balu_sto/features/account/models/role.dart';
+import 'package:balu_sto/features/firestore/models/role.dart';
 import 'package:balu_sto/helpers/extensions/list_extensions.dart';
 
 class AppUser {
