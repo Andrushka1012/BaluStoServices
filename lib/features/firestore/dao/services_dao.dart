@@ -14,7 +14,7 @@ class ServicesDao extends BaseDao<Service, String> {
   String getItemKey(Service item) => item.id;
 
   @override
-  Map<String, dynamic> itemToMap(Service item) => item.toJson();
+  Map<String, dynamic> itemToMap(Service item) => item.toJsonLocal();
 
   @override
   Service mapToItem(Map<String, dynamic> map) => Service.fromJson(map);

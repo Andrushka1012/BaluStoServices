@@ -45,7 +45,7 @@ class HomeMobilePage extends StatelessWidget {
 
   void _logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
-    await _authHandler.clear();
+    await _authHandler.logout();
     Navigator.of(context).pushNamedAndRemoveUntil(
       LoginMobilePage.PAGE_NAME,
           (Route<dynamic> route) => false,

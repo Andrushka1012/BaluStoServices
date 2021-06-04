@@ -6,7 +6,7 @@ abstract class LoginState {}
 class LoginStateInput extends LoginState {
   LoginStateInput({
     this.email = '',
-    this.password = '',
+    this.password = '!23Qwe',
   });
 
   final String email;

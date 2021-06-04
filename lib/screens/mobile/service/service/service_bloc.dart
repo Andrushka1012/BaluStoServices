@@ -48,19 +48,27 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
       case ServiceEventRemovePhoto:
         yield previousState.copyWith()..photo = null;
         break;
+      case ServiceEventDelete:
+        final result = await _firestoreRepository.removeService(previousState.service!);
+        if (result.isSuccessful) {
+          yield ServiceStateSuccess();
+        } else {
+          yield ServiceStateError(result.requiredError);
+          yield previousState;
+        }
+        break;
     }
   }
 
   Stream<ServiceState> _saveService(DefaultServiceState previousState) async* {
     yield ServiceStateProcessing();
     final saveResult = await _firestoreRepository.saveService(
-      serviceId: previousState.serviceId,
-      serviceName: previousState.serviceName,
-      moneyAmount: int.parse(previousState.moneyAmount),
-      isEditMode: previousState.isEditMode,
-      previousService: previousState.service,
-      photo: previousState.photo
-    );
+        serviceId: previousState.serviceId,
+        serviceName: previousState.serviceName,
+        moneyAmount: int.parse(previousState.moneyAmount),
+        isEditMode: previousState.isEditMode,
+        previousService: previousState.service,
+        photo: previousState.photo);
     if (saveResult.isSuccessful) {
       yield ServiceStateSuccess();
     } else {

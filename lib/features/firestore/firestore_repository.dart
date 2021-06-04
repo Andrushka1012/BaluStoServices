@@ -32,7 +32,7 @@ class FirestoreRepository {
       .collection(Service.COLLECTION_NAME)
       .withConverter<Service>(
         fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) => Service.fromJson(snapshot.data()),
-        toFirestore: (Service service, _) => service.toJson(),
+        toFirestore: (Service service, _) => service.toJsonApi(),
       );
 
   Future<SafeResponse<AppUser>> getCurrentUser() => fetchSafety(() async {
@@ -57,12 +57,29 @@ class FirestoreRepository {
             userId: _userIdentity.currentUser!.userId,
             serviceName: serviceName,
             moneyAmount: moneyAmount,
-            date: DateTime.now(),
+            date: previousService?.date ?? DateTime.now(),
+            modifiedDate: isEditMode ? DateTime.now() : null,
             hasPhoto: photo != null,
+            localData: ServiceLocalData(
+                filePath: photo?.path ?? previousService?.localData?.filePath,
+                isUploaded: false,
+                documentId: previousService?.localData?.documentId),
           );
 
           await _servicesDao.put(serviceData);
-          await _servicesCollection.add(serviceData);
+
+          String? documentId;
+          if (isEditMode) {
+            documentId = previousService?.localData?.documentId!;
+            _servicesCollection.doc(documentId).update(serviceData.toJsonApi()).timeout(Duration(seconds: 3));
+          } else {
+            final documentRef = await _servicesCollection.add(serviceData).timeout(Duration(seconds: 3));
+            documentId = documentRef.id;
+          }
+          serviceData.localData?.isUploaded = true;
+          serviceData.localData?.documentId = documentId;
+
+          await _servicesDao.put(serviceData);
         },
       );
 
@@ -73,7 +90,8 @@ class FirestoreRepository {
                 (await _servicesCollection.get(GetOptions(source: Source.server))).docs.map((e) => e.data()).toList();
             return services;
           } else {
-            return await _servicesDao.getAll();
+            final services = await _servicesDao.getAll();
+            return services.where((element) => element.userId == _userIdentity.currentUser?.userId).toList();
           }
         },
       );
@@ -83,7 +101,28 @@ class FirestoreRepository {
           assert(!kIsWeb, 'Method not available on web');
           final servicesDataResponse = await getUserServices(fromRemote: true);
           servicesDataResponse.throwIfNotSuccessful();
+
+          final services = servicesDataResponse.requiredData;
+
+          await Future.forEach(services, (Service service) async {
+            final localService = await _servicesDao.getBy(service.id);
+            if (localService != null) {
+              service.localData = localService.localData;
+            }
+          });
+
           await _servicesDao.putAll(servicesDataResponse.requiredData);
+        },
+      );
+
+  Future<SafeResponse> removeService(Service service) => fetchSafety(
+        () async {
+          if (!kIsWeb) {
+            await _servicesDao.remove(service);
+          }
+          if (service.localData?.documentId != null) {
+            await _servicesCollection.doc(service.localData?.documentId).delete().timeout(Duration(seconds: 3));
+          }
         },
       );
 }

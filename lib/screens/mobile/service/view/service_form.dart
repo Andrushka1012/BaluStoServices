@@ -1,4 +1,3 @@
-import 'package:balu_sto/helpers/dialogs.dart';
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:balu_sto/helpers/styles/text_styles.dart';
@@ -25,6 +24,16 @@ class ServiceForm extends StatelessWidget {
             isProcessing: state is ServiceStateProcessing,
             child: Column(
               children: [
+                if (state is DefaultServiceState && state.isEditMode)
+                  SizedBox(
+                    width: double.infinity,
+                    height: Dimens.spanSmallerGiant,
+                    child: ElevatedButton(
+                      child: Text('delete', style: AppTextStyles.bodyText1),
+                      style: ElevatedButton.styleFrom(primary: AppColors.primaryDark),
+                      onPressed: () => _deleteService(context),
+                    ),
+                  ),
                 if (state is DefaultServiceState && state.photo != null)
                   SizedBox(
                     width: 200,
@@ -36,24 +45,25 @@ class ServiceForm extends StatelessWidget {
                     width: double.infinity,
                     height: Dimens.spanSmallerGiant,
                     child: ElevatedButton(
-                      child: Text('remove', style: AppTextStyles.bodyText1),
+                      child: Text('remove photo', style: AppTextStyles.bodyText1),
                       style: ElevatedButton.styleFrom(primary: AppColors.primaryDark),
                       onPressed: () => context.read<ServiceBloc>().add(
                             ServiceEventRemovePhoto(),
                           ),
                     ),
                   ),
-                SizedBox(
-                  width: double.infinity,
-                  height: Dimens.spanSmallerGiant,
-                  child: ElevatedButton(
-                    child: Text('Photo', style: AppTextStyles.bodyText1),
-                    style: ElevatedButton.styleFrom(primary: AppColors.primaryDark),
-                    onPressed: () => context.read<ServiceBloc>().add(
-                          ServiceEventTakePhoto(),
-                        ),
+                if (state is DefaultServiceState && state.photo == null && !state.isEditMode)
+                  SizedBox(
+                    width: double.infinity,
+                    height: Dimens.spanSmallerGiant,
+                    child: ElevatedButton(
+                      child: Text('Photo', style: AppTextStyles.bodyText1),
+                      style: ElevatedButton.styleFrom(primary: AppColors.primaryDark),
+                      onPressed: () => context.read<ServiceBloc>().add(
+                            ServiceEventTakePhoto(),
+                          ),
+                    ),
                   ),
-                ),
                 TextInput(
                   controller: _serviceNameController,
                   label: 'Предоставленная услуга',
@@ -99,7 +109,8 @@ class ServiceForm extends StatelessWidget {
     }
 
     if (state is ServiceStateError) {
-      showErrorDialog(context, state.error);
+      Navigator.of(context).pop();
+      print(state.error);
     }
 
     if (state is ServiceStateSuccess) {
@@ -107,7 +118,7 @@ class ServiceForm extends StatelessWidget {
     }
   }
 
-  _save(BuildContext context, DefaultServiceState state) {
+  void _save(BuildContext context, DefaultServiceState state) {
     if (state.isEditMode || state.photo != null) {
       context.read<ServiceBloc>().add(
             ServiceEventApply(),
@@ -146,5 +157,40 @@ class ServiceForm extends StatelessWidget {
                 ],
               ));
     }
+  }
+
+  void _deleteService(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (_) => new AlertDialog(
+              title: new Text('Удалить услугу'),
+              content: new Text('Вы уверены что хотите удалить эту услугу? Вы не сможете добавить ее обратно!'),
+              actions: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                    child: Text(
+                      'Удалить',
+                      style: TextStyle(color: AppColors.redTart),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      context.read<ServiceBloc>().add(
+                            ServiceEventDelete(),
+                          );
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                    child: Text('Нет'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+              ],
+            ));
   }
 }

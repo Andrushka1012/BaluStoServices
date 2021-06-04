@@ -64,7 +64,6 @@ class AuthHandler {
 
         _userIdentity.obtainUserData(currentUserResponse.requiredData, false);
         await initLocalDb();
-
         return currentUserResponse;
       });
 
@@ -79,21 +78,13 @@ class AuthHandler {
   }
 
   Future logout() async {
-    await clear();
+    await _currentUserDao.removeAll();
     _userIdentity.clear();
   }
 
   Future initLocalDb() async {
     if (!kIsWeb) {
-      await clear();
       await _firestoreRepository.syncUserServices();
-    }
-  }
-
-  Future clear() async {
-    if (!kIsWeb) {
-      await _currentUserDao.removeAll();
-      await _servicesDao.removeAll();
     }
   }
 }

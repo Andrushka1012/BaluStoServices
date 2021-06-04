@@ -99,6 +99,7 @@ abstract class BaseDao<T, K> {
   }
 
   Future notify() async {
+    await Future.delayed(Duration(microseconds: 500));
     final results = await getAll();
     _daoStreamController.add(results);
   }

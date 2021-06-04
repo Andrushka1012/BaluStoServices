@@ -29,7 +29,7 @@ class RecentServicesForm extends KoinPage<RecentServicesBloc> {
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Text('${service.serviceName} : ${service.moneyAmount}'),
+          child: Text('${service.serviceName} : ${service.moneyAmount} - ${service.localData?.isUploaded}'),
         ),
       );
 
