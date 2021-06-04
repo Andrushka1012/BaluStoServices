@@ -1,3 +1,4 @@
+import 'package:balu_sto/helpers/dialogs.dart';
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:balu_sto/screens/mobile/home/view/home_page.dart';
@@ -16,31 +17,19 @@ class RegistrationPage extends KoinPage<RegistrationBloc> {
   Widget buildPage(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: BlocListener<RegistrationBloc, RegistrationState>(
-        listener: _listenEvents,
-        child: Center(
-          child: WebLimitationContainer(
-            child: SingleChildScrollView(
-              child: Card(
-                margin: const EdgeInsets.all(Dimens.spanSmall),
-                child: Padding(
-                  padding: const EdgeInsets.all(Dimens.spanBig),
-                  child: RegistrationForm(),
-                ),
+      body: Center(
+        child: WebLimitationContainer(
+          child: SingleChildScrollView(
+            child: Card(
+              margin: const EdgeInsets.all(Dimens.spanSmall),
+              child: Padding(
+                padding: const EdgeInsets.all(Dimens.spanBig),
+                child: RegistrationForm(),
               ),
             ),
           ),
         ),
       ),
     );
-  }
-
-  void _listenEvents(BuildContext context, RegistrationState state) {
-    if (state is RegistrationStateLogged) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        HomeMobilePage.PAGE_NAME,
-        (Route<dynamic> route) => false,
-      );
-    }
   }
 }

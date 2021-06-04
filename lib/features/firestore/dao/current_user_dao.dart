@@ -20,7 +20,7 @@ class CurrentUserDao extends BaseDao<AppUser, String> {
   String getItemKey(AppUser item) => item.userId;
 
   @override
-  Map<String, dynamic> itemToMap(AppUser item) => item.toJson();
+  Map<String, dynamic> itemToMap(AppUser item) => item.toJsonLocal();
 
   @override
   AppUser mapToItem(Map<String, dynamic> map) => AppUser.fromJson(map);

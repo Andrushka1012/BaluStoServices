@@ -68,24 +68,19 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
       FirebaseFirestore.instance
           .collection(AppUser.COLLECTION_NAME)
-          .add(user.toJson())
+          .add(user.toJsonApi())
           .then((value) => print('Account created'))
           .catchError((e) {
         print('Account creation error $e');
       });
 
+      await _firebaseAuth.signOut();
       if (kIsWeb) {
-        await _firebaseAuth.signOut();
         await Future.delayed(Duration(seconds: 3)); // Delay because of firebase firestore issue
-        await _firebaseAuth.signInWithEmailAndPassword(
-          email: inputState.email,
-          password: inputState.password,
-        );
       }
 
-      _userIdentity.obtainUserData(user, false);
       _preferencesProvider.prefillEmail.value = inputState.email;
-      yield RegistrationStateLogged();
+      yield RegistrationStateRegistered();
     } catch (e) {
       print(e);
       yield RegistrationStateError(e);

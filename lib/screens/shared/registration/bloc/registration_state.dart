@@ -26,7 +26,7 @@ class RegistrationStateInput extends RegistrationState {
       );
 }
 
-class RegistrationStateLogged extends RegistrationState {}
+class RegistrationStateRegistered extends RegistrationState {}
 class RegistrationStateProcessing extends RegistrationState {}
 
 class RegistrationStateError extends RegistrationState {

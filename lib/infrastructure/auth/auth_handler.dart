@@ -1,6 +1,6 @@
+import 'package:balu_sto/features/firestore/dao/current_user_dao.dart';
 import 'package:balu_sto/features/firestore/dao/services_dao.dart';
 import 'package:balu_sto/features/firestore/firestore_repository.dart';
-import 'package:balu_sto/features/firestore/dao/current_user_dao.dart';
 import 'package:balu_sto/helpers/fetch_helpers.dart';
 import 'package:balu_sto/helpers/preferences/preferences_provider.dart';
 import 'package:balu_sto/infrastructure/auth/user_identity.dart';
@@ -38,14 +38,11 @@ class AuthHandler {
 
         _preferencesProvider.prefillEmail.value = email;
 
-        //await clear();
-
         final initializationResult = await initOnlineSession();
         initializationResult.throwIfNotSuccessful();
       });
 
   Future<SafeResponse> initSession() => fetchSafety(() async {
-
         final initializationResult = await initOnlineSession();
 
         if (!kIsWeb && initializationResult.isFailure) {
@@ -66,6 +63,7 @@ class AuthHandler {
         }
 
         _userIdentity.obtainUserData(currentUserResponse.requiredData, false);
+        await initLocalDb();
 
         return currentUserResponse;
       });
@@ -82,9 +80,17 @@ class AuthHandler {
 
   Future logout() async {
     await clear();
+    _userIdentity.clear();
   }
 
-  Future clear() async{
+  Future initLocalDb() async {
+    if (!kIsWeb) {
+      await clear();
+      await _firestoreRepository.syncUserServices();
+    }
+  }
+
+  Future clear() async {
     if (!kIsWeb) {
       await _currentUserDao.removeAll();
       await _servicesDao.removeAll();

@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void showErrorDialog(BuildContext context, dynamic error) {
+  print(error);
   showDialog(
       context: context,
-      builder: (_) => new AlertDialog(
-            title: new Text("Ошибка"),
-            content: new Text("Что то пошо не так :( \n$error"),
+      builder: (_) => AlertDialog(
+            title: Text("Ошибка"),
+            content: Text("Что то пошо не так :( \n$error"),
             actions: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -21,24 +22,30 @@ void showErrorDialog(BuildContext context, dynamic error) {
           ));
 }
 
-
-void showDialogMessage(BuildContext context, {String? message, String? title}) {
+void showDialogMessage(
+  BuildContext context, {
+  String? message,
+  String? title,
+  Function? action,
+  bool barrierDismissible = true,
+}) {
   showDialog(
       context: context,
-      builder: (_) => new AlertDialog(
-        title: new Text(title ?? ''),
-        content: new Text(message ?? ''),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextButton(
-              child: Text('Oк'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          )
-        ],
-      ));
+      barrierDismissible: barrierDismissible,
+      builder: (_) => AlertDialog(
+            title: Text(title ?? ''),
+            content: Text(message ?? ''),
+            actions: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  child: Text('Oк'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    action?.call();
+                  },
+                ),
+              )
+            ],
+          ));
 }
-

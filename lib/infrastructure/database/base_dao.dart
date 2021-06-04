@@ -55,12 +55,19 @@ abstract class BaseDao<T, K> {
       .whereNotNull()
       .distinct((T previous, T next) => getItemKey(previous) == getItemKey(next));
 
-  Future put(T item) async {
+  Future put(T item, {bool notifyChanged = true}) async {
     final itemKey = _getObjectKey(getItemKey(item));
     store.record(itemKey).put(
           await database,
           itemToMap(item),
         );
+    if (notifyChanged) {
+      await notify();
+    }
+  }
+
+  Future putAll(List<T> items) async {
+    await Future.forEach<T>(items, (e) => put(e, notifyChanged: false));
     await notify();
   }
 

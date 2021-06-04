@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:balu_sto/features/firestore/dao/services_dao.dart';
 import 'package:balu_sto/features/firestore/models/service.dart';
@@ -23,49 +24,66 @@ class FirestoreRepository {
   CollectionReference<AppUser> get _usersCollection =>
       FirebaseFirestore.instance.collection(AppUser.COLLECTION_NAME).withConverter<AppUser>(
             fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) => AppUser.fromJson(snapshot.data()),
-            toFirestore: (AppUser user, _) => user.toJson(),
+            toFirestore: (AppUser user, _) => user.toJsonApi(),
           );
 
-  CollectionReference<Service> get _servicesCollection =>
-      FirebaseFirestore.instance.collection(Service.COLLECTION_NAME).withConverter<Service>(
-            fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) => Service.fromJson(snapshot.data()),
-            toFirestore: (Service service, _) => service.toJson(),
-          );
+  CollectionReference<Service> get _servicesCollection => _usersCollection
+      .doc(_userIdentity.currentUser?.documentId)
+      .collection(Service.COLLECTION_NAME)
+      .withConverter<Service>(
+        fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) => Service.fromJson(snapshot.data()),
+        toFirestore: (Service service, _) => service.toJson(),
+      );
 
   Future<SafeResponse<AppUser>> getCurrentUser() => fetchSafety(() async {
-        final currentUser = (await _usersCollection.get(GetOptions(source: Source.server)))
+        final currentUserDoc = (await _usersCollection.get(GetOptions(source: Source.server)))
             .docs
             .firstWhere((element) => element.data().userId == _firebaseAuth.currentUser!.uid);
-        return currentUser.data();
+        return currentUserDoc.data()..documentId = currentUserDoc.id;
       });
 
   Future<SafeResponse> saveService({
+    required String serviceId,
     required String serviceName,
     required int moneyAmount,
     required bool isEditMode,
     Service? previousService,
+    File? photo,
   }) =>
       fetchSafety(
         () async {
           final serviceData = Service(
-            id: previousService?.id,
+            id: serviceId,
             userId: _userIdentity.currentUser!.userId,
             serviceName: serviceName,
             moneyAmount: moneyAmount,
             date: DateTime.now(),
+            hasPhoto: photo != null,
           );
 
           await _servicesDao.put(serviceData);
+          await _servicesCollection.add(serviceData);
         },
       );
 
-  Future<SafeResponse<List<Service>>> getUserServices() => fetchSafety(
+  Future<SafeResponse<List<Service>>> getUserServices({bool fromRemote = false}) => fetchSafety(
         () async {
-          if (kIsWeb) {
-            return []; // todo: get from firestore
+          if (kIsWeb || fromRemote) {
+            final services =
+                (await _servicesCollection.get(GetOptions(source: Source.server))).docs.map((e) => e.data()).toList();
+            return services;
           } else {
             return await _servicesDao.getAll();
           }
+        },
+      );
+
+  Future<SafeResponse> syncUserServices() => fetchSafety(
+        () async {
+          assert(!kIsWeb, 'Method not available on web');
+          final servicesDataResponse = await getUserServices(fromRemote: true);
+          servicesDataResponse.throwIfNotSuccessful();
+          await _servicesDao.putAll(servicesDataResponse.requiredData);
         },
       );
 }

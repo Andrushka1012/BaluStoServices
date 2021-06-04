@@ -54,10 +54,12 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
   Stream<ServiceState> _saveService(DefaultServiceState previousState) async* {
     yield ServiceStateProcessing();
     final saveResult = await _firestoreRepository.saveService(
+      serviceId: previousState.serviceId,
       serviceName: previousState.serviceName,
       moneyAmount: int.parse(previousState.moneyAmount),
       isEditMode: previousState.isEditMode,
       previousService: previousState.service,
+      photo: previousState.photo
     );
     if (saveResult.isSuccessful) {
       yield ServiceStateSuccess();

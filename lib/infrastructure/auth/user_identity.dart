@@ -7,7 +7,7 @@ class UserIdentity {
   void obtainUserData(AppUser user, bool offlineMode) {
     currentUser = user;
     this.offlineMode = offlineMode;
-    print('init:\n${user.toJson()}');
+    print('init:\n${user.toJsonApi()}');
     print('offline: $offlineMode');
   }
 
