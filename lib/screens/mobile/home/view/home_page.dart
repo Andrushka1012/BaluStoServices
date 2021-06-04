@@ -19,7 +19,15 @@ class HomeMobilePage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            RecentServicesForm(),
+            RecentServicesForm(
+              onServiceSelected: (service) => Navigator.of(context).pushNamed(
+                ServicePage.PAGE_NAME,
+                arguments: ServicePageArgs(
+                  editMode: true,
+                  service: service,
+                ),
+              ),
+            ),
             ElevatedButton(
               child: Text("Выйти"),
               onPressed: () {

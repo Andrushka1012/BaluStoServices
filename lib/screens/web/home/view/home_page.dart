@@ -11,7 +11,9 @@ class HomeWebPage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          RecentServicesForm(),
+          RecentServicesForm(
+            onServiceSelected: (service) {},
+          ),
           ElevatedButton(
             child: Text("Выйти"),
             onPressed: () {

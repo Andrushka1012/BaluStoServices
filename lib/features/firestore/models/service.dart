@@ -1,4 +1,14 @@
 class Service {
+  Service({
+    required this.userId,
+    required this.serviceName,
+    required this.moneyAmount,
+    required this.date,
+    required this.modifiedDate,
+    required this.hasPhoto,
+    String? id,
+    this.localData,
+  }) : id = id ?? DateTime.now().millisecondsSinceEpoch.toString();
   static const COLLECTION_NAME = 'services';
 
   late final String id;
@@ -11,16 +21,9 @@ class Service {
 
   ServiceLocalData? localData;
 
-  Service({
-    required this.userId,
-    required this.serviceName,
-    required this.moneyAmount,
-    required this.date,
-    required this.modifiedDate,
-    required this.hasPhoto,
-    String? id,
-    this.localData,
-  }) : id = id ?? DateTime.now().millisecondsSinceEpoch.toString();
+  String? get photoUrl => hasPhoto
+      ? 'https://firebasestorage.googleapis.com/v0/b/balustoservices.appspot.com/o/services%2F$id?alt=media'
+      : null;
 
   Service.fromJson(dynamic json) {
     id = json['id'];

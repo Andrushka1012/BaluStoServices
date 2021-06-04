@@ -6,6 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RecentServicesForm extends KoinPage<RecentServicesBloc> {
+
+  RecentServicesForm({required this.onServiceSelected});
+
+  final Function(Service) onServiceSelected;
+
   @override
   void initBloc(RecentServicesBloc bloc) {
     bloc.add(RecentServicesEvent.INIT);
@@ -20,16 +25,20 @@ class RecentServicesForm extends KoinPage<RecentServicesBloc> {
       );
 
   Widget _getServiceItem(BuildContext context, Service service) => GestureDetector(
-        onTap: () => Navigator.of(context).pushNamed(
-          ServicePage.PAGE_NAME,
-          arguments: ServicePageArgs(
-            editMode: true,
-            service: service,
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text('${service.serviceName} : ${service.moneyAmount} - ${service.localData?.isUploaded}'),
+        onTap: () => onServiceSelected(service),
+        child: Column(
+          children: [
+            if (service.photoUrl != null)
+              SizedBox(
+                width: 50,
+                height: 50,
+                child: Image.network(service.photoUrl!),
+              ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text('${service.serviceName} : ${service.moneyAmount} - ${service.localData?.isUploaded}'),
+            ),
+          ],
         ),
       );
 

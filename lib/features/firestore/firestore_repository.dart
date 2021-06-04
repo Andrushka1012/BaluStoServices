@@ -8,6 +8,7 @@ import 'package:balu_sto/helpers/fetch_helpers.dart';
 import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:koin/internals.dart';
 
@@ -76,9 +77,19 @@ class FirestoreRepository {
             final documentRef = await _servicesCollection.add(serviceData).timeout(Duration(seconds: 3));
             documentId = documentRef.id;
           }
-          serviceData.localData?.isUploaded = true;
-          serviceData.localData?.documentId = documentId;
 
+          serviceData.localData?.documentId = documentId;
+          await _servicesDao.put(serviceData);
+
+          if (photo != null) {
+            final storageRef = FirebaseStorage.instance.ref().child('services/$serviceId');
+            final task = await storageRef.putFile(photo);
+            final downloadUrl = await task.ref.getDownloadURL();
+            print(downloadUrl);
+            print(serviceId);
+          }
+
+          serviceData.localData?.isUploaded = true;
           await _servicesDao.put(serviceData);
         },
       );
@@ -122,6 +133,11 @@ class FirestoreRepository {
           }
           if (service.localData?.documentId != null) {
             await _servicesCollection.doc(service.localData?.documentId).delete().timeout(Duration(seconds: 3));
+          }
+
+          if (service.hasPhoto) {
+            final storageRef = FirebaseStorage.instance.ref().child('services/${service.id}');
+            await storageRef.delete();
           }
         },
       );
