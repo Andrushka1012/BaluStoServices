@@ -38,11 +38,14 @@ class AuthHandler {
 
         _preferencesProvider.prefillEmail.value = email;
 
+        //await clear();
+
         final initializationResult = await initOnlineSession();
         initializationResult.throwIfNotSuccessful();
       });
 
   Future<SafeResponse> initSession() => fetchSafety(() async {
+
         final initializationResult = await initOnlineSession();
 
         if (!kIsWeb && initializationResult.isFailure) {
@@ -78,7 +81,13 @@ class AuthHandler {
   }
 
   Future logout() async {
-    await _currentUserDao.removeAll();
-    await _servicesDao.removeAll();
+    await clear();
+  }
+
+  Future clear() async{
+    if (!kIsWeb) {
+      await _currentUserDao.removeAll();
+      await _servicesDao.removeAll();
+    }
   }
 }

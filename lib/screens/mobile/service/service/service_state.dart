@@ -9,7 +9,14 @@ class DefaultServiceState extends ServiceState {
     required this.isEditMode,
     required this.serviceName,
     required this.moneyAmount,
+    this.photo
   });
+
+  final Service? service;
+  final bool isEditMode;
+  final String serviceName;
+  final String moneyAmount;
+  File? photo;
 
   static DefaultServiceState create(Service? service, bool isEditMode) => DefaultServiceState._(
         service: service,
@@ -21,18 +28,15 @@ class DefaultServiceState extends ServiceState {
   DefaultServiceState copyWith({
     String? serviceName,
     String? moneyAmount,
+    File? photo,
   }) =>
       DefaultServiceState._(
         service: service,
         isEditMode: this.isEditMode,
         serviceName: serviceName ?? this.serviceName,
         moneyAmount: moneyAmount ?? this.moneyAmount,
+        photo: photo ?? this.photo
       );
-
-  final Service? service;
-  final bool isEditMode;
-  final String serviceName;
-  final String moneyAmount;
 
 }
 

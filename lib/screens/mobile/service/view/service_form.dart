@@ -25,6 +25,35 @@ class ServiceForm extends StatelessWidget {
             isProcessing: state is ServiceStateProcessing,
             child: Column(
               children: [
+                if (state is DefaultServiceState && state.photo != null)
+                  SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: Image.file(state.photo!),
+                  ),
+                if (state is DefaultServiceState && state.photo != null && !state.isEditMode)
+                  SizedBox(
+                    width: double.infinity,
+                    height: Dimens.spanSmallerGiant,
+                    child: ElevatedButton(
+                      child: Text('remove', style: AppTextStyles.bodyText1),
+                      style: ElevatedButton.styleFrom(primary: AppColors.primaryDark),
+                      onPressed: () => context.read<ServiceBloc>().add(
+                            ServiceEventRemovePhoto(),
+                          ),
+                    ),
+                  ),
+                SizedBox(
+                  width: double.infinity,
+                  height: Dimens.spanSmallerGiant,
+                  child: ElevatedButton(
+                    child: Text('Photo', style: AppTextStyles.bodyText1),
+                    style: ElevatedButton.styleFrom(primary: AppColors.primaryDark),
+                    onPressed: () => context.read<ServiceBloc>().add(
+                          ServiceEventTakePhoto(),
+                        ),
+                  ),
+                ),
                 TextInput(
                   controller: _serviceNameController,
                   label: 'Предоставленная услуга',
@@ -45,25 +74,11 @@ class ServiceForm extends StatelessWidget {
                   width: double.infinity,
                   height: Dimens.spanSmallerGiant,
                   child: ElevatedButton(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Записать', style: AppTextStyles.bodyText1),
-                        SizedBox(
-                          width: Dimens.spanTiny,
-                        ),
-                        Icon(
-                          Icons.arrow_forward_rounded,
-                          size: Dimens.spanMedium,
-                        ),
-                      ],
-                    ),
+                    child: Text('Записать', style: AppTextStyles.bodyText1),
                     style: ElevatedButton.styleFrom(primary: AppColors.primaryDark),
                     onPressed:
                         state is DefaultServiceState && state.serviceName.isNotEmpty && state.moneyAmount.isNotEmpty
-                            ? () => context.read<ServiceBloc>().add(
-                                  ServiceEventApply(),
-                                )
+                            ? () => _save(context, state)
                             : null,
                   ),
                 ),
@@ -89,6 +104,47 @@ class ServiceForm extends StatelessWidget {
 
     if (state is ServiceStateSuccess) {
       Navigator.of(context).pop();
+    }
+  }
+
+  _save(BuildContext context, DefaultServiceState state) {
+    if (state.isEditMode || state.photo != null) {
+      context.read<ServiceBloc>().add(
+            ServiceEventApply(),
+          );
+    } else {
+      showDialog(
+          context: context,
+          builder: (_) => new AlertDialog(
+                title: new Text('Фотография не была добавленна'),
+                content: new Text('Вы уверены что не хотите добавить фото?\nВы не спожете сделать это позже!'),
+                actions: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextButton(
+                      child: Text('Добваить'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        context.read<ServiceBloc>().add(
+                              ServiceEventTakePhoto(),
+                            );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextButton(
+                      child: Text('Отправить без фото'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        context.read<ServiceBloc>().add(
+                              ServiceEventApply(),
+                            );
+                      },
+                    ),
+                  ),
+                ],
+              ));
     }
   }
 }

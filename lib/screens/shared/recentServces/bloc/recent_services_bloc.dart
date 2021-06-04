@@ -25,7 +25,8 @@ class RecentServicesBloc extends Bloc<RecentServicesEvent, RecentServicesState> 
         final servicesResponse = await _firestoreRepository.getUserServices();
 
         if (servicesResponse.isSuccessful) {
-          yield RecentServicesStateDataReady(servicesResponse.requiredData.innerList(0, 4));
+          servicesResponse.requiredData.sort((first, second) => first.date.compareTo(second.date));
+          yield RecentServicesStateDataReady(servicesResponse.requiredData.reversed.toList().innerList(0, 4));
         }
         break;
     }

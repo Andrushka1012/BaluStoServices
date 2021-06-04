@@ -13,3 +13,5 @@ class ServiceEventMoneyAmountChanged extends ServiceEvent{
 }
 
 class ServiceEventApply extends ServiceEvent{}
+class ServiceEventTakePhoto extends ServiceEvent{}
+class ServiceEventRemovePhoto extends ServiceEvent{}
