@@ -1,3 +1,4 @@
+import 'package:balu_sto/screens/shared/recentServces/view/recent_services_form.dart';
 import 'package:balu_sto/screens/web/login/view/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,15 +9,20 @@ class HomeWebPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ElevatedButton(
-        child: Text("Выйти"),
-        onPressed: () {
-          FirebaseAuth.instance.signOut();
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            LoginWebPage.PAGE_NAME,
-            (Route<dynamic> route) => false,
-          );
-        },
+      body: Column(
+        children: [
+          RecentServicesForm(),
+          ElevatedButton(
+            child: Text("Выйти"),
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                LoginWebPage.PAGE_NAME,
+                (Route<dynamic> route) => false,
+              );
+            },
+          ),
+        ],
       ),
     );
   }

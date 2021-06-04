@@ -52,7 +52,7 @@ class WebApp extends StatelessWidget {
       case HomeWebPage.PAGE_NAME:
         return HomeWebPage();
       default:
-        throw Exception('Not screen specified to route ${settings.name} in communities navigation');
+        throw Exception('Not screen specified to route ${settings.name}');
     }
   };
 }
