@@ -2,6 +2,7 @@ import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/text_styles.dart';
 import 'package:balu_sto/infrastructure/auth/auth_handler.dart';
 import 'package:balu_sto/screens/mobile/login/view/login_page.dart';
+import 'package:balu_sto/screens/shared/employeesList/view/employees_list_page.dart';
 import 'package:balu_sto/screens/web/login/view/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -26,6 +27,16 @@ class MainDrawer extends StatelessWidget {
                       fit: BoxFit.cover,
                     )),
                 child: Container(),
+              ),
+              ListTile(
+                title: Text('Список работников', style: AppTextStyles.bodyText1w500,),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushNamed(EmployeesListPage.PAGE_NAME);
+                },
+              ),
+              Divider(
+                color: AppColors.white,
               ),
               ListTile(
                 title: Text('Выйти', style: AppTextStyles.bodyText1w500,),

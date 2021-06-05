@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:balu_sto/features/firestore/dao/services_dao.dart';
+import 'package:balu_sto/features/firestore/models/employee_status.dart';
 import 'package:balu_sto/features/firestore/models/service.dart';
 import 'package:balu_sto/features/firestore/models/user.dart';
 import 'package:balu_sto/helpers/extensions/firestore_extensions.dart';
@@ -167,6 +168,43 @@ class FirestoreRepository {
 
             return services;
           }
+        },
+      );
+
+  Future<SafeResponse<List<EmployeeStatusModel>>> getEmployees() => fetchSafety(
+        () async {
+          assert(_userIdentity.isAdmin, 'Это доступно только администратору');
+          final usersDocuments = await _usersCollection.get();
+
+          final List<EmployeeStatusModel> statuses = [];
+
+          await Future.wait(
+            usersDocuments.docs.map(
+              (document) async {
+                final employeeResponse = await getEmployeeStatus(document.data().userId);
+                employeeResponse.throwIfNotSuccessful();
+                statuses.add(employeeResponse.requiredData);
+              },
+            ),
+          );
+
+          print(statuses);
+          return statuses;
+        },
+      );
+
+  Future<SafeResponse<EmployeeStatusModel>> getEmployeeStatus(String userId) => fetchSafety(
+        () async {
+          final userDocument = (await _usersCollection.where('userId', isEqualTo: userId).get()).docs.first;
+          final userData = userDocument.data();
+
+          final userServicesCollection = await _getUserServicesCollection(userId);
+          final services = (await userServicesCollection.get()).docs.map((e) => e.data()).toList();
+
+          return EmployeeStatusModel(
+            user: userData,
+            services: services,
+          );
         },
       );
 }
