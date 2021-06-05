@@ -161,7 +161,7 @@ class FirestoreRepository {
             servicesResponse.throwIfNotSuccessful();
             return servicesResponse.requiredData;
           } else {
-            if (!_userIdentity.isAdmin) throw 'Вы можете просматревать только свои услуги';
+            assert(_userIdentity.isAdmin, 'Вы можете просматривать только свои услуги');
             final collection = await _getUserServicesCollection(userId);
             final services = (await collection.get()).docs.map((e) => e.data()).toList();
 

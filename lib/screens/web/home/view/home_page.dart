@@ -1,11 +1,15 @@
+import 'package:balu_sto/infrastructure/auth/auth_handler.dart';
 import 'package:balu_sto/screens/shared/home/recentServces/view/recent_services_form.dart';
 import 'package:balu_sto/screens/shared/home/servicesList/view/services_list_page.dart';
 import 'package:balu_sto/screens/web/login/view/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:koin_flutter/koin_flutter.dart';
 
 class HomeWebPage extends StatelessWidget {
   static const PAGE_NAME = 'HomePage';
+
+  late final AuthHandler _authHandler = get();
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +25,20 @@ class HomeWebPage extends StatelessWidget {
           ElevatedButton(
             child: Text("Выйти"),
             onPressed: () {
-              FirebaseAuth.instance.signOut();
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                LoginWebPage.PAGE_NAME,
-                (Route<dynamic> route) => false,
-              );
+              _logout(context);
             },
           ),
         ],
       ),
+    );
+  }
+
+  void _logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    await _authHandler.logout();
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      LoginWebPage.PAGE_NAME,
+          (Route<dynamic> route) => false,
     );
   }
 }

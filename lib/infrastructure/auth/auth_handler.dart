@@ -78,7 +78,9 @@ class AuthHandler {
   }
 
   Future logout() async {
-    await _currentUserDao.removeAll();
+    if (!kIsWeb) {
+      await _currentUserDao.removeAll();
+    }
     _userIdentity.clear();
   }
 
