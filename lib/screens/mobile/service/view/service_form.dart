@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:balu_sto/helpers/dialogs.dart';
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:balu_sto/helpers/styles/text_styles.dart';
 import 'package:balu_sto/screens/mobile/service/service/service_bloc.dart';
+import 'package:balu_sto/widgets/app_card.dart';
 import 'package:balu_sto/widgets/containers/progress_container.dart';
 import 'package:balu_sto/widgets/inputs/text_input.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +14,40 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ServiceForm extends StatelessWidget {
   final _serviceNameController = TextEditingController();
   final _moneyAmountController = TextEditingController();
+
+  Widget _getPhotoItem(BuildContext context, File photo) => Padding(
+        padding: EdgeInsets.only(bottom: Dimens.spanBig),
+        child: Center(
+          child: Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                image: FileImage(photo),
+              ),
+            ),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: IconButton(
+                padding: EdgeInsets.only(
+                  bottom: Dimens.spanTiny,
+                  right: Dimens.spanTiny,
+                ),
+                alignment: Alignment.bottomRight,
+                icon: Icon(
+                  Icons.delete,
+                  color: AppColors.white,
+                ),
+                onPressed: () => context.read<ServiceBloc>().add(
+                      ServiceEventRemovePhoto(),
+                    ),
+              ),
+            ),
+          ),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -22,77 +60,80 @@ class ServiceForm extends StatelessWidget {
           }
           return ProgressContainer(
             isProcessing: state is ServiceStateProcessing,
-            child: Column(
-              children: [
-                if (state is DefaultServiceState && state.isEditMode)
-                  SizedBox(
-                    width: double.infinity,
-                    height: Dimens.spanSmallerGiant,
-                    child: ElevatedButton(
-                      child: Text('delete', style: AppTextStyles.bodyText1),
-                      style: ElevatedButton.styleFrom(primary: AppColors.primary),
-                      onPressed: () => _deleteService(context),
-                    ),
-                  ),
-                if (state is DefaultServiceState && state.photo != null)
-                  SizedBox(
-                    width: 200,
-                    height: 200,
-                    child: Image.file(state.photo!),
-                  ),
-                if (state is DefaultServiceState && state.photo != null && !state.isEditMode)
-                  SizedBox(
-                    width: double.infinity,
-                    height: Dimens.spanSmallerGiant,
-                    child: ElevatedButton(
-                      child: Text('remove photo', style: AppTextStyles.bodyText1),
-                      style: ElevatedButton.styleFrom(primary: AppColors.primary),
-                      onPressed: () => context.read<ServiceBloc>().add(
-                            ServiceEventRemovePhoto(),
+            child: AppCard(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (state is DefaultServiceState && state.photo != null) _getPhotoItem(context, state.photo!),
+                  if (state is DefaultServiceState && state.photo == null && !state.isEditMode)
+                    Padding(
+                      padding: EdgeInsets.only(bottom: Dimens.spanBig),
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.primary),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.camera,
+                            color: AppColors.white,
                           ),
+                          onPressed: () => context.read<ServiceBloc>().add(
+                                ServiceEventTakePhoto(),
+                              ),
+                        ),
+                      ),
                     ),
+                  TextInput(
+                    controller: _serviceNameController,
+                    label: 'Предоставленная услуга',
+                    hint: 'Введите название услуги',
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    onChanged: (value) => context.read<ServiceBloc>().add(ServiceEventNameChanged(value)),
                   ),
-                if (state is DefaultServiceState && state.photo == null && !state.isEditMode)
+                  SizedBox(
+                    height: Dimens.spanSmall,
+                  ),
+                  TextInput(
+                    controller: _moneyAmountController,
+                    label: 'Стоимость услуги',
+                    hint: 'Введите стоимость услуги',
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.done,
+                    onChanged: (value) => context.read<ServiceBloc>().add(ServiceEventMoneyAmountChanged(value)),
+                  ),
+                  SizedBox(
+                    height: Dimens.spanSmall,
+                  ),
                   SizedBox(
                     width: double.infinity,
                     height: Dimens.spanSmallerGiant,
                     child: ElevatedButton(
-                      child: Text('Photo', style: AppTextStyles.bodyText1),
+                      child: Text('Записать', style: AppTextStyles.bodyText1),
                       style: ElevatedButton.styleFrom(primary: AppColors.primary),
-                      onPressed: () => context.read<ServiceBloc>().add(
-                            ServiceEventTakePhoto(),
-                          ),
+                      onPressed:
+                          state is DefaultServiceState && state.serviceName.isNotEmpty && state.moneyAmount.isNotEmpty
+                              ? () => _save(context, state)
+                              : null,
                     ),
                   ),
-                TextInput(
-                  controller: _serviceNameController,
-                  label: 'Предоставленная услуга',
-                  hint: 'Введите название услуги',
-                  keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.next,
-                  onChanged: (value) => context.read<ServiceBloc>().add(ServiceEventNameChanged(value)),
-                ),
-                TextInput(
-                  controller: _moneyAmountController,
-                  label: 'Стоимость услуги',
-                  hint: 'Введите стоимость услуги',
-                  keyboardType: TextInputType.number,
-                  textInputAction: TextInputAction.done,
-                  onChanged: (value) => context.read<ServiceBloc>().add(ServiceEventMoneyAmountChanged(value)),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: Dimens.spanSmallerGiant,
-                  child: ElevatedButton(
-                    child: Text('Записать', style: AppTextStyles.bodyText1),
-                    style: ElevatedButton.styleFrom(primary: AppColors.primary),
-                    onPressed:
-                        state is DefaultServiceState && state.serviceName.isNotEmpty && state.moneyAmount.isNotEmpty
-                            ? () => _save(context, state)
-                            : null,
-                  ),
-                ),
-              ],
+                  if (state is DefaultServiceState && state.isEditMode)
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: Dimens.spanSmall,
+                      ),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: Dimens.spanSmallerGiant,
+                        child: ElevatedButton(
+                          child: Text('Удалить', style: AppTextStyles.bodyText1),
+                          style: ElevatedButton.styleFrom(primary: AppColors.redTart),
+                          onPressed: () => _deleteService(context),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
           );
         });
@@ -109,8 +150,11 @@ class ServiceForm extends StatelessWidget {
     }
 
     if (state is ServiceStateError) {
-      Navigator.of(context).pop();
-      print(state.error);
+      if (state.close) {
+        Navigator.of(context).pop();
+      } else {
+        showErrorDialog(context, state.error);
+      }
     }
 
     if (state is ServiceStateSuccess) {
@@ -126,14 +170,24 @@ class ServiceForm extends StatelessWidget {
     } else {
       showDialog(
           context: context,
-          builder: (_) => new AlertDialog(
-                title: new Text('Фотография не была добавленна'),
-                content: new Text('Вы уверены что не хотите добавить фото?\nВы не спожете сделать это позже!'),
+          builder: (_) => AlertDialog(
+                backgroundColor: AppColors.secondary,
+                title: Text(
+                  'Фотография не была добавленна!',
+                  style: TextStyle(color: AppColors.white),
+                ),
+                content: Text(
+                  'Вы уверены что не хотите добавить фото?\nВы не сможете сделать это позже!',
+                  style: TextStyle(color: AppColors.white),
+                ),
                 actions: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextButton(
-                      child: Text('Добваить'),
+                      child: Text(
+                        'Добваить',
+                        style: TextStyle(color: AppColors.white),
+                      ),
                       onPressed: () {
                         Navigator.of(context).pop();
                         context.read<ServiceBloc>().add(
@@ -145,7 +199,10 @@ class ServiceForm extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextButton(
-                      child: Text('Отправить без фото'),
+                      child: Text(
+                        'Отправить без фото',
+                        style: TextStyle(color: AppColors.white),
+                      ),
                       onPressed: () {
                         Navigator.of(context).pop();
                         context.read<ServiceBloc>().add(
@@ -162,9 +219,16 @@ class ServiceForm extends StatelessWidget {
   void _deleteService(BuildContext context) {
     showDialog(
         context: context,
-        builder: (_) => new AlertDialog(
-              title: new Text('Удалить услугу'),
-              content: new Text('Вы уверены что хотите удалить эту услугу? Вы не сможете добавить ее обратно!'),
+        builder: (_) => AlertDialog(
+              title: Text(
+                'Удалить услугу',
+                style: TextStyle(color: AppColors.white),
+              ),
+              backgroundColor: AppColors.secondary,
+              content: Text(
+                'Вы уверены что хотите удалить эту услугу? Вы не сможете добавить ее обратно!',
+                style: TextStyle(color: AppColors.white),
+              ),
               actions: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -184,7 +248,10 @@ class ServiceForm extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextButton(
-                    child: Text('Нет'),
+                    child: Text(
+                      'Нет',
+                      style: TextStyle(color: AppColors.white),
+                    ),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },

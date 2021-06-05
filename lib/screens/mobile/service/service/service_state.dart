@@ -45,7 +45,8 @@ class ServiceStateProcessing extends ServiceState {}
 class ServiceStateSuccess extends ServiceState {}
 
 class ServiceStateError extends ServiceState {
-  ServiceStateError(this.error);
+  ServiceStateError(this.error, this.close);
 
   final dynamic error;
+  final bool close;
 }

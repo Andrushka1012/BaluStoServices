@@ -2,7 +2,6 @@ import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:balu_sto/helpers/styles/text_styles.dart';
 import 'package:balu_sto/screens/mobile/home/view/home_page.dart';
-import 'package:balu_sto/screens/shared/forgotPassword/view/forgot_password_page.dart';
 import 'package:balu_sto/screens/shared/login/bloc/login_bloc.dart';
 import 'package:balu_sto/screens/shared/login/view/login_form.dart';
 import 'package:balu_sto/screens/shared/registration/view/registration_page.dart';

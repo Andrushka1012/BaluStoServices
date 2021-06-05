@@ -53,7 +53,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
         if (result.isSuccessful) {
           yield ServiceStateSuccess();
         } else {
-          yield ServiceStateError(result.requiredError);
+          yield ServiceStateError(result.requiredError, false);
           yield previousState;
         }
         break;
@@ -61,18 +61,23 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
   }
 
   Stream<ServiceState> _saveService(DefaultServiceState previousState) async* {
-    yield ServiceStateProcessing();
-    final saveResult = await _firestoreRepository.saveService(
-        serviceId: previousState.serviceId,
-        serviceName: previousState.serviceName,
-        moneyAmount: int.parse(previousState.moneyAmount),
-        isEditMode: previousState.isEditMode,
-        previousService: previousState.service,
-        photo: previousState.photo);
-    if (saveResult.isSuccessful) {
-      yield ServiceStateSuccess();
-    } else {
-      yield ServiceStateError(saveResult.requiredError);
+    try {
+      yield ServiceStateProcessing();
+      final saveResult = await _firestoreRepository.saveService(
+          serviceId: previousState.serviceId,
+          serviceName: previousState.serviceName,
+          moneyAmount: int.parse(previousState.moneyAmount),
+          isEditMode: previousState.isEditMode,
+          previousService: previousState.service,
+          photo: previousState.photo);
+      if (saveResult.isSuccessful) {
+        yield ServiceStateSuccess();
+      } else {
+        yield ServiceStateError(saveResult.requiredError, true);
+        yield previousState;
+      }
+    }catch(e) {
+      yield ServiceStateError(e, false);
       yield previousState;
     }
   }

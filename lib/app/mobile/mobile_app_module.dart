@@ -15,5 +15,8 @@ final mobileAppModule = Module()
   ..single((scope) => CurrentUserDao(scope.get<LocalDatabase>()))
   ..single((scope) => ServicesDao(scope.get<LocalDatabase>()))
   ..factoryWithParam<ServiceBloc, Pair<Service?, bool>>(
-        (scope, Pair<Service?, bool> args) => ServiceBloc(args, scope.get<FirestoreRepository>()),
+    (scope, Pair<Service?, bool> args) => ServiceBloc(
+      args,
+      scope.get<FirestoreRepository>(),
+    ),
   );

@@ -1,4 +1,4 @@
-import 'package:balu_sto/screens/shared/recentServces/view/recent_services_form.dart';
+import 'package:balu_sto/screens/shared/home/recentServces/view/recent_services_form.dart';
 import 'package:balu_sto/screens/web/login/view/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +13,7 @@ class HomeWebPage extends StatelessWidget {
         children: [
           RecentServicesForm(
             onServiceSelected: (service) {},
+            onShowAll: (){},
           ),
           ElevatedButton(
             child: Text("Выйти"),

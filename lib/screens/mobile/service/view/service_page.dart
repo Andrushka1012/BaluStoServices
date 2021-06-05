@@ -3,6 +3,7 @@ import 'package:balu_sto/helpers/pair.dart';
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/screens/mobile/service/service/service_bloc.dart';
 import 'package:balu_sto/screens/mobile/service/view/service_form.dart';
+import 'package:balu_sto/widgets/balu_appbar.dart';
 import 'package:balu_sto/widgets/pages/koin_with_params_page.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,10 @@ class ServicePage extends KoinWithParamsPage<ServiceBloc, Pair<Service?, bool>> 
   @override
   Widget buildPage(BuildContext context) => Scaffold(
         backgroundColor: AppColors.background,
+        appBar: BaluAppbar(
+          title: !_args.editMode ? 'Добавить услугу' : 'Редактировать услугу',
+          showBack: true,
+        ),
         body: SafeArea(
           child: ServiceForm(),
         ),

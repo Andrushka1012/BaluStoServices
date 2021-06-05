@@ -22,7 +22,7 @@ class RecentServicesBloc extends Bloc<RecentServicesEvent, RecentServicesState> 
   Stream<RecentServicesState> mapEventToState(RecentServicesEvent event) async* {
     switch (event) {
       case RecentServicesEvent.INIT:
-        final servicesResponse = await _firestoreRepository.getUserServices();
+        final servicesResponse = await _firestoreRepository.getCurrentUserServices();
 
         if (servicesResponse.isSuccessful) {
           servicesResponse.requiredData.sort((first, second) => first.date.compareTo(second.date));

@@ -28,6 +28,13 @@ class AppTextStyles {
         color: AppColors.white,
       );
 
+  static TextStyle get headline2Yanone => GoogleFonts.yanoneKaffeesatz(
+        fontSize: Dimens.fontSizeHeadline2,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 0.1,
+        color: AppColors.white,
+      );
+
   static TextStyle get headline3 => GoogleFonts.pattaya(
         fontSize: Dimens.fontSizeHeadline3,
         fontWeight: FontWeight.w500,

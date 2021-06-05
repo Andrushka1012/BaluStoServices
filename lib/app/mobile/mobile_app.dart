@@ -1,3 +1,4 @@
+import 'package:balu_sto/app/share_pages.dart';
 import 'package:balu_sto/core_module.dart';
 import 'package:balu_sto/helpers/styles/theme.dart';
 import 'package:balu_sto/screens/mobile/home/view/home_page.dart';
@@ -20,9 +21,24 @@ class MobileApp extends StatelessWidget {
       theme: createTheme(context),
       initialRoute: SplashScreenMobilePage.PAGE_NAME,
       routes: routes,
-      onGenerateRoute: (RouteSettings settings) => MaterialPageRoute(
-        settings: settings,
-        builder: (BuildContext context) => getGenerateRoutePage(settings),
+      onGenerateRoute: (RouteSettings settings) => PageRouteBuilder(
+        pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+          return getGenerateRoutePage(settings);
+        },
+        transitionsBuilder: (
+          BuildContext context,
+          Animation<double> animation,
+          Animation<double> secondaryAnimation,
+          Widget child,
+        ) {
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(1, 0),
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          );
+        },
       ),
     );
   }
@@ -48,6 +64,6 @@ final Widget Function(RouteSettings) getGenerateRoutePage = (RouteSettings setti
     case ServicePage.PAGE_NAME:
       return ServicePage(settings.arguments! as ServicePageArgs);
     default:
-      throw Exception('Not screen specified to route ${settings.name}');
+      return getGenerateSharedRoutePage(settings);
   }
 };

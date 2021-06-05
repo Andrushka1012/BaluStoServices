@@ -28,13 +28,25 @@ class FirestoreRepository {
             toFirestore: (AppUser user, _) => user.toJsonApi(),
           );
 
-  CollectionReference<Service> get _servicesCollection => _usersCollection
+  CollectionReference<Service> get _currentUserServicesCollection => _usersCollection
       .doc(_userIdentity.currentUser?.documentId)
       .collection(Service.COLLECTION_NAME)
       .withConverter<Service>(
         fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) => Service.fromJson(snapshot.data()),
         toFirestore: (Service service, _) => service.toJsonApi(),
       );
+
+  Future<CollectionReference<Service>> _getUserServicesCollection(String userId) async {
+    final userDocumentId = await _usersCollection.where('userId', isEqualTo: userId).get();
+
+    return _usersCollection
+        .doc(userDocumentId.docs.first.id)
+        .collection(Service.COLLECTION_NAME)
+        .withConverter<Service>(
+          fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) => Service.fromJson(snapshot.data()),
+          toFirestore: (Service service, _) => service.toJsonApi(),
+        );
+  }
 
   Future<SafeResponse<AppUser>> getCurrentUser() => fetchSafety(() async {
         final currentUserDoc = (await _usersCollection.get(GetOptions(source: Source.server)))
@@ -72,9 +84,12 @@ class FirestoreRepository {
           String? documentId;
           if (isEditMode) {
             documentId = previousService?.localData?.documentId!;
-            _servicesCollection.doc(documentId).update(serviceData.toJsonApi()).timeout(Duration(seconds: 3));
+            _currentUserServicesCollection
+                .doc(documentId)
+                .update(serviceData.toJsonApi())
+                .timeout(Duration(seconds: 3));
           } else {
-            final documentRef = await _servicesCollection.add(serviceData).timeout(Duration(seconds: 3));
+            final documentRef = await _currentUserServicesCollection.add(serviceData).timeout(Duration(seconds: 3));
             documentId = documentRef.id;
           }
 
@@ -94,11 +109,13 @@ class FirestoreRepository {
         },
       );
 
-  Future<SafeResponse<List<Service>>> getUserServices({bool fromRemote = false}) => fetchSafety(
+  Future<SafeResponse<List<Service>>> getCurrentUserServices({bool fromRemote = false}) => fetchSafety(
         () async {
           if (kIsWeb || fromRemote) {
-            final services =
-                (await _servicesCollection.get(GetOptions(source: Source.server))).docs.map((e) => e.data()).toList();
+            final services = (await _currentUserServicesCollection.get(GetOptions(source: Source.server)))
+                .docs
+                .map((e) => e.data())
+                .toList();
             return services;
           } else {
             final services = await _servicesDao.getAll();
@@ -110,7 +127,7 @@ class FirestoreRepository {
   Future<SafeResponse> syncUserServices() => fetchSafety(
         () async {
           assert(!kIsWeb, 'Method not available on web');
-          final servicesDataResponse = await getUserServices(fromRemote: true);
+          final servicesDataResponse = await getCurrentUserServices(fromRemote: true);
           servicesDataResponse.throwIfNotSuccessful();
 
           final services = servicesDataResponse.requiredData;
@@ -132,12 +149,31 @@ class FirestoreRepository {
             await _servicesDao.remove(service);
           }
           if (service.localData?.documentId != null) {
-            await _servicesCollection.doc(service.localData?.documentId).delete().timeout(Duration(seconds: 3));
+            await _currentUserServicesCollection
+                .doc(service.localData?.documentId)
+                .delete()
+                .timeout(Duration(seconds: 3));
           }
 
           if (service.hasPhoto) {
             final storageRef = FirebaseStorage.instance.ref().child('services/${service.id}');
             await storageRef.delete();
+          }
+        },
+      );
+
+  Future<SafeResponse<List<Service>>> getUserServices(String userId) => fetchSafety(
+        () async {
+          if (userId == _userIdentity.currentUser?.userId) {
+            final servicesResponse = await getCurrentUserServices();
+            servicesResponse.throwIfNotSuccessful();
+            return servicesResponse.requiredData;
+          } else {
+            if (!_userIdentity.isAdmin) throw 'Вы можете просматревать только свои услуги';
+            final collection = await _getUserServicesCollection(userId);
+            final services = (await collection.get()).docs.map((e) => e.data()).toList();
+
+            return services;
           }
         },
       );

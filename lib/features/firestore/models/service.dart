@@ -1,3 +1,5 @@
+import 'package:balu_sto/helpers/extensions/date_extensions.dart';
+
 class Service {
   Service({
     required this.userId,
@@ -24,6 +26,8 @@ class Service {
   String? get photoUrl => hasPhoto
       ? 'https://firebasestorage.googleapis.com/v0/b/balustoservices.appspot.com/o/services%2F$id?alt=media'
       : null;
+
+  String get formattedDate => date.formatted();
 
   Service.fromJson(dynamic json) {
     id = json['id'];
