@@ -52,7 +52,7 @@ class MainDrawer extends StatelessWidget {
                   Navigator.of(context).pushNamed(
                     ServicesModificationPage.PAGE_NAME,
                     arguments: ServicesModificationPageArgs(
-                      ServicesModificationMode.CONFIRMATION,
+                      mode: ServicesModificationMode.CONFIRMATION,
                     ),
                   );
                 },
@@ -70,7 +70,7 @@ class MainDrawer extends StatelessWidget {
                   Navigator.of(context).pushNamed(
                     ServicesModificationPage.PAGE_NAME,
                     arguments: ServicesModificationPageArgs(
-                      ServicesModificationMode.PAYMENT,
+                      mode: ServicesModificationMode.PAYMENT,
                     ),
                   );
                 },

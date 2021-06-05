@@ -17,14 +17,18 @@ class ServicesModificationPage extends StatelessWidget {
           title: 'Список работников',
           showBack: true,
         ),
-        body: ServicesModificationForm(),
+        body: ServicesModificationForm(_args),
       );
 }
 
 class ServicesModificationPageArgs {
-  ServicesModificationPageArgs(this.mode);
+  ServicesModificationPageArgs({
+    required this.mode,
+    this.userId,
+  });
 
   final ServicesModificationMode mode;
+  final String? userId;
 }
 
 enum ServicesModificationMode { CONFIRMATION, PAYMENT }
