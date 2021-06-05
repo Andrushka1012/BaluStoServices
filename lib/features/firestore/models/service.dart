@@ -1,4 +1,6 @@
+import 'package:balu_sto/features/firestore/models/service_status.dart';
 import 'package:balu_sto/helpers/extensions/date_extensions.dart';
+import 'package:balu_sto/helpers/extensions/list_extensions.dart';
 
 class Service {
   Service({
@@ -8,6 +10,7 @@ class Service {
     required this.date,
     required this.modifiedDate,
     required this.hasPhoto,
+    required this.status,
     String? id,
     this.localData,
   }) : id = id ?? DateTime.now().millisecondsSinceEpoch.toString();
@@ -20,6 +23,7 @@ class Service {
   late final DateTime date;
   late final DateTime? modifiedDate;
   late final bool hasPhoto;
+  late final ServiceStatus status;
 
   ServiceLocalData? localData;
 
@@ -38,6 +42,7 @@ class Service {
     modifiedDate = json['modifiedDate'] != null ? DateTime.parse(json['modifiedDate'] as String) : null;
     hasPhoto = json['hasPhoto'] == true;
     localData = json['localData'] != null ? ServiceLocalData.fromJson(json['localData']) : null;
+    status = ServiceStatusExtenion.create(json['status']);
   }
 
   Map<String, Object?> toJsonApi() {
@@ -49,6 +54,7 @@ class Service {
     map['date'] = date.toIso8601String();
     map['modifiedDate'] = modifiedDate?.toIso8601String();
     map['hasPhoto'] = hasPhoto;
+    map['status'] = status.value;
     return map;
   }
 
@@ -62,6 +68,7 @@ class Service {
     map['modifiedDate'] = modifiedDate?.toIso8601String();
     map['hasPhoto'] = hasPhoto;
     map['localData'] = localData?.toJson();
+    map['status'] = status.value;
     return map;
   }
 }

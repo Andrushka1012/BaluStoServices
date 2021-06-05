@@ -53,7 +53,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
         if (result.isSuccessful) {
           yield ServiceStateSuccess();
         } else {
-          yield ServiceStateError(result.requiredError, false);
+          yield ServiceStateError(result.requiredError);
           yield previousState;
         }
         break;
@@ -73,11 +73,11 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
       if (saveResult.isSuccessful) {
         yield ServiceStateSuccess();
       } else {
-        yield ServiceStateError(saveResult.requiredError, true);
+        yield ServiceStateError(saveResult.requiredError);
         yield previousState;
       }
     }catch(e) {
-      yield ServiceStateError(e, false);
+      yield ServiceStateError(e);
       yield previousState;
     }
   }

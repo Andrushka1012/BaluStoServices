@@ -3,6 +3,7 @@ import 'package:balu_sto/helpers/styles/text_styles.dart';
 import 'package:balu_sto/infrastructure/auth/auth_handler.dart';
 import 'package:balu_sto/screens/mobile/login/view/login_page.dart';
 import 'package:balu_sto/screens/shared/employeesList/view/employees_list_page.dart';
+import 'package:balu_sto/screens/shared/serviceModification/view/services_modification_page.dart';
 import 'package:balu_sto/screens/web/login/view/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -29,7 +30,10 @@ class MainDrawer extends StatelessWidget {
                 child: Container(),
               ),
               ListTile(
-                title: Text('Список работников', style: AppTextStyles.bodyText1w500,),
+                title: Text(
+                  'Список работников',
+                  style: AppTextStyles.bodyText1w500,
+                ),
                 onTap: () {
                   Navigator.of(context).pop();
                   Navigator.of(context).pushNamed(EmployeesListPage.PAGE_NAME);
@@ -39,7 +43,46 @@ class MainDrawer extends StatelessWidget {
                 color: AppColors.white,
               ),
               ListTile(
-                title: Text('Выйти', style: AppTextStyles.bodyText1w500,),
+                title: Text(
+                  'Прийнять оплату',
+                  style: AppTextStyles.bodyText1w500,
+                ),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushNamed(
+                    ServicesModificationPage.PAGE_NAME,
+                    arguments: ServicesModificationPageArgs(
+                      ServicesModificationMode.CONFIRMATION,
+                    ),
+                  );
+                },
+              ),
+              Divider(
+                color: AppColors.white,
+              ),
+              ListTile(
+                title: Text(
+                  'Выдать зарплату',
+                  style: AppTextStyles.bodyText1w500,
+                ),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushNamed(
+                    ServicesModificationPage.PAGE_NAME,
+                    arguments: ServicesModificationPageArgs(
+                      ServicesModificationMode.PAYMENT,
+                    ),
+                  );
+                },
+              ),
+              Divider(
+                color: AppColors.white,
+              ),
+              ListTile(
+                title: Text(
+                  'Выйти',
+                  style: AppTextStyles.bodyText1w500,
+                ),
                 onTap: () {
                   Navigator.of(context).pop();
                   _logout(context);

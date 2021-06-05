@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:balu_sto/features/firestore/dao/services_dao.dart';
 import 'package:balu_sto/features/firestore/models/employee_status.dart';
 import 'package:balu_sto/features/firestore/models/service.dart';
+import 'package:balu_sto/features/firestore/models/service_status.dart';
 import 'package:balu_sto/features/firestore/models/user.dart';
 import 'package:balu_sto/helpers/extensions/firestore_extensions.dart';
 import 'package:balu_sto/helpers/fetch_helpers.dart';
@@ -63,6 +64,7 @@ class FirestoreRepository {
             userId: _userIdentity.currentUser!.userId,
             serviceName: serviceName,
             moneyAmount: moneyAmount,
+            status: ServiceStatus.NOT_CONFIRMED,
             date: previousService?.date ?? DateTime.now(),
             modifiedDate: isEditMode ? DateTime.now() : null,
             hasPhoto: previousService?.hasPhoto ?? photo != null,
@@ -73,17 +75,26 @@ class FirestoreRepository {
           );
 
           await _servicesDao.put(serviceData);
-
           String? documentId;
-          if (isEditMode) {
-            documentId = previousService?.localData?.documentId!;
-            _currentUserServicesCollection
-                .doc(documentId)
-                .update(serviceData.toJsonApi())
-                .timeout(Duration(seconds: 3));
-          } else {
-            final documentRef = await _currentUserServicesCollection.add(serviceData).timeout(Duration(seconds: 3));
-            documentId = documentRef.id;
+
+          try {
+            if (isEditMode) {
+              documentId = previousService?.localData?.documentId!;
+              _currentUserServicesCollection
+                  .doc(documentId)
+                  .update(serviceData.toJsonApi())
+                  .timeout(Duration(seconds: 3));
+            } else {
+              final documentRef = await _currentUserServicesCollection.add(serviceData).timeout(Duration(seconds: 3));
+              documentId = documentRef.id;
+            }
+          } catch (e) {
+            if (isEditMode) {
+              await _servicesDao.put(previousService!);
+            } else {
+              await _servicesDao.removeByKey(serviceId);
+            }
+            rethrow;
           }
 
           serviceData.localData?.documentId = documentId;

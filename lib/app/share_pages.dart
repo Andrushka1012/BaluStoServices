@@ -1,5 +1,6 @@
 import 'package:balu_sto/screens/shared/employeesList/view/employees_list_page.dart';
 import 'package:balu_sto/screens/shared/home/servicesList/view/services_list_page.dart';
+import 'package:balu_sto/screens/shared/serviceModification/view/services_modification_page.dart';
 import 'package:flutter/material.dart';
 
 final Widget Function(RouteSettings) getGenerateSharedRoutePage = (RouteSettings settings) {
@@ -13,6 +14,9 @@ final Widget Function(RouteSettings) getGenerateSharedRoutePage = (RouteSettings
               userId: settings.name!.split('/')[1],
             ),
     );
+  }
+  if (settings.name!.contains(ServicesModificationPage.PAGE_NAME)) {
+    return ServicesModificationPage(settings.arguments as ServicesModificationPageArgs);
   }
 
   throw Exception('Not screen specified to route ${settings.name}');

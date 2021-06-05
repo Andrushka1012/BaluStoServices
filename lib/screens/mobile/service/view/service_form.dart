@@ -150,11 +150,7 @@ class ServiceForm extends StatelessWidget {
     }
 
     if (state is ServiceStateError) {
-      if (state.close) {
-        Navigator.of(context).pop();
-      } else {
-        showErrorDialog(context, state.error);
-      }
+      showErrorDialog(context, state.error);
     }
 
     if (state is ServiceStateSuccess) {
