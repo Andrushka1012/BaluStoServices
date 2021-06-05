@@ -101,7 +101,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   height: Dimens.spanSmallerGiant,
                   child: ElevatedButton(
                     child: Text('Создать аккаунт', style: AppTextStyles.bodyText1),
-                    style: ElevatedButton.styleFrom(primary: AppColors.primaryDark),
+                    style: ElevatedButton.styleFrom(primary: AppColors.primary),
                     onPressed: () => context.read<RegistrationBloc>().add(
                           RegistrationEventCreate(),
                         ),

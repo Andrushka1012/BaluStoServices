@@ -30,7 +30,7 @@ class ServiceForm extends StatelessWidget {
                     height: Dimens.spanSmallerGiant,
                     child: ElevatedButton(
                       child: Text('delete', style: AppTextStyles.bodyText1),
-                      style: ElevatedButton.styleFrom(primary: AppColors.primaryDark),
+                      style: ElevatedButton.styleFrom(primary: AppColors.primary),
                       onPressed: () => _deleteService(context),
                     ),
                   ),
@@ -46,7 +46,7 @@ class ServiceForm extends StatelessWidget {
                     height: Dimens.spanSmallerGiant,
                     child: ElevatedButton(
                       child: Text('remove photo', style: AppTextStyles.bodyText1),
-                      style: ElevatedButton.styleFrom(primary: AppColors.primaryDark),
+                      style: ElevatedButton.styleFrom(primary: AppColors.primary),
                       onPressed: () => context.read<ServiceBloc>().add(
                             ServiceEventRemovePhoto(),
                           ),
@@ -58,7 +58,7 @@ class ServiceForm extends StatelessWidget {
                     height: Dimens.spanSmallerGiant,
                     child: ElevatedButton(
                       child: Text('Photo', style: AppTextStyles.bodyText1),
-                      style: ElevatedButton.styleFrom(primary: AppColors.primaryDark),
+                      style: ElevatedButton.styleFrom(primary: AppColors.primary),
                       onPressed: () => context.read<ServiceBloc>().add(
                             ServiceEventTakePhoto(),
                           ),
@@ -85,7 +85,7 @@ class ServiceForm extends StatelessWidget {
                   height: Dimens.spanSmallerGiant,
                   child: ElevatedButton(
                     child: Text('Записать', style: AppTextStyles.bodyText1),
-                    style: ElevatedButton.styleFrom(primary: AppColors.primaryDark),
+                    style: ElevatedButton.styleFrom(primary: AppColors.primary),
                     onPressed:
                         state is DefaultServiceState && state.serviceName.isNotEmpty && state.moneyAmount.isNotEmpty
                             ? () => _save(context, state)

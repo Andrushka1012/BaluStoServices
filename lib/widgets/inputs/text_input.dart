@@ -33,7 +33,6 @@ class TextInput extends StatelessWidget {
               label!,
               style: AppTextStyles.caption.copyWith(
                 fontWeight: FontWeight.bold,
-                color: AppColors.secondaryDark,
               ),
             ),
           Padding(

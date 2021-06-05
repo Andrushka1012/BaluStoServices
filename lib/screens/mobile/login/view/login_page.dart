@@ -53,7 +53,7 @@ class LoginMobilePage extends KoinPage<LoginBloc> {
                             onPressed: () => Navigator.of(context).pushNamed(RegistrationPage.PAGE_NAME),
                             style: OutlinedButton.styleFrom(
                               primary: AppColors.secondaryDark,
-                              side: BorderSide(color: AppColors.primaryDark, width: 1),
+                              side: BorderSide(color: AppColors.primary, width: 1),
                             ),
                           ),
                         ),

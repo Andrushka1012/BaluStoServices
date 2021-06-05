@@ -42,10 +42,10 @@ class HomeMobilePage extends StatelessWidget {
             arguments: ServicePageArgs(
               editMode: false,
             )),
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.secondary,
         child: Icon(
           Icons.add,
-          color: AppColors.primaryDark,
+          color: AppColors.primary,
         ),
       ),
     );

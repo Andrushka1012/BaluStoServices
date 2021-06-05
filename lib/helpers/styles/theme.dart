@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 
 ThemeData createTheme(BuildContext context) => ThemeData(
       primaryColor: AppColors.primary,
+      unselectedWidgetColor: AppColors.white,
       accentColor: AppColors.secondary,
       backgroundColor: AppColors.background,
       scaffoldBackgroundColor: AppColors.white,
       errorColor: AppColors.redTart,
-      cardColor: AppColors.white,
+      cardColor: AppColors.secondary,
       buttonTheme: ButtonThemeData(
             height: Dimens.spanSmallerGiant,
-            buttonColor: AppColors.primaryDark
+            buttonColor: AppColors.primary
       ),
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: AppColors.secondary,

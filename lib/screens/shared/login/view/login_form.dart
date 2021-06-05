@@ -43,7 +43,7 @@ class _LoginFormState extends State<LoginForm> {
               child: Text(
                 'Востановить',
                 style: AppTextStyles.bodyText1.copyWith(
-                  color: AppColors.primaryDark,
+                  color: AppColors.primary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -69,7 +69,6 @@ class _LoginFormState extends State<LoginForm> {
                     'Войти',
                     style: AppTextStyles.headline1.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.secondaryDark,
                     ),
                   ),
                   SizedBox(
@@ -107,6 +106,7 @@ class _LoginFormState extends State<LoginForm> {
                           width: Dimens.spanHuge,
                           height: Dimens.spanHuge,
                           child: Checkbox(
+
                               value: _passwordVisible,
                               onChanged: (value) {
                                 setState(() {
@@ -144,7 +144,7 @@ class _LoginFormState extends State<LoginForm> {
                           ),
                         ],
                       ),
-                      style: ElevatedButton.styleFrom(primary: AppColors.primaryDark),
+                      style: ElevatedButton.styleFrom(primary: AppColors.primary),
                       onPressed: () => context.read<LoginBloc>().add(
                             LoginEventAttempt(),
                           ),

@@ -42,7 +42,7 @@ class ForgotPasswordForm extends StatelessWidget {
               height: Dimens.spanSmallerGiant,
               child: ElevatedButton(
                 child: Text('Отправить ссылку сброса', style: AppTextStyles.bodyText1),
-                style: ElevatedButton.styleFrom(primary: AppColors.primaryDark),
+                style: ElevatedButton.styleFrom(primary: AppColors.primary),
                 onPressed: () => _resetPassword(context),
               ),
             ),
