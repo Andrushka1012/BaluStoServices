@@ -11,7 +11,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:meta/meta.dart';
 
 part 'registration_event.dart';
-
 part 'registration_state.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {

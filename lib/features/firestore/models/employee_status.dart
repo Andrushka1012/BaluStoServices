@@ -11,6 +11,8 @@ class EmployeeStatusModel {
   final AppUser user;
   final List<Service> services;
 
-  List<Service> get  toConfirmation => services.where((service) => service.status == ServiceStatus.NOT_CONFIRMED).toList();
-  List<Service> get  toPayment => services.where((service) => service.status == ServiceStatus.CONFIRMED).toList();
+  List<Service> get toConfirmation =>
+      services.where((service) => service.status == ServiceStatus.NOT_CONFIRMED).toList();
+
+  List<Service> get toPayment => services.where((service) => service.status == ServiceStatus.CONFIRMED).toList();
 }

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:balu_sto/features/firestore/firestore_repository.dart';
 import 'package:balu_sto/features/firestore/models/service.dart';
@@ -10,7 +9,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 
 part 'service_event.dart';
-
 part 'service_state.dart';
 
 class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
@@ -76,7 +74,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
         yield ServiceStateError(saveResult.requiredError);
         yield previousState;
       }
-    }catch(e) {
+    } catch (e) {
       yield ServiceStateError(e);
       yield previousState;
     }

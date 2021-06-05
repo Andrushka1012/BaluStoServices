@@ -2,7 +2,6 @@ import 'package:balu_sto/app/share_pages.dart';
 import 'package:balu_sto/core_module.dart';
 import 'package:balu_sto/helpers/styles/theme.dart';
 import 'package:balu_sto/screens/shared/forgotPassword/view/forgot_password_page.dart';
-import 'package:balu_sto/screens/shared/home/servicesList/view/services_list_page.dart';
 import 'package:balu_sto/screens/shared/registration/view/registration_page.dart';
 import 'package:balu_sto/screens/shared/sharedModule.dart';
 import 'package:balu_sto/screens/web/home/view/home_page.dart';

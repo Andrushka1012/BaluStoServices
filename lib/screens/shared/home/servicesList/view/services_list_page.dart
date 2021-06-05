@@ -7,6 +7,7 @@ import 'package:koin_flutter/koin_flutter.dart';
 
 class ServicesListPage extends StatelessWidget {
   static const PAGE_NAME = 'ServicesListPage';
+
   static getPageName(String userId) => 'user/$userId/ServicesListPage';
 
   ServicesListPage(this._args);
@@ -19,7 +20,8 @@ class ServicesListPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.secondaryDark,
       appBar: BaluAppbar(
-        title: _args.userId == _userIdentity.requiredCurrentUser.userId ? 'Ваши услуги' : 'Услуги ${_args.userName ?? ''}',
+        title:
+            _args.userId == _userIdentity.requiredCurrentUser.userId ? 'Ваши услуги' : 'Услуги ${_args.userName ?? ''}',
         showBack: true,
       ),
       body: ServicesListForm(_args.userId),

@@ -38,7 +38,7 @@ class HomeWebPage extends StatelessWidget {
     await _authHandler.logout();
     Navigator.of(context).pushNamedAndRemoveUntil(
       LoginWebPage.PAGE_NAME,
-          (Route<dynamic> route) => false,
+      (Route<dynamic> route) => false,
     );
   }
 }

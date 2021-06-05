@@ -22,7 +22,6 @@ class MainDrawer extends StatelessWidget {
             children: <Widget>[
               DrawerHeader(
                 decoration: BoxDecoration(
-                    color: Colors.blue,
                     image: DecorationImage(
                       image: AssetImage('assets/images/into_background.png'),
                       fit: BoxFit.cover,

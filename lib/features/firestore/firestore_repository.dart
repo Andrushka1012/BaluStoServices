@@ -212,9 +212,11 @@ class FirestoreRepository {
           final userServicesCollection = await _getUserServicesCollection(userId);
           final services = (await userServicesCollection.get()).docs.map((e) => e.data()).toList();
 
+          services.sort((first, second) => first.date.compareTo(second.date));
+
           return EmployeeStatusModel(
             user: userData,
-            services: services,
+            services: services.reversed.toList(),
           );
         },
       );

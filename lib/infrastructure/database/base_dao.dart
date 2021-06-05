@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:sembast/sembast.dart';
 import 'package:balu_sto/helpers/extensions/list_extensions.dart';
 import 'package:balu_sto/helpers/extensions/stream_extensions.dart';
+import 'package:sembast/sembast.dart';
 
 import 'local_data_base.dart';
 

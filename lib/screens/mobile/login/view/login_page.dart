@@ -42,7 +42,10 @@ class LoginMobilePage extends KoinPage<LoginBloc> {
                         Center(child: LoginForm()),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: Dimens.spanBig),
-                          child: Text('Или', style: AppTextStyles.bodyText1,),
+                          child: Text(
+                            'Или',
+                            style: AppTextStyles.bodyText1,
+                          ),
                         ),
                         SizedBox(
                           width: double.infinity,

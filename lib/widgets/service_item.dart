@@ -6,10 +6,11 @@ import 'package:balu_sto/widgets/balu_image.dart';
 import 'package:flutter/material.dart';
 
 class ServiceItem extends StatelessWidget {
-  const ServiceItem(this.service, {required this.onSelected});
+  const ServiceItem(this.service, {required this.onSelected, this.showArrow = true});
 
   final Service service;
   final Function(Service)? onSelected;
+  final bool showArrow;
 
   Widget get _placeHolderIcon => Icon(
         Icons.car_repair,
@@ -64,7 +65,7 @@ class ServiceItem extends StatelessWidget {
                   ),
                 ),
               ),
-              if (onSelected != null)
+              if (onSelected != null && showArrow)
                 Icon(
                   Icons.chevron_right,
                   color: AppColors.white,

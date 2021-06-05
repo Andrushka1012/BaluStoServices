@@ -26,5 +26,4 @@ class Dimens {
   static const webConstraintsMinSize = 500.0;
   static const webConstraintsMaxHeight = 600.0;
   static const webConstraintsMaxWidth = 1000.0;
-
 }

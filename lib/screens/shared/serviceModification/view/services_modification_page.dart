@@ -14,7 +14,7 @@ class ServicesModificationPage extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: AppColors.background,
         appBar: BaluAppbar(
-          title: 'Список работников',
+          title: _args.mode == ServicesModificationMode.CONFIRMATION ? 'Прийнять оплату' : 'Выдать зарплату',
           showBack: true,
         ),
         body: ServicesModificationForm(_args),

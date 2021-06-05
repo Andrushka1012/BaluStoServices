@@ -2,7 +2,6 @@ import 'package:balu_sto/helpers/preferences/base_preference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferencesProvider {
-
   static late final PreferencesProvider instance = PreferencesProvider();
 
   static const _LAST_EMAIL_KEY = 'LAST_EMAIL';

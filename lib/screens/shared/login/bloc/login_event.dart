@@ -15,5 +15,4 @@ class LoginEventPasswordChanged extends LoginEvent {
   final String value;
 }
 
-class LoginEventAttempt extends LoginEvent {
-}
+class LoginEventAttempt extends LoginEvent {}

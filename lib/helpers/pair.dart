@@ -1,6 +1,6 @@
 class Pair<F, S> {
-  const Pair(this.first, this.second);
+  Pair(this.first, this.second);
 
-  final F first;
-  final S second;
+  F first;
+  S second;
 }

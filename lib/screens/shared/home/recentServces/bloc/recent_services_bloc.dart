@@ -7,7 +7,6 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 part 'recent_services_event.dart';
-
 part 'recent_services_state.dart';
 
 class RecentServicesBloc extends Bloc<RecentServicesEvent, RecentServicesState> {

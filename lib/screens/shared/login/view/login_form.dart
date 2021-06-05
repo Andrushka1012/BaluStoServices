@@ -106,7 +106,6 @@ class _LoginFormState extends State<LoginForm> {
                           width: Dimens.spanHuge,
                           height: Dimens.spanHuge,
                           child: Checkbox(
-
                               value: _passwordVisible,
                               onChanged: (value) {
                                 setState(() {

@@ -29,7 +29,10 @@ class RecentServicesForm extends KoinPage<RecentServicesBloc> {
                 top: Dimens.spanBig,
                 bottom: Dimens.spanSmall,
               ),
-              child: Text('Последние услуги', style: AppTextStyles.headline2Yanone,),
+              child: Text(
+                'Последние услуги',
+                style: AppTextStyles.headline2Yanone,
+              ),
             ),
             ...state.services.map(
               (service) => ServiceItem(

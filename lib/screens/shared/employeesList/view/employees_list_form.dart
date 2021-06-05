@@ -15,7 +15,7 @@ class EmployeesListForm extends KoinWithParamsPage<EmployeesManagementBloc, Pair
 
   @override
   void initBloc(EmployeesManagementBloc bloc) {
-    bloc.add(EmployeesManagementEvent.INIT);
+    bloc.add(EmployeesManagementEventInit());
   }
 
   Widget _getContentItem(BuildContext context, List<EmployeeStatusModel> employee) => ListView(

@@ -21,5 +21,4 @@ class RegistrationEventPasswordChanged extends RegistrationEvent {
   final String value;
 }
 
-class RegistrationEventCreate extends RegistrationEvent {
-}
+class RegistrationEventCreate extends RegistrationEvent {}

@@ -6,7 +6,6 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 part 'services_list_event.dart';
-
 part 'services_list_state.dart';
 
 class ServicesListBloc extends Bloc<ServicesListEvent, ServicesListState> {

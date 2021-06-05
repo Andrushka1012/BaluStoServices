@@ -11,10 +11,7 @@ ThemeData createTheme(BuildContext context) => ThemeData(
       scaffoldBackgroundColor: AppColors.white,
       errorColor: AppColors.redTart,
       cardColor: AppColors.secondary,
-      buttonTheme: ButtonThemeData(
-            height: Dimens.spanSmallerGiant,
-            buttonColor: AppColors.primary
-      ),
+      buttonTheme: ButtonThemeData(height: Dimens.spanSmallerGiant, buttonColor: AppColors.primary),
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: AppColors.secondary,
       ),
