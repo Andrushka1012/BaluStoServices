@@ -25,8 +25,9 @@ class ServicesListBloc extends Bloc<ServicesListEvent, ServicesListState> {
       case ServicesListEvent.INIT:
         yield ServicesListStateProcessing();
         final servicesResponse = await _firestoreRepository.getUserServices(userId);
+        servicesResponse.requiredData.sort((first, second) => first.date.compareTo(second.date));
         if (servicesResponse.isSuccessful) {
-          yield ServicesListStateData(servicesResponse.requiredData);
+          yield ServicesListStateData(servicesResponse.requiredData.reversed.toList());
         } else {
           yield ServicesListStateError(servicesResponse.requiredError);
         }

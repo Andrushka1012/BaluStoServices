@@ -64,7 +64,7 @@ class FirestoreRepository {
             moneyAmount: moneyAmount,
             date: previousService?.date ?? DateTime.now(),
             modifiedDate: isEditMode ? DateTime.now() : null,
-            hasPhoto: photo != null,
+            hasPhoto: previousService?.hasPhoto ?? photo != null,
             localData: ServiceLocalData(
                 filePath: photo?.path ?? previousService?.localData?.filePath,
                 isUploaded: false,
