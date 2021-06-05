@@ -7,8 +7,8 @@ import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:meta/meta.dart';
 
 part 'registration_event.dart';
 

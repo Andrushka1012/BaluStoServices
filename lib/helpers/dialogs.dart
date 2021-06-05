@@ -45,8 +45,14 @@ void showDialogMessage(
       barrierDismissible: barrierDismissible,
       builder: (_) => AlertDialog(
             backgroundColor: AppColors.secondary,
-            title: Text(title ?? ''),
-            content: Text(message ?? ''),
+            title: Text(
+              title ?? '',
+              style: TextStyle(color: AppColors.white),
+            ),
+            content: Text(
+              message ?? '',
+              style: TextStyle(color: AppColors.white),
+            ),
             actions: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(8.0),

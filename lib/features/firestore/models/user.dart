@@ -5,7 +5,7 @@ class AppUser {
   static const COLLECTION_NAME = 'users';
 
   late final String userId;
-  late String documentId;
+  String? documentId;
   late final String name;
   late final String email;
   late final Role role;

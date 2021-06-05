@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:balu_sto/features/firestore/dao/services_dao.dart';
 import 'package:balu_sto/features/firestore/models/service.dart';
 import 'package:balu_sto/features/firestore/models/user.dart';
+import 'package:balu_sto/helpers/extensions/firestore_extensions.dart';
 import 'package:balu_sto/helpers/fetch_helpers.dart';
 import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,26 +24,17 @@ class FirestoreRepository {
   Stream<List<Service>>? get servicesStream => !kIsWeb ? _servicesDao.getAllStreamed() : null;
 
   CollectionReference<AppUser> get _usersCollection =>
-      FirebaseFirestore.instance.collection(AppUser.COLLECTION_NAME).withConverter<AppUser>(
-            fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) => AppUser.fromJson(snapshot.data()),
-            toFirestore: (AppUser user, _) => user.toJsonApi(),
-          );
+      FirebaseFirestore.instance.collection(AppUser.COLLECTION_NAME).userConverter();
 
   CollectionReference<Service> get _currentUserServicesCollection => _usersCollection
       .doc(_userIdentity.currentUser?.documentId)
       .collection(Service.COLLECTION_NAME)
-      .withConverter<Service>(
-        fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) => Service.fromJson(snapshot.data()),
-        toFirestore: (Service service, _) => service.toJsonApi(),
-      );
+      .serviceConverter();
 
   Future<CollectionReference<Service>> _getUserServicesCollection(String userId) async {
-    final userDocumentId = await _usersCollection.where('userId', isEqualTo: userId).get();
+    final userDocumentId = (await _usersCollection.where('userId', isEqualTo: userId).get()).docs.first.id;
 
-    return _usersCollection
-        .doc(userDocumentId.docs.first.id)
-        .collection(Service.COLLECTION_NAME)
-        .withConverter<Service>(
+    return _usersCollection.doc(userDocumentId).collection(Service.COLLECTION_NAME).withConverter<Service>(
           fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) => Service.fromJson(snapshot.data()),
           toFirestore: (Service service, _) => service.toJsonApi(),
         );
