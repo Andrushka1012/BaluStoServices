@@ -1,7 +1,7 @@
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:balu_sto/screens/mobile/service/view/service_page.dart';
-import 'package:balu_sto/screens/shared/home/recentServces/view/recent_services_form.dart';
+import 'package:balu_sto/screens/shared/home/userServices/view/user_services_form.dart';
 import 'package:balu_sto/screens/shared/home/servicesList/view/services_list_page.dart';
 import 'package:balu_sto/screens/shared/widget/main_drawer.dart';
 import 'package:balu_sto/widgets/balu_appbar.dart';
@@ -25,7 +25,8 @@ class HomeMobilePage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            RecentServicesForm(
+            UserServicesForm(
+              userId: _userIdentity.requiredCurrentUser.userId,
               onServiceSelected: (service) => Navigator.of(context).pushNamed(
                 ServicePage.PAGE_NAME,
                 arguments: ServicePageArgs(

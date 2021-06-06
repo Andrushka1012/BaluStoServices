@@ -8,11 +8,13 @@ class BaluAppbar extends StatelessWidget implements PreferredSizeWidget {
     required this.title,
     this.showBack = false,
     this.defaultLeading = false,
+    this.actions = const [],
   });
 
   final String title;
   final bool showBack;
   final bool defaultLeading;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) => AppBar(
@@ -36,6 +38,7 @@ class BaluAppbar extends StatelessWidget implements PreferredSizeWidget {
             fontSize: Dimens.fontSizeHeadline2,
           ),
         ),
+        actions: actions,
       );
 
   @override

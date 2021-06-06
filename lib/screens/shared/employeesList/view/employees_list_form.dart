@@ -2,6 +2,7 @@ import 'package:balu_sto/features/firestore/models/employee_status.dart';
 import 'package:balu_sto/helpers/dialogs.dart';
 import 'package:balu_sto/helpers/pair.dart';
 import 'package:balu_sto/screens/shared/employeesList/bloc/employees_management_bloc.dart';
+import 'package:balu_sto/screens/shared/home/userPage/view/user_profile_page.dart';
 import 'package:balu_sto/screens/shared/serviceModification/view/services_modification_page.dart';
 import 'package:balu_sto/widgets/containers/progress_container.dart';
 import 'package:balu_sto/widgets/employee_item.dart';
@@ -21,7 +22,17 @@ class EmployeesListForm extends KoinWithParamsPage<EmployeesManagementBloc, Pair
   Widget _getContentItem(BuildContext context, List<EmployeeStatusModel> employee) => ListView(
         children: employee
             .map(
-              (employee) => EmployeeItem(employee),
+              (employee) => EmployeeItem(
+                employee,
+                onEmployeeSelected: (_) => Navigator.of(context).pushNamed(
+                    UserProfilePage.getPageName(
+                      employee.user.userId,
+                    ),
+                    arguments: UserProfilePageArg(
+                      userId: employee.user.userId,
+                      user: employee.user,
+                    )),
+              ),
             )
             .toList(),
       );

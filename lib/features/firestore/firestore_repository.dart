@@ -223,7 +223,7 @@ class FirestoreRepository {
         },
       );
 
-  Future<SafeResponse> updateUserServices(List<Service> services) => fetchSafety(
+  Future<SafeResponse> updateServices(List<Service> services) => fetchSafety(
         () async {
           await Future.wait(
             services.map((service) async {
@@ -231,6 +231,10 @@ class FirestoreRepository {
               await serviceDocument.reference.update(service.toJsonApi()).timeout(Duration(seconds: 3));
             }),
           );
+
+          if (!kIsWeb) {
+            await syncUserServices();
+          }
         },
       );
 }

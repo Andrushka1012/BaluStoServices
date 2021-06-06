@@ -60,7 +60,7 @@ class ServicesModificationPage
                 style: TextStyle(color: AppColors.white),
               ),
               content: Text(
-                'Вы уверенны что хотите $_title в общем размере ${state.selectedAmount}?',
+                'Вы уверенны что хотите $_title в общем размере ${_args.mode == ServicesModificationMode.CONFIRMATION ? state.selectedAmount : state.selectedAmount / 2}?',
                 style: TextStyle(color: AppColors.white),
               ),
               actions: <Widget>[

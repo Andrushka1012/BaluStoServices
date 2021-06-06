@@ -85,7 +85,7 @@ class EmployeesManagementBloc extends Bloc<EmployeesManagementEvent, EmployeesMa
         service.status = mode == ServicesModificationMode.CONFIRMATION ? ServiceStatus.CONFIRMED : ServiceStatus.PAYED;
       });
 
-      final updateResult = await firestoreRepository.updateUserServices(selectedServices);
+      final updateResult = await firestoreRepository.updateServices(selectedServices);
       if (updateResult.isSuccessful) {
         yield EmployeesListStateSuccess();
       } else {

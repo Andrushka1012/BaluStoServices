@@ -1,5 +1,6 @@
 import 'package:balu_sto/screens/shared/employeesList/view/employees_list_page.dart';
 import 'package:balu_sto/screens/shared/home/servicesList/view/services_list_page.dart';
+import 'package:balu_sto/screens/shared/home/userPage/view/user_profile_page.dart';
 import 'package:balu_sto/screens/shared/serviceModification/view/services_modification_page.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +12,16 @@ final Widget Function(RouteSettings) getGenerateSharedRoutePage = (RouteSettings
       settings.arguments != null
           ? settings.arguments as ServicesListPageArgs
           : ServicesListPageArgs(
+              userId: settings.name!.split('/')[1],
+            ),
+    );
+  }
+
+  if (settings.name!.contains(UserProfilePage.PAGE_NAME)) {
+    return UserProfilePage(
+      settings.arguments != null
+          ? settings.arguments as UserProfilePageArg
+          : UserProfilePageArg(
               userId: settings.name!.split('/')[1],
             ),
     );
