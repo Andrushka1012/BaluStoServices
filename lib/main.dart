@@ -4,20 +4,19 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 import 'app/mobile/mobile_app.dart';
-import 'app/web/web_app.dart';
 
 void main() async {
   if (kIsWeb) {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
-
-    WebApp.initKoin();
+    App.initKoin();
     PreferencesProvider.instance.initialize();
-    runApp(WebApp());
+
+    runApp(App());
   } else {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
-    MobileApp.initKoin();
-    runApp(MobileApp());
+
+    runApp(App());
   }
 }

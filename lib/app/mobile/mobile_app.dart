@@ -13,7 +13,7 @@ import 'package:koin/koin.dart';
 
 import 'mobile_app_module.dart';
 
-class MobileApp extends StatelessWidget {
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -56,7 +56,7 @@ final routes = <String, WidgetBuilder>{
   LoginMobilePage.PAGE_NAME: (context) => LoginMobilePage(),
   RegistrationPage.PAGE_NAME: (context) => RegistrationPage(),
   ForgotPasswordPage.PAGE_NAME: (context) => ForgotPasswordPage(),
-  HomeMobilePage.PAGE_NAME: (context) => HomeMobilePage(),
+  HomePage.PAGE_NAME: (context) => HomePage(),
 };
 
 final Widget Function(RouteSettings) getGenerateRoutePage = (RouteSettings settings) {

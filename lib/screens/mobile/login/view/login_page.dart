@@ -5,8 +5,10 @@ import 'package:balu_sto/screens/mobile/home/view/home_page.dart';
 import 'package:balu_sto/screens/shared/login/bloc/login_bloc.dart';
 import 'package:balu_sto/screens/shared/login/view/login_form.dart';
 import 'package:balu_sto/screens/shared/registration/view/registration_page.dart';
+import 'package:balu_sto/screens/web/login/view/login_page.dart';
 import 'package:balu_sto/widgets/logos/app_logo.dart';
 import 'package:balu_sto/widgets/pages/koin_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,7 +17,7 @@ class LoginMobilePage extends KoinPage<LoginBloc> {
 
   @override
   Widget buildPage(BuildContext context) {
-    return Scaffold(
+    return kIsWeb ? LoginWebPage() : Scaffold(
       backgroundColor: AppColors.background,
       body: BlocListener<LoginBloc, LoginState>(
         listener: _listenEvents,
@@ -74,7 +76,7 @@ class LoginMobilePage extends KoinPage<LoginBloc> {
   void _listenEvents(BuildContext context, LoginState state) {
     if (state is LoginStateLogged) {
       Navigator.of(context).pushNamedAndRemoveUntil(
-        HomeMobilePage.PAGE_NAME,
+        HomePage.PAGE_NAME,
         (Route<dynamic> route) => false,
       );
     }

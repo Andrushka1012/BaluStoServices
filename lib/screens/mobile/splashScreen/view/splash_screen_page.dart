@@ -41,7 +41,7 @@ class SplashScreenMobilePage extends KoinPage<SplashScreenBloc> {
         break;
       case SplashScreenStateLogged:
         Navigator.of(context).pushNamedAndRemoveUntil(
-          HomeMobilePage.PAGE_NAME,
+          HomePage.PAGE_NAME,
           (Route<dynamic> route) => false,
         );
         break;

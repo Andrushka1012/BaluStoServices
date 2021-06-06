@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 class UserProfilePage extends StatelessWidget {
   static const PAGE_NAME = 'UserProfilePage';
 
-  static getPageName(String userId) => 'user/$userId/UserProfilePage';
+  static getPageName(String userId) => 'user/$userId/$PAGE_NAME';
 
   UserProfilePage(this._args);
 

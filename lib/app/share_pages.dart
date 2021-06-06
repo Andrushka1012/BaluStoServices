@@ -1,4 +1,5 @@
 import 'package:balu_sto/screens/shared/employeesList/view/employees_list_page.dart';
+import 'package:balu_sto/screens/shared/home/serviceDetails/view/service_details_page.dart';
 import 'package:balu_sto/screens/shared/home/servicesList/view/services_list_page.dart';
 import 'package:balu_sto/screens/shared/home/userPage/view/user_profile_page.dart';
 import 'package:balu_sto/screens/shared/serviceModification/view/services_modification_page.dart';
@@ -26,6 +27,10 @@ final Widget Function(RouteSettings) getGenerateSharedRoutePage = (RouteSettings
             ),
     );
   }
+  if (settings.name!.contains(ServiceDetailsPage.PAGE_NAME)) {
+    return ServiceDetailsPage(settings.arguments as ServiceDetailsPageArgs);
+  }
+
   if (settings.name!.contains(ServicesModificationPage.PAGE_NAME)) {
     return ServicesModificationPage(settings.arguments as ServicesModificationPageArgs);
   }
