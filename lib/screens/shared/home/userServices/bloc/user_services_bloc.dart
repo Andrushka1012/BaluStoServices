@@ -12,7 +12,7 @@ part 'user_services_state.dart';
 
 class RecentServicesBloc extends Bloc<UserServicesEvent, UserServicesState> {
   RecentServicesBloc(this.userId, this._firestoreRepository) : super(InitialRecentServicesState()) {
-    _servicesSubscription = _firestoreRepository.servicesStream?.listen((_) => add(UserServicesEvent.INIT));
+    _servicesSubscription = _firestoreRepository.getUserServicesStream(userId)?.listen((_) => add(UserServicesEvent.INIT));
   }
 
   final String userId;

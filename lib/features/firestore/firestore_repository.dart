@@ -7,6 +7,7 @@ import 'package:balu_sto/features/firestore/models/service.dart';
 import 'package:balu_sto/features/firestore/models/service_status.dart';
 import 'package:balu_sto/features/firestore/models/user.dart';
 import 'package:balu_sto/helpers/extensions/firestore_extensions.dart';
+import 'package:balu_sto/helpers/extensions/stream_extensions.dart';
 import 'package:balu_sto/helpers/fetch_helpers.dart';
 import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,7 +23,8 @@ class FirestoreRepository {
   final UserIdentity _userIdentity;
   late final AssetsDao _assetsDao = _scope.get();
 
-  Stream<List<Service>>? get servicesStream => null;
+  Stream<QuerySnapshot<Service>>? getUserServicesStream(String userId) =>
+      flattenStreams(_getUserServicesCollection(userId).asStream().map((event) => event.snapshots()));
 
   CollectionReference<AppUser> get _usersCollection =>
       FirebaseFirestore.instance.collection(AppUser.COLLECTION_NAME).userConverter();

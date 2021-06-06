@@ -6,11 +6,12 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 part 'services_list_event.dart';
+
 part 'services_list_state.dart';
 
 class ServicesListBloc extends Bloc<ServicesListEvent, ServicesListState> {
   ServicesListBloc(this.userId, this._firestoreRepository) : super(ServicesListStateProcessing()) {
-    _servicesSubscription = _firestoreRepository.servicesStream?.listen((_) => add(ServicesListEvent.INIT));
+    _servicesSubscription = _firestoreRepository.getUserServicesStream(userId)?.listen((_) => add(ServicesListEvent.INIT));
   }
 
   final String userId;
