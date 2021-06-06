@@ -1,6 +1,7 @@
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/text_styles.dart';
 import 'package:balu_sto/infrastructure/auth/auth_handler.dart';
+import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:balu_sto/screens/mobile/login/view/login_page.dart';
 import 'package:balu_sto/screens/shared/employeesList/view/employees_list_page.dart';
 import 'package:balu_sto/screens/shared/serviceModification/view/services_modification_page.dart';
@@ -12,6 +13,7 @@ import 'package:koin_flutter/koin_flutter.dart';
 
 class MainDrawer extends StatelessWidget {
   late final AuthHandler _authHandler = get();
+  late final UserIdentity _userIdentity = get();
 
   @override
   Widget build(BuildContext context) => Drawer(
@@ -23,60 +25,66 @@ class MainDrawer extends StatelessWidget {
               DrawerHeader(
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/into_background.png'),
-                      fit: BoxFit.cover,
-                    )),
+                  image: AssetImage('assets/images/into_background.png'),
+                  fit: BoxFit.cover,
+                )),
                 child: Container(),
               ),
-              ListTile(
-                title: Text(
-                  'Список работников',
-                  style: AppTextStyles.bodyText1w500,
+              if (_userIdentity.isAdmin) ...[
+                ListTile(
+                  title: Text(
+                    'Список работников',
+                    style: AppTextStyles.bodyText1w500,
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(EmployeesListPage.PAGE_NAME);
+                  },
                 ),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pushNamed(EmployeesListPage.PAGE_NAME);
-                },
-              ),
-              Divider(
-                color: AppColors.white,
-              ),
-              ListTile(
-                title: Text(
-                  'Прийнять оплату',
-                  style: AppTextStyles.bodyText1w500,
+                Divider(
+                  color: AppColors.white,
                 ),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pushNamed(
-                    ServicesModificationPage.PAGE_NAME,
-                    arguments: ServicesModificationPageArgs(
-                      mode: ServicesModificationMode.CONFIRMATION,
-                    ),
-                  );
-                },
-              ),
-              Divider(
-                color: AppColors.white,
-              ),
-              ListTile(
-                title: Text(
-                  'Выдать зарплату',
-                  style: AppTextStyles.bodyText1w500,
+              ],
+              if (_userIdentity.isAdmin) ...[
+                ListTile(
+                  title: Text(
+                    'Прийнять оплату',
+                    style: AppTextStyles.bodyText1w500,
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(
+                      ServicesModificationPage.PAGE_NAME,
+                      arguments: ServicesModificationPageArgs(
+                        mode: ServicesModificationMode.CONFIRMATION,
+                      ),
+                    );
+                  },
                 ),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pushNamed(
-                    ServicesModificationPage.PAGE_NAME,
-                    arguments: ServicesModificationPageArgs(
-                      mode: ServicesModificationMode.PAYMENT,
-                    ),
-                  );
-                },
-              ),
-              Divider(
-                color: AppColors.white,
-              ),
+                Divider(
+                  color: AppColors.white,
+                ),
+              ],
+              if (_userIdentity.isAdmin) ...[
+                ListTile(
+                  title: Text(
+                    'Выдать зарплату',
+                    style: AppTextStyles.bodyText1w500,
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(
+                      ServicesModificationPage.PAGE_NAME,
+                      arguments: ServicesModificationPageArgs(
+                        mode: ServicesModificationMode.PAYMENT,
+                      ),
+                    );
+                  },
+                ),
+                Divider(
+                  color: AppColors.white,
+                ),
+              ],
               ListTile(
                 title: Text(
                   'Выйти',

@@ -12,4 +12,7 @@ extension ListExtension<T> on List<T> {
       return null;
     }
   }
+
+  Map<K, List<T>> groupBy<K>(K Function(T) keyFunction) => fold(<K, List<T>>{},
+      (Map<K, List<T>> map, T element) => map..putIfAbsent(keyFunction(element), () => <T>[]).add(element));
 }

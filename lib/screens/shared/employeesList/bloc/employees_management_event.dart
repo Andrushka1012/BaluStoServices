@@ -15,3 +15,5 @@ class EmployeesManagementEventUnselect extends EmployeesManagementEvent {
 
   List<Service> services;
 }
+
+class EmployeesManagementEventApply extends EmployeesManagementEvent {}

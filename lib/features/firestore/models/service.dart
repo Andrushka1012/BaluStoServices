@@ -1,5 +1,6 @@
 import 'package:balu_sto/features/firestore/models/service_status.dart';
 import 'package:balu_sto/helpers/extensions/date_extensions.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Service {
   Service({
@@ -22,7 +23,7 @@ class Service {
   late final DateTime date;
   late final DateTime? modifiedDate;
   late final bool hasPhoto;
-  late final ServiceStatus status;
+  late ServiceStatus status;
 
   ServiceLocalData? localData;
 

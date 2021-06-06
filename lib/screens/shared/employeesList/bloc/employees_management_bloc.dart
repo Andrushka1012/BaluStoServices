@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:balu_sto/features/firestore/firestore_repository.dart';
 import 'package:balu_sto/features/firestore/models/employee_status.dart';
 import 'package:balu_sto/features/firestore/models/service.dart';
+import 'package:balu_sto/features/firestore/models/service_status.dart';
+import 'package:balu_sto/features/firestore/models/user.dart';
 import 'package:balu_sto/helpers/extensions/list_extensions.dart';
-import 'package:balu_sto/helpers/pair.dart';
+import 'package:balu_sto/helpers/triple.dart';
 import 'package:balu_sto/screens/shared/serviceModification/view/services_modification_page.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
@@ -44,6 +46,11 @@ class EmployeesManagementBloc extends Bloc<EmployeesManagementEvent, EmployeesMa
           yield (currentState).unselect(unselectEvent.services);
         }
         break;
+      case EmployeesManagementEventApply:
+        if (mode != null) {
+          yield* apply();
+        }
+        break;
     }
   }
 
@@ -64,6 +71,26 @@ class EmployeesManagementBloc extends Bloc<EmployeesManagementEvent, EmployeesMa
       yield EmployeesListStateDefault.create(employees);
     } catch (e) {
       yield EmployeesListStateError(e);
+    }
+  }
+
+  Stream<EmployeesManagementState> apply() async* {
+    final previousState = state;
+    if (previousState is EmployeesListStateDefault) {
+      yield EmployeesListStateProcessing();
+
+      final selectedServices = previousState.selectedSelections.map((triple) => triple.first).toList();
+
+      selectedServices.forEach((service) {
+        service.status = mode == ServicesModificationMode.CONFIRMATION ? ServiceStatus.CONFIRMED : ServiceStatus.PAYED;
+      });
+
+      final updateResult = await firestoreRepository.updateUserServices(selectedServices);
+      if (updateResult.isSuccessful) {
+        yield EmployeesListStateSuccess();
+      } else {
+        yield EmployeesListStateError(updateResult.requiredError);
+      }
     }
   }
 }

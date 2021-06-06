@@ -36,10 +36,12 @@ class FirestoreRepository {
   Future<CollectionReference<Service>> _getUserServicesCollection(String userId) async {
     final userDocumentId = (await _usersCollection.where('userId', isEqualTo: userId).get()).docs.first.id;
 
-    return _usersCollection.doc(userDocumentId).collection(Service.COLLECTION_NAME).withConverter<Service>(
-          fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) => Service.fromJson(snapshot.data()),
-          toFirestore: (Service service, _) => service.toJsonApi(),
-        );
+    return _usersCollection.doc(userDocumentId).collection(Service.COLLECTION_NAME).serviceConverter();
+  }
+
+  Future<QueryDocumentSnapshot<Service>> _getUserService(String userId, String serviceId) async {
+    final userServicesCollection = await _getUserServicesCollection(userId);
+    return (await userServicesCollection.where('id', isEqualTo: serviceId).get()).docs.first;
   }
 
   Future<SafeResponse<AppUser>> getCurrentUser() => fetchSafety(() async {
@@ -217,6 +219,17 @@ class FirestoreRepository {
           return EmployeeStatusModel(
             user: userData,
             services: services.reversed.toList(),
+          );
+        },
+      );
+
+  Future<SafeResponse> updateUserServices(List<Service> services) => fetchSafety(
+        () async {
+          await Future.wait(
+            services.map((service) async {
+              final serviceDocument = await _getUserService(service.userId, service.id);
+              await serviceDocument.reference.update(service.toJsonApi()).timeout(Duration(seconds: 3));
+            }),
           );
         },
       );
