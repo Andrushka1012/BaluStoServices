@@ -8,6 +8,7 @@ import 'package:balu_sto/screens/mobile/service/service/service_bloc.dart';
 import 'package:balu_sto/widgets/app_card.dart';
 import 'package:balu_sto/widgets/containers/progress_container.dart';
 import 'package:balu_sto/widgets/inputs/text_input.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -64,8 +65,8 @@ class ServiceForm extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (state is DefaultServiceState && state.photo != null) _getPhotoItem(context, state.photo!),
-                  if (state is DefaultServiceState && state.photo == null && !state.isEditMode)
+                  if (!kIsWeb && state is DefaultServiceState && state.photo != null) _getPhotoItem(context, state.photo!),
+                  if (!kIsWeb && state is DefaultServiceState && state.photo == null && !state.isEditMode)
                     Padding(
                       padding: EdgeInsets.only(bottom: Dimens.spanBig),
                       child: Container(

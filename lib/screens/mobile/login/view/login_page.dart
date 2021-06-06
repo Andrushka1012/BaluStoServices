@@ -17,7 +17,7 @@ class LoginMobilePage extends KoinPage<LoginBloc> {
 
   @override
   Widget buildPage(BuildContext context) {
-    return kIsWeb ? LoginWebPage() : Scaffold(
+    return kIsWeb && MediaQuery.of(context).size.width >= 600? LoginWebPage() : Scaffold(
       backgroundColor: AppColors.background,
       body: BlocListener<LoginBloc, LoginState>(
         listener: _listenEvents,

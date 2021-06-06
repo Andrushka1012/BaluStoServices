@@ -1,12 +1,10 @@
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:balu_sto/screens/mobile/service/view/service_page.dart';
-import 'package:balu_sto/screens/shared/home/serviceDetails/view/service_details_page.dart';
 import 'package:balu_sto/screens/shared/home/servicesList/view/services_list_page.dart';
 import 'package:balu_sto/screens/shared/home/userServices/view/user_services_form.dart';
 import 'package:balu_sto/screens/shared/widget/main_drawer.dart';
 import 'package:balu_sto/widgets/balu_appbar.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:koin_flutter/koin_flutter.dart';
 
@@ -29,20 +27,13 @@ class HomePage extends StatelessWidget {
           children: [
             UserServicesForm(
               userId: _userIdentity.requiredCurrentUser.userId,
-              onServiceSelected: kIsWeb
-                  ? (service) => Navigator.of(context).pushNamed(
-                        ServicePage.PAGE_NAME,
-                        arguments: ServicePageArgs(
-                          editMode: true,
-                          service: service,
-                        ),
-                      )
-                  : (service) => Navigator.of(context).pushNamed(
-                        ServiceDetailsPage.PAGE_NAME,
-                        arguments: ServiceDetailsPageArgs(
-                          service,
-                        ),
-                      ),
+              onServiceSelected: (service) => Navigator.of(context).pushNamed(
+                ServicePage.PAGE_NAME,
+                arguments: ServicePageArgs(
+                  editMode: true,
+                  service: service,
+                ),
+              ),
               onShowAll: () => Navigator.of(context).pushNamed(
                 ServicesListPage.getPageName(_userIdentity.requiredCurrentUser.userId),
               ),
@@ -50,7 +41,7 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: !kIsWeb ? FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.of(context).pushNamed(ServicePage.PAGE_NAME,
             arguments: ServicePageArgs(
               editMode: false,
@@ -60,7 +51,7 @@ class HomePage extends StatelessWidget {
           Icons.add,
           color: AppColors.primary,
         ),
-      ) : Container(),
+      ),
     );
   }
 }
