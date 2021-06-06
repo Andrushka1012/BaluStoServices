@@ -1,10 +1,10 @@
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:balu_sto/helpers/styles/text_styles.dart';
-import 'package:balu_sto/screens/mobile/home/view/home_page.dart';
-import 'package:balu_sto/screens/shared/login/bloc/login_bloc.dart';
-import 'package:balu_sto/screens/shared/login/view/login_form.dart';
-import 'package:balu_sto/screens/shared/registration/view/registration_page.dart';
+import 'package:balu_sto/screens/shared/home/homePage/view/home_page.dart';
+import 'package:balu_sto/screens/shared/intro/login/bloc/login_bloc.dart';
+import 'package:balu_sto/screens/shared/intro/login/view/login_form.dart';
+import 'package:balu_sto/screens/shared/intro/registration/view/registration_page.dart';
 import 'package:balu_sto/screens/web/login/view/login_page.dart';
 import 'package:balu_sto/widgets/logos/app_logo.dart';
 import 'package:balu_sto/widgets/pages/koin_page.dart';

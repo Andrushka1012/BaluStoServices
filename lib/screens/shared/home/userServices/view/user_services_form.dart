@@ -5,6 +5,7 @@ import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:balu_sto/helpers/styles/text_styles.dart';
 import 'package:balu_sto/screens/shared/home/userServices/bloc/user_services_bloc.dart';
 import 'package:balu_sto/widgets/app_card.dart';
+import 'package:balu_sto/widgets/containers/web_constraints_container.dart';
 import 'package:balu_sto/widgets/pages/koin_with_params_page.dart';
 import 'package:balu_sto/widgets/service_item.dart';
 import 'package:flutter/material.dart';
@@ -102,12 +103,14 @@ class UserServicesForm extends KoinWithParamsPage<RecentServicesBloc, String> {
   Widget buildPage(BuildContext context) {
     return BlocBuilder<RecentServicesBloc, UserServicesState>(
       builder: (_, UserServicesState state) => state is UserServicesStateDataReady
-          ? Column(
-              children: [
-                _getServicesStatisticItem(context, state),
-                if (state.services.isNotEmpty) _getRecentServicesItem(context, state),
-              ],
-            )
+          ? WebConstraintsContainer(
+            child: Column(
+                children: [
+                  _getServicesStatisticItem(context, state),
+                  if (state.services.isNotEmpty) _getRecentServicesItem(context, state),
+                ],
+              ),
+          )
           : Container(),
     );
   }

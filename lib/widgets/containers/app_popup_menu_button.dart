@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:balu_sto/helpers/styles/text_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,24 +24,9 @@ class AppPopupMenuButton extends StatelessWidget {
         onSelected: (index) => items[index].onPressed?.call(),
       );
 
-  Widget getIosPopupButton(BuildContext context) => InkWell(
-        onTap: () => _showIosContextMenu(context),
-        child: IgnorePointer(child: child),
-      );
-
   @override
   Widget build(BuildContext context) {
-    if (Platform.isAndroid && showCancel) {
-      items.add(AppPopupMenuButtonItem(
-        text: 'Отмена',
-      ));
-    }
-
-    return enabled
-        ? Platform.isAndroid
-            ? _androidPopupButton
-            : getIosPopupButton(context)
-        : child;
+    return _androidPopupButton;
   }
 
   List<PopupMenuEntry<int>> _contextMenuBuilder(BuildContext context) {
@@ -52,38 +35,13 @@ class AppPopupMenuButton extends StatelessWidget {
         .map(
           (item) => PopupMenuItem(
             value: index++,
-            child: Text(item.text, style: AppTextStyles.bodyText1,),
+            child: Text(
+              item.text,
+              style: AppTextStyles.bodyText1,
+            ),
           ),
         )
         .toList();
-  }
-
-  void _showIosContextMenu(BuildContext context) {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) => CupertinoActionSheet(
-        actions: items
-            .map(
-              (item) => CupertinoActionSheetAction(
-                isDestructiveAction: item.isDestructiveAction,
-                child: Text(item.text),
-                onPressed: () {
-                  Navigator.pop(context);
-                  item.onPressed?.call();
-                },
-              ),
-            )
-            .toList(),
-        cancelButton: showCancel
-            ? CupertinoActionSheetAction(
-                child: Text('Отмена'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
-            : null,
-      ),
-    );
   }
 }
 

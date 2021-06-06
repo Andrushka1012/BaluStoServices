@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
-import 'app/mobile/mobile_app.dart';
+import 'app/app.dart';
 
 void main() async {
   if (kIsWeb) {

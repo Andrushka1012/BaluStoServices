@@ -1,7 +1,7 @@
 import 'package:balu_sto/helpers/pair.dart';
 import 'package:balu_sto/helpers/styles/colors.dart';
-import 'package:balu_sto/screens/shared/employeesList/bloc/employees_management_bloc.dart';
-import 'package:balu_sto/screens/shared/serviceModification/view/services_modification_form.dart';
+import 'package:balu_sto/screens/shared/home/employeesList/bloc/employees_management_bloc.dart';
+import 'package:balu_sto/screens/shared/home/serviceModification/view/services_modification_form.dart';
 import 'package:balu_sto/widgets/balu_appbar.dart';
 import 'package:balu_sto/widgets/pages/koin_with_params_page.dart';
 import 'package:flutter/material.dart';

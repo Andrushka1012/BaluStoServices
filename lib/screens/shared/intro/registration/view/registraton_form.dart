@@ -2,7 +2,7 @@ import 'package:balu_sto/helpers/dialogs.dart';
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:balu_sto/helpers/styles/text_styles.dart';
-import 'package:balu_sto/screens/shared/registration/bloc/registration_bloc.dart';
+import 'package:balu_sto/screens/shared/intro/registration/bloc/registration_bloc.dart';
 import 'package:balu_sto/widgets/containers/progress_container.dart';
 import 'package:balu_sto/widgets/inputs/text_input.dart';
 import 'package:flutter/material.dart';

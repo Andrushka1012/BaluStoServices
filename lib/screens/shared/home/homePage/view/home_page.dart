@@ -29,7 +29,7 @@ class HomePage extends StatelessWidget {
           children: [
             UserServicesForm(
               userId: _userIdentity.requiredCurrentUser.userId,
-              onServiceSelected: !kIsWeb
+              onServiceSelected: kIsWeb
                   ? (service) => Navigator.of(context).pushNamed(
                         ServicePage.PAGE_NAME,
                         arguments: ServicePageArgs(
@@ -50,7 +50,7 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: !kIsWeb ? FloatingActionButton(
         onPressed: () => Navigator.of(context).pushNamed(ServicePage.PAGE_NAME,
             arguments: ServicePageArgs(
               editMode: false,
@@ -60,7 +60,7 @@ class HomePage extends StatelessWidget {
           Icons.add,
           color: AppColors.primary,
         ),
-      ),
+      ) : Container(),
     );
   }
 }

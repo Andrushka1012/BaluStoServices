@@ -1,8 +1,9 @@
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:balu_sto/helpers/styles/text_styles.dart';
-import 'package:balu_sto/screens/shared/login/view/login_form.dart';
-import 'package:balu_sto/screens/shared/registration/view/registration_page.dart';
+import 'package:balu_sto/screens/shared/intro/login/view/login_form.dart';
+import 'package:balu_sto/screens/shared/intro/registration/view/registration_page.dart';
+
 import 'package:balu_sto/widgets/containers/intro_container.dart';
 import 'package:balu_sto/widgets/containers/web_constraints_container.dart';
 import 'package:balu_sto/widgets/logos/app_logo.dart';

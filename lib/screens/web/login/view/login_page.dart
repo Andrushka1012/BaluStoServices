@@ -1,6 +1,6 @@
 import 'package:balu_sto/helpers/styles/colors.dart';
-import 'package:balu_sto/screens/mobile/home/view/home_page.dart';
-import 'package:balu_sto/screens/shared/login/bloc/login_bloc.dart';
+import 'package:balu_sto/screens/shared/home/homePage/view/home_page.dart';
+import 'package:balu_sto/screens/shared/intro/login/bloc/login_bloc.dart';
 import 'package:balu_sto/screens/web/login/view/login_body.dart';
 import 'package:balu_sto/widgets/pages/koin_page.dart';
 import 'package:flutter/material.dart';

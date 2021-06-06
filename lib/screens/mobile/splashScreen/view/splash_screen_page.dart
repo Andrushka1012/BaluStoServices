@@ -1,8 +1,8 @@
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/dimens.dart';
-import 'package:balu_sto/screens/mobile/home/view/home_page.dart';
 import 'package:balu_sto/screens/mobile/login/view/login_page.dart';
-import 'package:balu_sto/screens/shared/splashScreen/bloc/splash_screen_bloc.dart';
+import 'package:balu_sto/screens/shared/home/homePage/view/home_page.dart';
+import 'package:balu_sto/screens/shared/intro/splashScreen/bloc/splash_screen_bloc.dart';
 import 'package:balu_sto/widgets/logos/app_logo.dart';
 import 'package:balu_sto/widgets/pages/koin_page.dart';
 import 'package:flutter/material.dart';

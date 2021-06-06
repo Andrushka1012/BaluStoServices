@@ -1,7 +1,8 @@
 import 'package:balu_sto/helpers/styles/colors.dart';
-import 'package:balu_sto/screens/shared/employeesList/view/employees_list_form.dart';
 import 'package:balu_sto/widgets/balu_appbar.dart';
 import 'package:flutter/material.dart';
+
+import 'employees_list_form.dart';
 
 class EmployeesListPage extends StatelessWidget {
   static const PAGE_NAME = 'EmployeesListPage';

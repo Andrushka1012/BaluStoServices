@@ -1,7 +1,7 @@
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/dimens.dart';
-import 'package:balu_sto/screens/shared/registration/bloc/registration_bloc.dart';
-import 'package:balu_sto/screens/shared/registration/view/registraton_form.dart';
+import 'package:balu_sto/screens/shared/intro/registration/bloc/registration_bloc.dart';
+import 'package:balu_sto/screens/shared/intro/registration/view/registraton_form.dart';
 import 'package:balu_sto/widgets/containers/web_limitation_container.dart';
 import 'package:balu_sto/widgets/pages/koin_page.dart';
 import 'package:flutter/material.dart';

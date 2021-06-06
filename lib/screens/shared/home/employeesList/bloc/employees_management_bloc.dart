@@ -7,7 +7,7 @@ import 'package:balu_sto/features/firestore/models/service_status.dart';
 import 'package:balu_sto/features/firestore/models/user.dart';
 import 'package:balu_sto/helpers/extensions/list_extensions.dart';
 import 'package:balu_sto/helpers/triple.dart';
-import 'package:balu_sto/screens/shared/serviceModification/view/services_modification_page.dart';
+import 'package:balu_sto/screens/shared/home/serviceModification/view/services_modification_page.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
