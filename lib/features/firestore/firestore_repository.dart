@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:balu_sto/features/firestore/dao/services_dao.dart';
+import 'package:balu_sto/features/firestore/dao/assets_dao.dart';
 import 'package:balu_sto/features/firestore/models/employee_status.dart';
 import 'package:balu_sto/features/firestore/models/service.dart';
 import 'package:balu_sto/features/firestore/models/service_status.dart';
@@ -12,7 +12,6 @@ import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:koin/internals.dart';
 
 class FirestoreRepository {
@@ -21,9 +20,9 @@ class FirestoreRepository {
   final Scope _scope;
   final _firebaseAuth = FirebaseAuth.instance;
   final UserIdentity _userIdentity;
-  late final ServicesDao _servicesDao = _scope.get();
+  late final AssetsDao _assetsDao = _scope.get();
 
-  Stream<List<Service>>? get servicesStream => !kIsWeb ? _servicesDao.getAllStreamed() : null;
+  Stream<List<Service>>? get servicesStream => null;
 
   CollectionReference<AppUser> get _usersCollection =>
       FirebaseFirestore.instance.collection(AppUser.COLLECTION_NAME).userConverter();
@@ -44,8 +43,8 @@ class FirestoreRepository {
     return (await userServicesCollection.where('id', isEqualTo: serviceId).get()).docs.first;
   }
 
-  Future<SafeResponse<AppUser>> getCurrentUser() => fetchSafety(() async {
-        final currentUserDoc = (await _usersCollection.get(GetOptions(source: Source.server)))
+  Future<SafeResponse<AppUser>> getCurrentUser({Source source = Source.server}) => fetchSafety(() async {
+        final currentUserDoc = (await _usersCollection.get(GetOptions(source: source)))
             .docs
             .firstWhere((element) => element.data().userId == _firebaseAuth.currentUser!.uid);
         return currentUserDoc.data()..documentId = currentUserDoc.id;
@@ -70,100 +69,53 @@ class FirestoreRepository {
             date: previousService?.date ?? DateTime.now(),
             modifiedDate: isEditMode ? DateTime.now() : null,
             hasPhoto: previousService?.hasPhoto ?? photo != null,
-            localData: ServiceLocalData(
-                filePath: photo?.path ?? previousService?.localData?.filePath,
-                isUploaded: false,
-                documentId: previousService?.localData?.documentId),
           );
-
-          await _servicesDao.put(serviceData);
-          String? documentId;
 
           try {
             if (isEditMode) {
-              documentId = previousService?.localData?.documentId!;
-              _currentUserServicesCollection
-                  .doc(documentId)
-                  .update(serviceData.toJsonApi())
-                  .timeout(Duration(seconds: 3));
+              final serviceDocument = await _getUserService(previousService!.userId, previousService.id);
+              await serviceDocument.reference.update(serviceData.toJsonApi()).timeout(Duration(seconds: 5));
             } else {
-              final documentRef = await _currentUserServicesCollection.add(serviceData).timeout(Duration(seconds: 3));
-              documentId = documentRef.id;
+              await _currentUserServicesCollection.add(serviceData).timeout(Duration(seconds: 5));
             }
           } catch (e) {
-            if (isEditMode) {
-              await _servicesDao.put(previousService!);
-            } else {
-              await _servicesDao.removeByKey(serviceId);
+            print('Service upload error');
+            print(e);
+          }
+
+          try {
+            if (photo != null) {
+              final storageRef = FirebaseStorage.instance.ref().child('services/$serviceId');
+              await storageRef.putFile(photo).timeout(Duration(seconds: 10));
             }
-            rethrow;
-          }
-
-          serviceData.localData?.documentId = documentId;
-          await _servicesDao.put(serviceData);
-
-          if (photo != null) {
-            final storageRef = FirebaseStorage.instance.ref().child('services/$serviceId');
-            final task = await storageRef.putFile(photo);
-            final downloadUrl = await task.ref.getDownloadURL();
-            print(downloadUrl);
-            print(serviceId);
-          }
-
-          serviceData.localData?.isUploaded = true;
-          await _servicesDao.put(serviceData);
-        },
-      );
-
-  Future<SafeResponse<List<Service>>> getCurrentUserServices({bool fromRemote = false}) => fetchSafety(
-        () async {
-          if (kIsWeb || fromRemote) {
-            final services = (await _currentUserServicesCollection.get(GetOptions(source: Source.server)))
-                .docs
-                .map((e) => e.data())
-                .toList();
-            return services;
-          } else {
-            final services = await _servicesDao.getAll();
-            return services.where((element) => element.userId == _userIdentity.currentUser?.userId).toList();
+          } catch (e) {
+            print('Service photo upload error');
+            print(e);
+            await _assetsDao.put(AssetModel(assetPath: 'services/$serviceId', filePath: photo!.path));
           }
         },
       );
 
-  Future<SafeResponse> syncUserServices() => fetchSafety(
+  Future<SafeResponse<List<Service>>> getCurrentUserServices() => fetchSafety(
         () async {
-          assert(!kIsWeb, 'Method not available on web');
-          final servicesDataResponse = await getCurrentUserServices(fromRemote: true);
-          servicesDataResponse.throwIfNotSuccessful();
-
-          final services = servicesDataResponse.requiredData;
-
-          await Future.forEach(services, (Service service) async {
-            final localService = await _servicesDao.getBy(service.id);
-            if (localService != null) {
-              service.localData = localService.localData;
-            }
-          });
-
-          await _servicesDao.putAll(servicesDataResponse.requiredData);
+          final services = (await _currentUserServicesCollection.get()).docs.map((e) => e.data()).toList();
+          return services;
         },
       );
 
   Future<SafeResponse> removeService(Service service) => fetchSafety(
         () async {
-          if (!kIsWeb) {
-            await _servicesDao.remove(service);
-          }
-          if (service.localData?.documentId != null) {
-            await _currentUserServicesCollection
-                .doc(service.localData?.documentId)
-                .delete()
-                .timeout(Duration(seconds: 3));
-          }
+          final serviceRef = await _getUserService(service.userId, service.id);
 
-          if (service.hasPhoto) {
-            final storageRef = FirebaseStorage.instance.ref().child('services/${service.id}');
-            await storageRef.delete();
+          await serviceRef.reference.delete().timeout(Duration(seconds: 5));
+
+          try {
+            if (service.hasPhoto) {
+              final storageRef = FirebaseStorage.instance.ref().child('services/${service.id}');
+              await storageRef.delete();
+            }
+          } catch (e) {
+            print(e);
           }
         },
       );
@@ -228,13 +180,32 @@ class FirestoreRepository {
           await Future.wait(
             services.map((service) async {
               final serviceDocument = await _getUserService(service.userId, service.id);
-              await serviceDocument.reference.update(service.toJsonApi()).timeout(Duration(seconds: 3));
+              await serviceDocument.reference.update(service.toJsonApi()).timeout(Duration(seconds: 5));
             }),
           );
+        },
+      );
 
-          if (!kIsWeb) {
-            await syncUserServices();
-          }
+  Future<SafeResponse> uploadMissingAssets() => fetchSafety(
+        () async {
+          final assets = await _assetsDao.getAll();
+
+          await Future.wait(
+            assets.map((asset) async {
+              final assetFile = File(asset.filePath);
+              if (assetFile.existsSync()) {
+                try {
+                  final storageRef = FirebaseStorage.instance.ref().child(asset.assetPath);
+                  await storageRef.putFile(assetFile);
+
+                  await _assetsDao.remove(asset);
+                } catch (e) {
+                  print('Service photo upload error');
+                  print(e);
+                }
+              }
+            }),
+          );
         },
       );
 }

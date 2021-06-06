@@ -1,30 +1,24 @@
-import 'package:balu_sto/features/firestore/dao/current_user_dao.dart';
-import 'package:balu_sto/features/firestore/dao/services_dao.dart';
 import 'package:balu_sto/features/firestore/firestore_repository.dart';
 import 'package:balu_sto/helpers/fetch_helpers.dart';
 import 'package:balu_sto/helpers/preferences/preferences_provider.dart';
 import 'package:balu_sto/infrastructure/auth/user_identity.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:koin/internals.dart';
 
 class AuthHandler {
   AuthHandler(
-    this._scope,
     this._firebaseAuth,
     this._preferencesProvider,
     this._userIdentity,
     this._firestoreRepository,
   );
 
-  final Scope _scope;
   final FirebaseAuth _firebaseAuth;
   final PreferencesProvider _preferencesProvider;
   final UserIdentity _userIdentity;
   final FirestoreRepository _firestoreRepository;
-
-  late final CurrentUserDao _currentUserDao = _scope.get();
-  late final ServicesDao _servicesDao = _scope.get();
 
   Future<SafeResponse> signInWithEmailAndPassword({
     required String email,
@@ -55,22 +49,24 @@ class AuthHandler {
       });
 
   Future<SafeResponse> initOnlineSession() => fetchSafety(() async {
-        final currentUserResponse = await _firestoreRepository.getCurrentUser();
+        final currentUserResponse = await _firestoreRepository.getCurrentUser(source: Source.server);
         currentUserResponse.throwIfNotSuccessful();
 
-        if (!kIsWeb) {
-          _currentUserDao.put(currentUserResponse.requiredData);
+        _userIdentity.obtainUserData(currentUserResponse.requiredData, false);
+
+        if(!kIsWeb) {
+          _firestoreRepository.uploadMissingAssets();
         }
 
-        _userIdentity.obtainUserData(currentUserResponse.requiredData, false);
-        await initLocalDb();
+
         return currentUserResponse;
       });
 
   Future<SafeResponse> initOfflineSession() async {
     try {
-      final userData = await _currentUserDao.getCurrentUser();
-      _userIdentity.obtainUserData(userData!, true);
+      final userDataResponse = await _firestoreRepository.getCurrentUser(source: Source.cache);
+      userDataResponse.throwIfNotSuccessful();
+      _userIdentity.obtainUserData(userDataResponse.requiredData, true);
       return SafeResponse.success(null);
     } catch (e) {
       return SafeResponse.error(e);
@@ -78,15 +74,6 @@ class AuthHandler {
   }
 
   Future logout() async {
-    if (!kIsWeb) {
-      await _currentUserDao.removeAll();
-    }
     _userIdentity.clear();
-  }
-
-  Future initLocalDb() async {
-    if (!kIsWeb) {
-      await _firestoreRepository.syncUserServices();
-    }
   }
 }
