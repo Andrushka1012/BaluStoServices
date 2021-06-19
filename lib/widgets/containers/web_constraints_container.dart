@@ -13,9 +13,9 @@ class WebConstraintsContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: kIsWeb
-          ? ConstrainedBox(
+    return kIsWeb
+        ? Center(
+          child: ConstrainedBox(
               constraints: BoxConstraints(
                 minHeight: Dimens.webConstraintsMinSize,
                 minWidth: smallScreen ? Dimens.webConstraintsMinSize / 2 : Dimens.webConstraintsMinSize,
@@ -23,8 +23,8 @@ class WebConstraintsContainer extends StatelessWidget {
                 maxWidth: smallScreen ? Dimens.webConstraintsMaxWidth / 2 : Dimens.webConstraintsMaxWidth,
               ),
               child: Center(child: child),
-            )
-          : child,
-    );
+            ),
+        )
+        : child;
   }
 }

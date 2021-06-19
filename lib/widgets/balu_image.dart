@@ -8,9 +8,11 @@ class BaluImage extends StatelessWidget {
   BaluImage({
     required this.imageUrl,
     required this.placeholder,
+    this.shape = BoxShape.circle
   });
 
   final Widget placeholder;
+  final BoxShape shape;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class BaluImage extends StatelessWidget {
             errorWidget: (context, url, error) => placeholder,
             imageBuilder: (context, imageProvider) => Container(
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
+                shape: shape,
                 image: DecorationImage(
                   image: imageProvider,
                   onError: (e, _) => placeholder,

@@ -29,6 +29,7 @@ class Service {
       : null;
 
   String get formattedDate => date.formatted();
+  String? get formattedModifiedDate => modifiedDate?.formatted();
 
   Service.fromJson(dynamic json) {
     id = json['id'];

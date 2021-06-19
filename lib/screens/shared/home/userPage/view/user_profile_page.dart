@@ -1,5 +1,6 @@
 import 'package:balu_sto/features/firestore/models/user.dart';
 import 'package:balu_sto/helpers/styles/colors.dart';
+import 'package:balu_sto/screens/shared/home/serviceDetails/view/service_details_page.dart';
 import 'package:balu_sto/screens/shared/home/serviceModification/view/services_modification_page.dart';
 import 'package:balu_sto/screens/shared/home/servicesList/view/services_list_page.dart';
 import 'package:balu_sto/screens/shared/home/userServices/view/user_services_form.dart';
@@ -58,7 +59,12 @@ class UserProfilePage extends StatelessWidget {
         children: [
           UserServicesForm(
             userId: _args.userId,
-            onServiceSelected: (service) {},
+            onServiceSelected: (service) => Navigator.of(context).pushNamed(
+              ServiceDetailsPage.getPageName(_args.userId, service.id),
+              arguments: ServiceDetailsPageArgs(
+                service,
+              ),
+            ),
             onShowAll: () => Navigator.of(context).pushNamed(
               ServicesListPage.getPageName(_args.userId),
             ),

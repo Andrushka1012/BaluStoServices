@@ -1,6 +1,8 @@
+import 'package:balu_sto/features/firestore/models/service_status.dart';
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:balu_sto/screens/mobile/service/view/service_page.dart';
+import 'package:balu_sto/screens/shared/home/serviceDetails/view/service_details_page.dart';
 import 'package:balu_sto/screens/shared/home/servicesList/view/services_list_page.dart';
 import 'package:balu_sto/screens/shared/home/userServices/view/user_services_form.dart';
 import 'package:balu_sto/screens/shared/widget/main_drawer.dart';
@@ -27,25 +29,33 @@ class HomePage extends StatelessWidget {
           children: [
             UserServicesForm(
               userId: _userIdentity.requiredCurrentUser.userId,
-              onServiceSelected: (service) => Navigator.of(context).pushNamed(
+              onServiceSelected: (service) =>
+              service.status == ServiceStatus.NOT_CONFIRMED ? Navigator.of(context).pushNamed(
                 ServicePage.PAGE_NAME,
                 arguments: ServicePageArgs(
                   editMode: true,
                   service: service,
                 ),
+              ): Navigator.of(context).pushNamed(
+                ServiceDetailsPage.getPageName(service.userId, service.id),
+                arguments: ServiceDetailsPageArgs(
+                  service,
+                ),
               ),
-              onShowAll: () => Navigator.of(context).pushNamed(
-                ServicesListPage.getPageName(_userIdentity.requiredCurrentUser.userId),
-              ),
+              onShowAll: () =>
+                  Navigator.of(context).pushNamed(
+                    ServicesListPage.getPageName(_userIdentity.requiredCurrentUser.userId),
+                  ),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).pushNamed(ServicePage.PAGE_NAME,
-            arguments: ServicePageArgs(
-              editMode: false,
-            )),
+        onPressed: () =>
+            Navigator.of(context).pushNamed(ServicePage.PAGE_NAME,
+                arguments: ServicePageArgs(
+                  editMode: false,
+                )),
         backgroundColor: AppColors.secondary,
         child: Icon(
           Icons.add,

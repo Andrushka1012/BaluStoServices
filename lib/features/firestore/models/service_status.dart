@@ -1,6 +1,17 @@
 enum ServiceStatus { NOT_CONFIRMED, CONFIRMED, PAYED }
 
 extension ServiceStatusExtenion on ServiceStatus {
+  String get translation {
+    switch (this) {
+      case ServiceStatus.NOT_CONFIRMED:
+        return 'Не подтвержденоо';
+      case ServiceStatus.CONFIRMED:
+        return 'Потвержденно, готово к оплате';
+      case ServiceStatus.PAYED:
+        return 'Оплаченно';
+    }
+  }
+
   String get value {
     switch (this) {
       case ServiceStatus.NOT_CONFIRMED:

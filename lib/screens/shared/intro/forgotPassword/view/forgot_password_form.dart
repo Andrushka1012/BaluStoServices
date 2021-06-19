@@ -18,9 +18,7 @@ class ForgotPasswordForm extends StatelessWidget {
         children: [
           Text(
             'Введите ваш адрес емейл и мы поможем Вам востановить аккаунт',
-            style: AppTextStyles.bodyText1.copyWith(
-              color: AppColors.secondaryDark,
-            ),
+            style: AppTextStyles.bodyText1,
           ),
           SizedBox(
             height: Dimens.spanHuge,

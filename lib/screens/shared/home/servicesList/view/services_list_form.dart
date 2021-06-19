@@ -1,4 +1,5 @@
 import 'package:balu_sto/features/firestore/models/service.dart';
+import 'package:balu_sto/features/firestore/models/service_status.dart';
 import 'package:balu_sto/helpers/dialogs.dart';
 import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:balu_sto/screens/mobile/service/view/service_page.dart';
@@ -7,7 +8,6 @@ import 'package:balu_sto/screens/shared/home/servicesList/bloc/services_list_blo
 import 'package:balu_sto/widgets/containers/progress_container.dart';
 import 'package:balu_sto/widgets/pages/koin_with_params_page.dart';
 import 'package:balu_sto/widgets/service_item.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:koin_flutter/koin_flutter.dart';
@@ -32,20 +32,21 @@ class ServicesListForm extends KoinWithParamsPage<ServicesListBloc, String> {
             .map(
               (service) => ServiceItem(
                 service,
-                onSelected: !kIsWeb && _userIdentity.requiredCurrentUser.userId == userId
-                    ? (service) => Navigator.of(context).pushNamed(
-                          ServicePage.PAGE_NAME,
-                          arguments: ServicePageArgs(
-                            editMode: true,
-                            service: service,
-                          ),
-                        )
-                    : (service) => Navigator.of(context).pushNamed(
-                          ServiceDetailsPage.PAGE_NAME,
-                          arguments: ServiceDetailsPageArgs(
-                            service,
-                          ),
-                        ),
+                onSelected:
+                    _userIdentity.requiredCurrentUser.userId == userId && service.status == ServiceStatus.NOT_CONFIRMED
+                        ? (service) => Navigator.of(context).pushNamed(
+                              ServicePage.PAGE_NAME,
+                              arguments: ServicePageArgs(
+                                editMode: true,
+                                service: service,
+                              ),
+                            )
+                        : (service) => Navigator.of(context).pushNamed(
+                              ServiceDetailsPage.getPageName(userId, service.id),
+                              arguments: ServiceDetailsPageArgs(
+                                service,
+                              ),
+                            ),
               ),
             )
             .toList(),

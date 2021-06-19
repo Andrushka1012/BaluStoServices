@@ -16,6 +16,7 @@ void main() async {
   } else {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
+    App.initKoin();
 
     runApp(App());
   }
