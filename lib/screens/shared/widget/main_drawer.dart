@@ -5,6 +5,7 @@ import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:balu_sto/screens/mobile/login/view/login_page.dart';
 import 'package:balu_sto/screens/shared/home/employeesList/view/employees_list_page.dart';
 import 'package:balu_sto/screens/shared/home/serviceModification/view/services_modification_page.dart';
+import 'package:balu_sto/screens/shared/home/transactionsList/view/transactions_list_page.dart';
 import 'package:balu_sto/screens/web/login/view/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -79,6 +80,21 @@ class MainDrawer extends StatelessWidget {
                         mode: ServicesModificationMode.PAYMENT,
                       ),
                     );
+                  },
+                ),
+                Divider(
+                  color: AppColors.white,
+                ),
+              ],
+              if (_userIdentity.isAdmin) ...[
+                ListTile(
+                  title: Text(
+                    'Список трансакций',
+                    style: AppTextStyles.bodyText1w500,
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(TransactionsListPage.PAGE_NAME);
                   },
                 ),
                 Divider(

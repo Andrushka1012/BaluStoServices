@@ -46,7 +46,7 @@ class TransactionMember {
 
   TransactionMember.fromJson(dynamic json) {
     userId = json['userId'];
-    services = json['date'];
+    services = (json['services'] as Iterable).map((e) => e.toString()).toList();
   }
 
   Map<String, Object?> toJsonApi() {

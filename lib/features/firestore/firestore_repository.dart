@@ -252,4 +252,33 @@ class FirestoreRepository {
           return workTransaction;
         },
       );
+
+  Future<SafeResponse<List<WorkTransaction>>> getTransactions(String? userId) => fetchSafety(
+        () async {
+          assert(
+            _userIdentity.isAdmin || userId == _userIdentity.requiredCurrentUser.userId,
+            'Вы можете просматривать только свои трансакции',
+          );
+          final transactionsDocuments = await _transactionsCollection.get();
+          final transactions = transactionsDocuments.docs.map((e) => e.data()).toList();
+
+          if (userId != null) {
+            final userTransactions = transactions
+                .where(
+                  (transaction) => transaction.members.firstOrNull((element1) => element1.userId == userId) != null,
+                )
+                .toList();
+
+            if (!_userIdentity.isAdmin) {
+              userTransactions.forEach((userTransaction) {
+                userTransaction.members.removeWhere((element) => element.userId != userId);
+              });
+            }
+
+            return userTransactions;
+          } else {
+            return transactions;
+          }
+        },
+      );
 }

@@ -5,6 +5,7 @@ import 'package:koin/koin.dart';
 import 'home/employeesList/bloc/employees_management_bloc.dart';
 import 'home/serviceModification/view/services_modification_page.dart';
 import 'home/servicesList/bloc/services_list_bloc.dart';
+import 'home/transactionsList/bloc/transactions_list_bloc.dart';
 import 'home/userServices/bloc/user_services_bloc.dart';
 import 'intro/login/bloc/login_bloc.dart';
 import 'intro/registration/bloc/registration_bloc.dart';
@@ -29,4 +30,7 @@ final sharedModule = Module()
       userId: args.first,
       mode: args.second,
     ),
+  )
+  ..factoryWithParam<TransactionsListBloc, String?>(
+    (scope, String? args) => TransactionsListBloc(args, scope.get()),
   );

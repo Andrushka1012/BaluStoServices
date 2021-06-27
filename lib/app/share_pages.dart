@@ -2,6 +2,7 @@ import 'package:balu_sto/screens/shared/home/employeesList/view/employees_list_p
 import 'package:balu_sto/screens/shared/home/serviceDetails/view/service_details_page.dart';
 import 'package:balu_sto/screens/shared/home/serviceModification/view/services_modification_page.dart';
 import 'package:balu_sto/screens/shared/home/servicesList/view/services_list_page.dart';
+import 'package:balu_sto/screens/shared/home/transactionsList/view/transactions_list_page.dart';
 import 'package:balu_sto/screens/shared/home/userPage/view/user_profile_page.dart';
 import 'package:flutter/material.dart';
 
@@ -33,6 +34,9 @@ final Widget Function(RouteSettings) getGenerateSharedRoutePage = (RouteSettings
 
   if (settings.name!.contains(ServicesModificationPage.PAGE_NAME)) {
     return ServicesModificationPage(settings.arguments as ServicesModificationPageArgs);
+  }
+  if (settings.name!.contains(TransactionsListPage.PAGE_NAME)) {
+    return TransactionsListPage();
   }
 
   throw Exception('Not screen specified to route ${settings.name}');
