@@ -5,8 +5,10 @@ import 'package:balu_sto/features/firestore/dao/assets_dao.dart';
 import 'package:balu_sto/features/firestore/models/employee_status.dart';
 import 'package:balu_sto/features/firestore/models/service.dart';
 import 'package:balu_sto/features/firestore/models/service_status.dart';
+import 'package:balu_sto/features/firestore/models/transaction.dart';
 import 'package:balu_sto/features/firestore/models/user.dart';
 import 'package:balu_sto/helpers/extensions/firestore_extensions.dart';
+import 'package:balu_sto/helpers/extensions/list_extensions.dart';
 import 'package:balu_sto/helpers/extensions/stream_extensions.dart';
 import 'package:balu_sto/helpers/fetch_helpers.dart';
 import 'package:balu_sto/infrastructure/auth/user_identity.dart';
@@ -177,12 +179,17 @@ class FirestoreRepository {
         },
       );
 
-  Future<SafeResponse> updateServices(List<Service> services) => fetchSafety(
+  Future<SafeResponse> updateServices(List<Service> services, Transaction? transaction) => fetchSafety(
         () async {
           await Future.wait(
             services.map((service) async {
               final serviceDocument = await _getUserService(service.userId, service.id);
-              await serviceDocument.reference.update(service.toJsonApi()).timeout(Duration(seconds: 5));
+
+              if (transaction != null) {
+                transaction.set(serviceDocument.reference, service.toJsonApi());
+              } else {
+                await serviceDocument.reference.update(service.toJsonApi()).timeout(Duration(seconds: 5));
+              }
             }),
           );
         },
@@ -208,6 +215,33 @@ class FirestoreRepository {
               }
             }),
           );
+        },
+      );
+
+  Future<SafeResponse> performTransaction(List<Service> services, ServiceStatus status) => fetchSafety(
+        () async {
+          await FirebaseFirestore.instance.runTransaction((transaction) async {
+            await updateServices(services, transaction);
+
+            final servicesGroups = services
+                .groupBy((item) => item.userId)
+                .entries
+                .map(
+                  (group) => TransactionMember(
+                    userId: group.key,
+                    services: group.value.map((e) => e.id).toList(),
+                  ),
+                )
+                .toList();
+
+            final workTransaction = WorkTransaction(
+              members: servicesGroups,
+              date: DateTime.now(),
+              status: status,
+            );
+
+
+          });
         },
       );
 }
