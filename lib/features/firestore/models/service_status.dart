@@ -4,7 +4,7 @@ extension ServiceStatusExtenion on ServiceStatus {
   String get translation {
     switch (this) {
       case ServiceStatus.NOT_CONFIRMED:
-        return 'Не подтвержденоо';
+        return 'Не подтвержденно';
       case ServiceStatus.CONFIRMED:
         return 'Потвержденно, готово к оплате';
       case ServiceStatus.PAYED:

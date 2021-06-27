@@ -9,7 +9,7 @@ class WorkTransaction {
     required this.status,
   }): id = id ?? DateTime.now().millisecondsSinceEpoch.toString();
 
-  static const COLLECTION_NAME = 'services';
+  static const COLLECTION_NAME = 'transactions';
 
   late final String id;
   late final List<TransactionMember> members;
@@ -29,7 +29,7 @@ class WorkTransaction {
     final map = <String, dynamic>{};
     map['id'] = id;
     map['date'] = date.toIso8601String();
-    map['members'] = members.map((e) => e.toJsonApi());
+    map['members'] = members.map((e) => e.toJsonApi()).toList();
     map['status'] = status.value;
     return map;
   }

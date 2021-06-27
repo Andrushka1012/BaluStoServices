@@ -36,6 +36,9 @@ class FirestoreRepository {
       .collection(Service.COLLECTION_NAME)
       .serviceConverter();
 
+  CollectionReference<WorkTransaction> get _transactionsCollection =>
+      FirebaseFirestore.instance.collection(WorkTransaction.COLLECTION_NAME).workTransactionConverter();
+
   Future<CollectionReference<Service>> _getUserServicesCollection(String userId) async {
     final userDocumentId = (await _usersCollection.where('userId', isEqualTo: userId).get()).docs.first.id;
 
@@ -240,7 +243,9 @@ class FirestoreRepository {
               status: status,
             );
 
+            final transactionDocument = _transactionsCollection.doc(workTransaction.id);
 
+            transaction.set(transactionDocument, workTransaction);
           });
         },
       );
