@@ -3,6 +3,7 @@ import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/screens/shared/home/serviceDetails/view/service_details_page.dart';
 import 'package:balu_sto/screens/shared/home/serviceModification/view/services_modification_page.dart';
 import 'package:balu_sto/screens/shared/home/servicesList/view/services_list_page.dart';
+import 'package:balu_sto/screens/shared/home/transactionsList/view/transactions_list_form.dart';
 import 'package:balu_sto/screens/shared/home/userServices/view/user_services_form.dart';
 import 'package:balu_sto/widgets/balu_appbar.dart';
 import 'package:balu_sto/widgets/containers/app_popup_menu_button.dart';
@@ -55,7 +56,7 @@ class UserProfilePage extends StatelessWidget {
         ],
       ),
       backgroundColor: AppColors.background,
-      body: Column(
+      body: ListView(
         children: [
           UserServicesForm(
             userId: _args.userId,
@@ -69,6 +70,9 @@ class UserProfilePage extends StatelessWidget {
               ServicesListPage.getPageName(_args.userId),
             ),
           ),
+          TransactionsListForm(
+            userId: _args.userId,
+          )
         ],
       ),
     );
