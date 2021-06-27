@@ -189,7 +189,7 @@ class FirestoreRepository {
               final serviceDocument = await _getUserService(service.userId, service.id);
 
               if (transaction != null) {
-                transaction.set(serviceDocument.reference, service.toJsonApi());
+                transaction.update(serviceDocument.reference, service.toJsonApi());
               } else {
                 await serviceDocument.reference.update(service.toJsonApi()).timeout(Duration(seconds: 5));
               }
@@ -221,8 +221,9 @@ class FirestoreRepository {
         },
       );
 
-  Future<SafeResponse> performTransaction(List<Service> services, ServiceStatus status) => fetchSafety(
+  Future<SafeResponse<WorkTransaction>> performTransaction(List<Service> services, ServiceStatus status) => fetchSafety(
         () async {
+          late WorkTransaction workTransaction;
           await FirebaseFirestore.instance.runTransaction((transaction) async {
             await updateServices(services, transaction);
 
@@ -237,7 +238,7 @@ class FirestoreRepository {
                 )
                 .toList();
 
-            final workTransaction = WorkTransaction(
+            workTransaction = WorkTransaction(
               members: servicesGroups,
               date: DateTime.now(),
               status: status,
@@ -247,6 +248,8 @@ class FirestoreRepository {
 
             transaction.set(transactionDocument, workTransaction);
           });
+
+          return workTransaction;
         },
       );
 }

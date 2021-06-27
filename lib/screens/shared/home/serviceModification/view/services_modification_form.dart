@@ -33,7 +33,10 @@ class ServicesModificationForm extends StatelessWidget {
                 ),
               ),
             ),
-            Text('Все чисто', style: AppTextStyles.headline1,),
+            Text(
+              'Все чисто',
+              style: AppTextStyles.headline1,
+            ),
           ],
         ),
       );
@@ -282,6 +285,7 @@ class ServicesModificationForm extends StatelessWidget {
 
     if (state is EmployeesListStateSuccess) {
       Navigator.of(context).pop();
+      // TODO: open transaction details
     }
   }
 }

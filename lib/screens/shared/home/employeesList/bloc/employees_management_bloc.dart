@@ -4,6 +4,7 @@ import 'package:balu_sto/features/firestore/firestore_repository.dart';
 import 'package:balu_sto/features/firestore/models/employee_status.dart';
 import 'package:balu_sto/features/firestore/models/service.dart';
 import 'package:balu_sto/features/firestore/models/service_status.dart';
+import 'package:balu_sto/features/firestore/models/transaction.dart';
 import 'package:balu_sto/features/firestore/models/user.dart';
 import 'package:balu_sto/helpers/extensions/list_extensions.dart';
 import 'package:balu_sto/helpers/triple.dart';
@@ -89,7 +90,7 @@ class EmployeesManagementBloc extends Bloc<EmployeesManagementEvent, EmployeesMa
 
       final updateResult = await firestoreRepository.performTransaction(selectedServices, status);
       if (updateResult.isSuccessful) {
-        yield EmployeesListStateSuccess();
+        yield EmployeesListStateSuccess(updateResult.requiredData);
       } else {
         yield EmployeesListStateError(updateResult.requiredError);
         yield* _init();

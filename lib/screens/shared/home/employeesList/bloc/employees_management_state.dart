@@ -59,7 +59,11 @@ class EmployeesListStateDefault extends EmployeesManagementState {
 
 class EmployeesListStateProcessing extends EmployeesManagementState {}
 
-class EmployeesListStateSuccess extends EmployeesManagementState {}
+class EmployeesListStateSuccess extends EmployeesManagementState {
+  EmployeesListStateSuccess(this.transaction);
+
+  final WorkTransaction transaction;
+}
 
 class EmployeesListStateError extends EmployeesManagementState {
   EmployeesListStateError(this.error);
