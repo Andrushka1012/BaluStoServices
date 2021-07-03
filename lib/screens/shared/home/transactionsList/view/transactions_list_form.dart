@@ -2,6 +2,7 @@ import 'package:balu_sto/helpers/dialogs.dart';
 import 'package:balu_sto/screens/shared/home/transactionsList/bloc/transactions_list_bloc.dart';
 import 'package:balu_sto/widgets/containers/progress_container.dart';
 import 'package:balu_sto/widgets/pages/koin_with_params_page.dart';
+import 'package:balu_sto/widgets/transaction_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,7 +20,7 @@ class TransactionsListForm extends KoinWithParamsPage<TransactionsListBloc, Stri
   }
 
   Widget _getTransactionsItems(BuildContext context, TransactionsListStateDefault state) => Column(
-        children: state.transactions.map((e) => Text(e.id)).toList(),
+        children: state.transactions.map((transaction) => TransactionItem(transaction)).toList(),
       );
 
   @override

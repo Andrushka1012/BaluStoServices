@@ -1,5 +1,7 @@
 import 'package:balu_sto/features/firestore/models/service_status.dart';
 import 'package:balu_sto/helpers/extensions/date_extensions.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class WorkTransaction {
   WorkTransaction({
@@ -17,6 +19,8 @@ class WorkTransaction {
   late ServiceStatus status;
 
   String get formattedDate => date.formatted();
+
+  int get servicesCount => members.fold(0, (int previous, TransactionMember member) => previous + member.services.length);
 
   WorkTransaction.fromJson(dynamic json) {
     id = json['id'];
@@ -54,5 +58,25 @@ class TransactionMember {
     map['userId'] = userId;
     map['services'] = services;
     return map;
+  }
+}
+
+extension ServiceStatusExtesion on ServiceStatus {
+  IconData get icon {
+    switch(this) {
+      case ServiceStatus.CONFIRMED:
+        return Icons.done;
+      default:
+        return Icons.payments_outlined;
+    }
+  }
+
+  String get translation {
+    switch(this) {
+      case ServiceStatus.CONFIRMED:
+        return 'Принятая оплата';
+      default:
+        return 'Оплаченно';
+    }
   }
 }
