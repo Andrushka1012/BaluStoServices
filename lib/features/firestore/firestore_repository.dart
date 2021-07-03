@@ -281,4 +281,48 @@ class FirestoreRepository {
           }
         },
       );
+
+  Future<SafeResponse<TransactionDetails>> getTransactionDetails(String transactionId) => fetchSafety(
+        () async {
+          final transaction =
+              (await _transactionsCollection.where('id', isEqualTo: transactionId).get()).docs.first.data();
+
+          if (_userIdentity.isAdmin) {
+            final detailsResponse = await _fetchTransactionDetails(transaction);
+            detailsResponse.throwIfNotSuccessful();
+            return detailsResponse.requiredData;
+          }
+
+          final transactionRelatedToUser = transaction.members.firstOrNull(
+            (member) => member.userId == _userIdentity.requiredCurrentUser.userId,
+          );
+          assert(transactionRelatedToUser != null, 'Вы не можете просмотреть подробности даной трансакции.');
+          transaction.members.removeWhere((member) => member.userId != _userIdentity.requiredCurrentUser.userId);
+
+          final detailsResponse = await _fetchTransactionDetails(transaction);
+          detailsResponse.throwIfNotSuccessful();
+          return detailsResponse.requiredData;
+        },
+      );
+
+  Future<SafeResponse<TransactionDetails>> _fetchTransactionDetails(WorkTransaction transaction) => fetchSafety(
+        () async {
+          final List<AppUser> relatedUsers = [];
+          final List<Service> relatedServices = [];
+          await Future.wait(transaction.members.map((member) async {
+            final userData = (await _usersCollection.where('userId', isEqualTo: member.userId).get()).docs.first.data();
+            relatedUsers.add(userData);
+            await Future.wait(member.services.map((serviceId) async {
+              final service = await _getUserService(member.userId, serviceId);
+              relatedServices.add(service.data());
+            }));
+          }));
+
+          return TransactionDetails(
+            transaction: transaction,
+            relatedUsers: relatedUsers,
+            relatedServices: relatedServices,
+          );
+        },
+      );
 }

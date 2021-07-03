@@ -1,7 +1,21 @@
+import 'package:balu_sto/features/firestore/models/service.dart';
 import 'package:balu_sto/features/firestore/models/service_status.dart';
+import 'package:balu_sto/features/firestore/models/user.dart';
 import 'package:balu_sto/helpers/extensions/date_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+class TransactionDetails {
+  final WorkTransaction transaction;
+  final List<AppUser> relatedUsers;
+  final List<Service> relatedServices;
+
+  TransactionDetails({
+    required this.transaction,
+    required this.relatedUsers,
+    required this.relatedServices,
+  });
+}
 
 class WorkTransaction {
   WorkTransaction({
@@ -9,7 +23,7 @@ class WorkTransaction {
     required this.members,
     required this.date,
     required this.status,
-  }): id = id ?? DateTime.now().millisecondsSinceEpoch.toString();
+  }) : id = id ?? DateTime.now().millisecondsSinceEpoch.toString();
 
   static const COLLECTION_NAME = 'transactions';
 
@@ -20,7 +34,8 @@ class WorkTransaction {
 
   String get formattedDate => date.formatted();
 
-  int get servicesCount => members.fold(0, (int previous, TransactionMember member) => previous + member.services.length);
+  int get servicesCount =>
+      members.fold(0, (int previous, TransactionMember member) => previous + member.services.length);
 
   WorkTransaction.fromJson(dynamic json) {
     id = json['id'];
@@ -63,7 +78,7 @@ class TransactionMember {
 
 extension ServiceStatusExtesion on ServiceStatus {
   IconData get icon {
-    switch(this) {
+    switch (this) {
       case ServiceStatus.CONFIRMED:
         return Icons.done;
       default:
@@ -72,7 +87,7 @@ extension ServiceStatusExtesion on ServiceStatus {
   }
 
   String get translation {
-    switch(this) {
+    switch (this) {
       case ServiceStatus.CONFIRMED:
         return 'Принятая оплата';
       default:

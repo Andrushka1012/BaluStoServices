@@ -1,10 +1,10 @@
 import 'package:balu_sto/features/firestore/models/transaction.dart';
+import 'package:balu_sto/helpers/extensions/date_extensions.dart';
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:balu_sto/helpers/styles/text_styles.dart';
-import 'package:balu_sto/screens/shared/home/serviceModification/view/services_modification_page.dart';
+import 'package:balu_sto/screens/shared/home/transactionDetails/view/transaction_details_page.dart';
 import 'package:flutter/material.dart';
-import 'package:balu_sto/helpers/extensions/date_extensions.dart';
 
 class TransactionItem extends StatelessWidget {
   const TransactionItem(this.transaction);
@@ -14,7 +14,10 @@ class TransactionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () => Navigator.of(context).pushNamed(
+        TransactionDetailsPage.PAGE_NAME,
+        arguments: TransactionDetailsPageArgs(transaction),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: Dimens.spanBig, vertical: Dimens.spanSmall),
         child: Row(
