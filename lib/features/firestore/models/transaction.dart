@@ -15,6 +15,8 @@ class TransactionDetails {
     required this.relatedUsers,
     required this.relatedServices,
   });
+
+  int get selectedAmount => relatedServices.fold(0, (previousValue, element) => previousValue + element.moneyAmount);
 }
 
 class WorkTransaction {
