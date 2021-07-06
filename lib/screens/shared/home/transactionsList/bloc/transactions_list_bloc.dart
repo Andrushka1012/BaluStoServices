@@ -10,10 +10,16 @@ part 'transactions_list_event.dart';
 part 'transactions_list_state.dart';
 
 class TransactionsListBloc extends Bloc<TransactionsListEvent, TransactionsListState> {
-  TransactionsListBloc(this._userId, this._firestoreRepository) : super(TransactionsListStateProcessing());
+  TransactionsListBloc(this._userId, this._firestoreRepository) : super(TransactionsListStateProcessing()) {
+    _transactionsSubscription = _firestoreRepository.getUserTransactionsStream(userId: _userId).listen(
+          (_) => add(TransactionsListEvent.INIT),
+        );
+  }
 
   final String? _userId;
   final FirestoreRepository _firestoreRepository;
+
+  StreamSubscription? _transactionsSubscription;
 
   @override
   Stream<TransactionsListState> mapEventToState(TransactionsListEvent event) async* {
@@ -30,5 +36,11 @@ class TransactionsListBloc extends Bloc<TransactionsListEvent, TransactionsListS
 
         break;
     }
+  }
+
+  @override
+  Future<void> close() {
+    _transactionsSubscription?.cancel();
+    return super.close();
   }
 }

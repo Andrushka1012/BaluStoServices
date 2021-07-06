@@ -9,6 +9,7 @@ import 'package:balu_sto/helpers/styles/text_styles.dart';
 import 'package:balu_sto/screens/shared/home/employeesList/bloc/employees_management_bloc.dart';
 import 'package:balu_sto/screens/shared/home/serviceDetails/view/service_details_page.dart';
 import 'package:balu_sto/screens/shared/home/serviceModification/view/services_modification_page.dart';
+import 'package:balu_sto/screens/shared/home/transactionDetails/view/transaction_details_page.dart';
 import 'package:balu_sto/widgets/app_card.dart';
 import 'package:balu_sto/widgets/containers/progress_container.dart';
 import 'package:balu_sto/widgets/service_item.dart';
@@ -285,7 +286,10 @@ class ServicesModificationForm extends StatelessWidget {
 
     if (state is EmployeesListStateSuccess) {
       Navigator.of(context).pop();
-      // TODO: open transaction details
+      Navigator.of(context).pushNamed(
+        TransactionDetailsPage.PAGE_NAME,
+        arguments: TransactionDetailsPageArgs(state.transaction),
+      );
     }
   }
 }

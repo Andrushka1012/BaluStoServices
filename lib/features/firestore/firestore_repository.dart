@@ -28,6 +28,15 @@ class FirestoreRepository {
   Stream<QuerySnapshot<Service>>? getUserServicesStream(String userId) =>
       flattenStreams(_getUserServicesCollection(userId).asStream().map((event) => event.snapshots()));
 
+  Stream<QuerySnapshot<WorkTransaction>> getUserTransactionsStream({String? userId}) =>
+      _transactionsCollection.snapshots().where((transactions) {
+        if (_userIdentity.isAdmin && userId == null) return true;
+
+        return transactions.docs.firstOrNull(
+                (document) => document.data().members.firstOrNull((member) => member.userId == userId) != null) !=
+            null;
+      });
+
   CollectionReference<AppUser> get _usersCollection =>
       FirebaseFirestore.instance.collection(AppUser.COLLECTION_NAME).userConverter();
 
