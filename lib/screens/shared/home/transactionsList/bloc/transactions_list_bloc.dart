@@ -23,7 +23,7 @@ class TransactionsListBloc extends Bloc<TransactionsListEvent, TransactionsListS
 
         final transactionsResponse = await _firestoreRepository.getTransactions(_userId);
         if (transactionsResponse.isSuccessful) {
-          yield TransactionsListStateDefault(transactionsResponse.requiredData);
+          yield TransactionsListStateDefault(transactionsResponse.requiredData.reversed.toList());
         } else {
           yield TransactionsListStateError(transactionsResponse.requiredError);
         }
