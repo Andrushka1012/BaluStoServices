@@ -103,14 +103,12 @@ class UserServicesForm extends KoinWithParamsPage<RecentServicesBloc, String> {
   Widget buildPage(BuildContext context) {
     return BlocBuilder<RecentServicesBloc, UserServicesState>(
       builder: (_, UserServicesState state) => state is UserServicesStateDataReady
-          ? WebConstraintsContainer(
-            child: Column(
-                children: [
-                  _getServicesStatisticItem(context, state),
-                  if (state.services.isNotEmpty) _getRecentServicesItem(context, state),
-                ],
-              ),
-          )
+          ? Column(
+              children: [
+                _getServicesStatisticItem(context, state),
+                if (state.services.isNotEmpty) _getRecentServicesItem(context, state),
+              ],
+            )
           : Container(),
     );
   }

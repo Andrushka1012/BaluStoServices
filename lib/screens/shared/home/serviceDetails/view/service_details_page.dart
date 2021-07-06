@@ -32,79 +32,77 @@ class ServiceDetailsPage extends StatelessWidget {
         title: _args.service.serviceName,
         showBack: true,
       ),
-      body: WebConstraintsContainer(
-        child: AppCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              GestureDetector(
-                onTap: () => _showPhoto(context),
-                child: Center(
-                  child: Container(
-                    width: 150,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(100),
-                      ),
+      body: AppCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            GestureDetector(
+              onTap: () => _showPhoto(context),
+              child: Center(
+                child: Container(
+                  width: 150,
+                  height: 150,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(100),
                     ),
-                    child: Center(
-                      child: _args.service.hasPhoto
-                          ? BaluImage(
-                              imageUrl: _args.service.photoUrl!,
-                              placeholder: _placeHolderIcon,
-                            )
-                          : _placeHolderIcon,
-                    ),
+                  ),
+                  child: Center(
+                    child: _args.service.hasPhoto
+                        ? BaluImage(
+                            imageUrl: _args.service.photoUrl!,
+                            placeholder: _placeHolderIcon,
+                          )
+                        : _placeHolderIcon,
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: Dimens.spanMedium,
-                ),
-                child: Center(
-                  child: Text(
-                    _args.service.serviceName,
-                    style: AppTextStyles.headline1,
-                  ),
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: Dimens.spanMedium,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: Dimens.spanSmall),
+              child: Center(
                 child: Text(
-                  'Статус: ${_args.service.status.translation}',
-                  style: AppTextStyles.bodyText1,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  _args.service.serviceName,
+                  style: AppTextStyles.headline1,
                 ),
               ),
-              Text(
-                'Стоимость: ${_args.service.moneyAmount}',
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: Dimens.spanSmall),
+              child: Text(
+                'Статус: ${_args.service.status.translation}',
                 style: AppTextStyles.bodyText1,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: Dimens.spanSmall),
-                child: Text(
-                  'Добавленно: ${_args.service.formattedDate}',
-                  style: AppTextStyles.bodyText1,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+            ),
+            Text(
+              'Стоимость: ${_args.service.moneyAmount}',
+              style: AppTextStyles.bodyText1,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: Dimens.spanSmall),
+              child: Text(
+                'Добавленно: ${_args.service.formattedDate}',
+                style: AppTextStyles.bodyText1,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              if (_args.service.modifiedDate != null)
-                Text(
-                  'Измененно: ${_args.service.formattedModifiedDate!}',
-                  style: AppTextStyles.bodyText1,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-            ],
-          ),
+            ),
+            if (_args.service.modifiedDate != null)
+              Text(
+                'Измененно: ${_args.service.formattedModifiedDate!}',
+                style: AppTextStyles.bodyText1,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+          ],
         ),
       ),
     );
