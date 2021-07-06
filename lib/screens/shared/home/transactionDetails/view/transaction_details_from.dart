@@ -5,9 +5,11 @@ import 'package:balu_sto/helpers/dialogs.dart';
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:balu_sto/helpers/styles/text_styles.dart';
+import 'package:balu_sto/screens/shared/home/serviceDetails/view/service_details_page.dart';
 import 'package:balu_sto/screens/shared/home/transactionDetails/bloc/transaction_details_bloc.dart';
 import 'package:balu_sto/widgets/app_card.dart';
 import 'package:balu_sto/widgets/containers/progress_container.dart';
+import 'package:balu_sto/widgets/service_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -125,10 +127,39 @@ class TransactionDetailsFrom extends StatelessWidget {
               ],
             );
 
+  Widget _getEmployeeSection(BuildContext context, TransactionDetailsStateDefault state, AppUser user) {
+    return Theme(
+      data: Theme.of(context).copyWith(accentColor: AppColors.white),
+      child: ExpansionTile(
+        initiallyExpanded: true,
+        title: Text(
+          user.name,
+          style: AppTextStyles.bodyText1,
+        ),
+        children: state.details.relatedServices
+            .where((service) => service.userId == user.userId)
+            .map(
+              (service) => ServiceItem(
+                service,
+                showArrow: false,
+                onSelected: (service) => Navigator.of(context).pushNamed(
+                  ServiceDetailsPage.getPageName(service.userId, service.id),
+                  arguments: ServiceDetailsPageArgs(
+                    service,
+                  ),
+                ),
+              ),
+            )
+            .toList(),
+      ),
+    );
+  }
+
   Widget _getTransactionDetailer(BuildContext context, TransactionDetailsStateDefault state) => SingleChildScrollView(
         child: Column(
           children: [
             _getSummaryItem(context, state),
+            ...state.details.relatedUsers.map((user) => _getEmployeeSection(context, state, user)).toList()
           ],
         ),
       );
