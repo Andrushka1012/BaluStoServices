@@ -50,7 +50,7 @@ class ForgotPasswordForm extends StatelessWidget {
   void _resetPassword(BuildContext context) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: _emailTextController.text);
-      showDialogMessage(context, title: 'Отправленно', message: 'Проверте Вашу почту.');
+      showDialogMessage(context, title: 'Отправлено', message: 'Проверте Вашу почту.');
       Navigator.of(context).pop();
     } catch (e) {
       showErrorDialog(context, e);

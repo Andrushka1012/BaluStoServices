@@ -160,7 +160,7 @@ class ServiceForm extends StatelessWidget {
   }
 
   void _save(BuildContext context, DefaultServiceState state) {
-    if (state.isEditMode || state.photo != null) {
+    if (kIsWeb || state.isEditMode || state.photo != null) {
       context.read<ServiceBloc>().add(
             ServiceEventApply(),
           );
@@ -170,7 +170,7 @@ class ServiceForm extends StatelessWidget {
           builder: (_) => AlertDialog(
                 backgroundColor: AppColors.secondary,
                 title: Text(
-                  'Фотография не была добавленна!',
+                  'Фотография не была добавлена!',
                   style: TextStyle(color: AppColors.white),
                 ),
                 content: Text(

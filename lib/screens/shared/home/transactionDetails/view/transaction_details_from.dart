@@ -18,7 +18,7 @@ class TransactionDetailsFrom extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              state.details.transaction.status == ServiceStatus.CONFIRMED ? 'Принято' : 'Оплаченно',
+              state.details.transaction.status == ServiceStatus.CONFIRMED ? 'Принято' : 'Оплачено',
               style: AppTextStyles.bodyText1.copyWith(color: AppColors.gray),
             ),
             _getModeAmountItem(state),
@@ -77,7 +77,7 @@ class TransactionDetailsFrom extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             )
           : Text(
-              'выданно: ${userSummary.fold(0, (int previousValue, element) => previousValue + element.moneyAmount) / 2} прийнято: ${userSummary.fold(0, (int previousValue, element) => previousValue + element.moneyAmount)} количество услуг: ${userSummary.length}',
+              'выдано: ${userSummary.fold(0, (int previousValue, element) => previousValue + element.moneyAmount) / 2} прийнято: ${userSummary.fold(0, (int previousValue, element) => previousValue + element.moneyAmount)} количество услуг: ${userSummary.length}',
               style: TextStyle(color: AppColors.gray, fontSize: Dimens.fontSizeCaption),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -114,7 +114,7 @@ class TransactionDetailsFrom extends StatelessWidget {
                   width: Dimens.spanBig,
                 ),
                 Text(
-                  'Выплаченно:',
+                  'Выплачено:',
                   style: AppTextStyles.bodyText1.copyWith(color: AppColors.gray),
                 ),
                 SizedBox(

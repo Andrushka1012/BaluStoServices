@@ -89,7 +89,7 @@ class ServiceDetailsPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: Dimens.spanSmall),
               child: Text(
-                'Добавленно: ${_args.service.formattedDate}',
+                'Добавлено: ${_args.service.formattedDate}',
                 style: AppTextStyles.bodyText1,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -97,7 +97,7 @@ class ServiceDetailsPage extends StatelessWidget {
             ),
             if (_args.service.modifiedDate != null)
               Text(
-                'Измененно: ${_args.service.formattedModifiedDate!}',
+                'Изменено: ${_args.service.formattedModifiedDate!}',
                 style: AppTextStyles.bodyText1,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

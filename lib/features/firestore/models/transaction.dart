@@ -93,7 +93,7 @@ extension ServiceStatusExtesion on ServiceStatus {
       case ServiceStatus.CONFIRMED:
         return 'Принятая оплата';
       default:
-        return 'Оплаченно';
+        return 'Оплачено';
     }
   }
 }
