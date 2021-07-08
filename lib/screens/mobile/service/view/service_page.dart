@@ -19,6 +19,11 @@ class ServicePage extends KoinWithParamsPage<ServiceBloc, Pair<Service?, bool>> 
   Pair<Service?, bool> get params => Pair(_args.service, _args.editMode);
 
   @override
+  void initBloc(ServiceBloc bloc) {
+    bloc.add(ServiceEventInit());
+  }
+
+  @override
   Widget buildPage(BuildContext context) => Scaffold(
         backgroundColor: AppColors.background,
         appBar: BaluAppbar(

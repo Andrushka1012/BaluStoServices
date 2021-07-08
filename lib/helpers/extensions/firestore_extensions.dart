@@ -21,9 +21,9 @@ extension FiestoreCollectionExtensions on CollectionReference<Map<String, dynami
         toFirestore: (WorkTransaction transaction, _) => transaction.toJsonApi(),
       );
 
-  CollectionReference<PopularServices> popularServiceConverter() => this.withConverter<PopularServices>(
+  CollectionReference<PopularService> popularServiceConverter() => this.withConverter<PopularService>(
         fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) =>
-            PopularServices.fromJson(snapshot.data()),
-        toFirestore: (PopularServices service, _) => service.toJsonApi(),
+            PopularService.fromJson(snapshot.data()),
+        toFirestore: (PopularService service, _) => service.toJsonApi(),
       );
 }

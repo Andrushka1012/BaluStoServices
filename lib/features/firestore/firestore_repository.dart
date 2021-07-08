@@ -50,8 +50,8 @@ class FirestoreRepository {
   CollectionReference<WorkTransaction> get _transactionsCollection =>
       FirebaseFirestore.instance.collection(WorkTransaction.COLLECTION_NAME).workTransactionConverter();
 
-  CollectionReference<PopularServices> get _popularServicesCollection =>
-      FirebaseFirestore.instance.collection(PopularServices.COLLECTION_NAME).popularServiceConverter();
+  CollectionReference<PopularService> get _popularServicesCollection =>
+      FirebaseFirestore.instance.collection(PopularService.COLLECTION_NAME).popularServiceConverter();
 
   Future<CollectionReference<Service>> _getUserServicesCollection(String userId) async {
     final userDocumentId = (await _usersCollection.where('userId', isEqualTo: userId).get()).docs.first.id;
@@ -340,7 +340,7 @@ class FirestoreRepository {
         },
       );
 
-  Future<SafeResponse<List<PopularServices>>> getPopularServices() => fetchSafety(
+  Future<SafeResponse<List<PopularService>>> getPopularServices() => fetchSafety(
         () async {
           final servicesDocument = await _popularServicesCollection.get();
 

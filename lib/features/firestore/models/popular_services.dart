@@ -1,14 +1,14 @@
-class PopularServices {
+class PopularService {
   late final String name;
-  late final double? price;
-  late final int? popularity;
+  late final int? price;
+  late final int popularity;
 
   static const String COLLECTION_NAME = 'popularServices';
 
-  PopularServices.fromJson(dynamic json) {
+  PopularService.fromJson(dynamic json) {
     name = json['name'];
     price = json['price'];
-    popularity = json['popularity'] ?? -1;
+    popularity = json['popularity'] ?? 0;
   }
 
   Map<String, Object?> toJsonApi() {

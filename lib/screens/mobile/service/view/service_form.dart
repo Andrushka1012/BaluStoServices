@@ -50,6 +50,33 @@ class ServiceForm extends StatelessWidget {
         ),
       );
 
+  Widget _popularServicesItems(BuildContext context, DefaultServiceState state) => SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: Dimens.spanSmall),
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: state.popularServices
+              .map((service) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: Dimens.spanTiny),
+                    child: GestureDetector(
+                      onTap: () =>  context.read<ServiceBloc>().add(
+                        ServiceEventPrefill(service),
+                      ),
+                      child: Chip(
+                        label: Text(
+                          service.name,
+                          style: AppTextStyles.bodyText1w500,
+                        ),
+                        backgroundColor: service.name.toLowerCase() == state.serviceName.toLowerCase()
+                            ? AppColors.primary
+                            : AppColors.secondary,
+                      ),
+                    ),
+                  ))
+              .toList(),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ServiceBloc, ServiceState>(
@@ -61,81 +88,93 @@ class ServiceForm extends StatelessWidget {
           }
           return ProgressContainer(
             isProcessing: state is ServiceStateProcessing,
-            child: AppCard(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (!kIsWeb && state is DefaultServiceState && state.photo != null) _getPhotoItem(context, state.photo!),
-                  if (!kIsWeb && state is DefaultServiceState && state.photo == null && !state.isEditMode)
-                    Padding(
-                      padding: EdgeInsets.only(bottom: Dimens.spanBig),
-                      child: Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.primary),
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.camera,
-                            color: AppColors.white,
-                          ),
-                          onPressed: () => context.read<ServiceBloc>().add(
-                                ServiceEventTakePhoto(),
+            child: state is! ServiceStateProcessing
+                ? SingleChildScrollView(
+                  child: Column(
+                      children: [
+                        _popularServicesItems(context, state as DefaultServiceState),
+                        AppCard(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (!kIsWeb && state is DefaultServiceState && state.photo != null)
+                                _getPhotoItem(context, state.photo!),
+                              if (!kIsWeb && state is DefaultServiceState && state.photo == null && !state.isEditMode)
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: Dimens.spanBig),
+                                  child: Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.primary),
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.camera,
+                                        color: AppColors.white,
+                                      ),
+                                      onPressed: () => context.read<ServiceBloc>().add(
+                                            ServiceEventTakePhoto(),
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                              TextInput(
+                                controller: _serviceNameController,
+                                label: 'Предоставленная услуга',
+                                hint: 'Введите название услуги',
+                                keyboardType: TextInputType.text,
+                                textInputAction: TextInputAction.next,
+                                onChanged: (value) => context.read<ServiceBloc>().add(ServiceEventNameChanged(value)),
                               ),
+                              SizedBox(
+                                height: Dimens.spanSmall,
+                              ),
+                              TextInput(
+                                controller: _moneyAmountController,
+                                label: 'Стоимость услуги',
+                                hint: 'Введите стоимость услуги',
+                                keyboardType: TextInputType.number,
+                                textInputAction: TextInputAction.done,
+                                onChanged: (value) =>
+                                    context.read<ServiceBloc>().add(ServiceEventMoneyAmountChanged(value)),
+                              ),
+                              SizedBox(
+                                height: Dimens.spanSmall,
+                              ),
+                              SizedBox(
+                                width: double.infinity,
+                                height: Dimens.spanSmallerGiant,
+                                child: ElevatedButton(
+                                  child: Text('Записать', style: AppTextStyles.bodyText1),
+                                  style: ElevatedButton.styleFrom(primary: AppColors.primary),
+                                  onPressed: state is DefaultServiceState &&
+                                          state.serviceName.isNotEmpty &&
+                                          state.moneyAmount.isNotEmpty
+                                      ? () => _save(context, state)
+                                      : null,
+                                ),
+                              ),
+                              if (state is DefaultServiceState && state.isEditMode)
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: Dimens.spanSmall,
+                                  ),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    height: Dimens.spanSmallerGiant,
+                                    child: ElevatedButton(
+                                      child: Text('Удалить', style: AppTextStyles.bodyText1),
+                                      style: ElevatedButton.styleFrom(primary: AppColors.redTart),
+                                      onPressed: () => _deleteService(context),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  TextInput(
-                    controller: _serviceNameController,
-                    label: 'Предоставленная услуга',
-                    hint: 'Введите название услуги',
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    onChanged: (value) => context.read<ServiceBloc>().add(ServiceEventNameChanged(value)),
-                  ),
-                  SizedBox(
-                    height: Dimens.spanSmall,
-                  ),
-                  TextInput(
-                    controller: _moneyAmountController,
-                    label: 'Стоимость услуги',
-                    hint: 'Введите стоимость услуги',
-                    keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.done,
-                    onChanged: (value) => context.read<ServiceBloc>().add(ServiceEventMoneyAmountChanged(value)),
-                  ),
-                  SizedBox(
-                    height: Dimens.spanSmall,
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: Dimens.spanSmallerGiant,
-                    child: ElevatedButton(
-                      child: Text('Записать', style: AppTextStyles.bodyText1),
-                      style: ElevatedButton.styleFrom(primary: AppColors.primary),
-                      onPressed:
-                          state is DefaultServiceState && state.serviceName.isNotEmpty && state.moneyAmount.isNotEmpty
-                              ? () => _save(context, state)
-                              : null,
-                    ),
-                  ),
-                  if (state is DefaultServiceState && state.isEditMode)
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: Dimens.spanSmall,
-                      ),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: Dimens.spanSmallerGiant,
-                        child: ElevatedButton(
-                          child: Text('Удалить', style: AppTextStyles.bodyText1),
-                          style: ElevatedButton.styleFrom(primary: AppColors.redTart),
-                          onPressed: () => _deleteService(context),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
+                )
+                : Container(),
           );
         });
   }
