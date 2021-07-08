@@ -17,6 +17,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:koin/internals.dart';
 
+import 'models/popular_services.dart';
+
 class FirestoreRepository {
   FirestoreRepository(this._scope, this._userIdentity);
 
@@ -47,6 +49,9 @@ class FirestoreRepository {
 
   CollectionReference<WorkTransaction> get _transactionsCollection =>
       FirebaseFirestore.instance.collection(WorkTransaction.COLLECTION_NAME).workTransactionConverter();
+
+  CollectionReference<PopularServices> get _popularServicesCollection =>
+      FirebaseFirestore.instance.collection(PopularServices.COLLECTION_NAME).popularServiceConverter();
 
   Future<CollectionReference<Service>> _getUserServicesCollection(String userId) async {
     final userDocumentId = (await _usersCollection.where('userId', isEqualTo: userId).get()).docs.first.id;
@@ -332,6 +337,14 @@ class FirestoreRepository {
             relatedUsers: relatedUsers,
             relatedServices: relatedServices,
           );
+        },
+      );
+
+  Future<SafeResponse<List<PopularServices>>> getPopularServices() => fetchSafety(
+        () async {
+          final servicesDocument = await _popularServicesCollection.get();
+
+          return servicesDocument.docs.map((doc) => doc.data()).toList();
         },
       );
 }
