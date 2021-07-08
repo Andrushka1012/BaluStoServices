@@ -1,4 +1,5 @@
 import 'package:balu_sto/features/firestore/models/service.dart';
+import 'package:balu_sto/features/firestore/models/service_status.dart';
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:balu_sto/helpers/styles/text_styles.dart';
@@ -56,7 +57,7 @@ class ServiceItem extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        service.formattedDate,
+                        '${service.formattedDate}, статус: ${service.status.translation}',
                         style: TextStyle(color: AppColors.gray, fontSize: Dimens.fontSizeCaption),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

@@ -3,13 +3,16 @@ import 'package:balu_sto/helpers/extensions/date_extensions.dart';
 import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:balu_sto/helpers/styles/text_styles.dart';
+import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:balu_sto/screens/shared/home/transactionDetails/view/transaction_details_page.dart';
 import 'package:flutter/material.dart';
+import 'package:koin_flutter/koin_flutter.dart';
 
 class TransactionItem extends StatelessWidget {
-  const TransactionItem(this.transaction);
+  TransactionItem(this.transaction);
 
   final WorkTransaction transaction;
+  late final UserIdentity _userIdentity = get();
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +54,8 @@ class TransactionItem extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      'включает услуг ${transaction.servicesCount} для ${transaction.members.length} работников',
+                      'включает услуг ${transaction.servicesCount}' +
+                          (_userIdentity.isAdmin ? 'для ${transaction.members.length} работников' : ''),
                       style: TextStyle(color: AppColors.gray, fontSize: Dimens.fontSizeCaption),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
