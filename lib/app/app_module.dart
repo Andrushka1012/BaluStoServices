@@ -8,6 +8,7 @@ import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:balu_sto/infrastructure/database/directory_util.dart';
 import 'package:balu_sto/infrastructure/database/local_data_base.dart';
 import 'package:balu_sto/screens/mobile/service/service/service_bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:koin/koin.dart';
 
@@ -24,7 +25,17 @@ final appModule = Module()
   ..single((scope) => UserIdentity())
   ..single((scope) => PreferencesProvider.instance)
   ..single((scope) => FirebaseAuth.instance)
-  ..single((scope) => FirestoreRepository(scope, scope.get()))
+  ..single((scope) {
+    return FirebaseFirestore.instance
+      ..settings = Settings(
+        persistenceEnabled: false,
+      );
+  })
+  ..single((scope) => FirestoreRepository(
+        scope,
+        scope.get(),
+        scope.get(),
+      ))
   ..single((scope) => AuthHandler(
         scope.get(),
         scope.get(),

@@ -213,7 +213,7 @@ class ServiceForm extends StatelessWidget {
                   style: TextStyle(color: AppColors.white),
                 ),
                 content: Text(
-                  'Вы уверены что не хотите добавить фото?\nВы не сможете сделать это позже!',
+                  'Пожалуйста добавьте фотографию.',
                   style: TextStyle(color: AppColors.white),
                 ),
                 actions: <Widget>[
@@ -228,21 +228,6 @@ class ServiceForm extends StatelessWidget {
                         Navigator.of(context).pop();
                         context.read<ServiceBloc>().add(
                               ServiceEventTakePhoto(),
-                            );
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextButton(
-                      child: Text(
-                        'Отправить без фото',
-                        style: TextStyle(color: AppColors.white),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        context.read<ServiceBloc>().add(
-                              ServiceEventApply(),
                             );
                       },
                     ),

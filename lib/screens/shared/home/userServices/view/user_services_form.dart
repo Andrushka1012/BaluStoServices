@@ -5,7 +5,6 @@ import 'package:balu_sto/helpers/styles/dimens.dart';
 import 'package:balu_sto/helpers/styles/text_styles.dart';
 import 'package:balu_sto/screens/shared/home/userServices/bloc/user_services_bloc.dart';
 import 'package:balu_sto/widgets/app_card.dart';
-import 'package:balu_sto/widgets/containers/web_constraints_container.dart';
 import 'package:balu_sto/widgets/pages/koin_with_params_page.dart';
 import 'package:balu_sto/widgets/service_item.dart';
 import 'package:flutter/material.dart';

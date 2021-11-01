@@ -5,7 +5,6 @@ import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:koin/internals.dart';
 
 class AuthHandler {
   AuthHandler(
@@ -54,10 +53,9 @@ class AuthHandler {
 
         _userIdentity.obtainUserData(currentUserResponse.requiredData, false);
 
-        if(!kIsWeb) {
+        if (!kIsWeb) {
           _firestoreRepository.uploadMissingAssets();
         }
-
 
         return currentUserResponse;
       });

@@ -20,11 +20,12 @@ import 'package:koin/internals.dart';
 import 'models/popular_services.dart';
 
 class FirestoreRepository {
-  FirestoreRepository(this._scope, this._userIdentity);
+  FirestoreRepository(this._scope, this._userIdentity, this._firestore);
 
   final Scope _scope;
   final _firebaseAuth = FirebaseAuth.instance;
   final UserIdentity _userIdentity;
+  final FirebaseFirestore _firestore;
   late final AssetsDao _assetsDao = _scope.get();
 
   Stream<QuerySnapshot<Service>>? getUserServicesStream(String userId) =>
@@ -40,7 +41,7 @@ class FirestoreRepository {
       });
 
   CollectionReference<AppUser> get _usersCollection =>
-      FirebaseFirestore.instance.collection(AppUser.COLLECTION_NAME).userConverter();
+      _firestore.collection(AppUser.COLLECTION_NAME).userConverter();
 
   CollectionReference<Service> get _currentUserServicesCollection => _usersCollection
       .doc(_userIdentity.currentUser?.documentId)
@@ -48,10 +49,10 @@ class FirestoreRepository {
       .serviceConverter();
 
   CollectionReference<WorkTransaction> get _transactionsCollection =>
-      FirebaseFirestore.instance.collection(WorkTransaction.COLLECTION_NAME).workTransactionConverter();
+      _firestore.collection(WorkTransaction.COLLECTION_NAME).workTransactionConverter();
 
   CollectionReference<PopularService> get _popularServicesCollection =>
-      FirebaseFirestore.instance.collection(PopularService.COLLECTION_NAME).popularServiceConverter();
+      _firestore.collection(PopularService.COLLECTION_NAME).popularServiceConverter();
 
   Future<CollectionReference<Service>> _getUserServicesCollection(String userId) async {
     final userDocumentId = (await _usersCollection.where('userId', isEqualTo: userId).get()).docs.first.id;
@@ -108,6 +109,7 @@ class FirestoreRepository {
             if (photo != null) {
               final storageRef = FirebaseStorage.instance.ref().child('services/$serviceId');
               await storageRef.putFile(photo).timeout(Duration(seconds: 10));
+              photo.delete();
             }
           } catch (e) {
             print('Service photo upload error');
@@ -230,6 +232,7 @@ class FirestoreRepository {
                   await storageRef.putFile(assetFile);
 
                   await _assetsDao.remove(asset);
+                  assetFile.delete();
                 } catch (e) {
                   print('Service photo upload error');
                   print(e);
@@ -243,7 +246,7 @@ class FirestoreRepository {
   Future<SafeResponse<WorkTransaction>> performTransaction(List<Service> services, ServiceStatus status) => fetchSafety(
         () async {
           late WorkTransaction workTransaction;
-          await FirebaseFirestore.instance.runTransaction((transaction) async {
+          await _firestore.runTransaction((transaction) async {
             await updateServices(services, transaction);
 
             final servicesGroups = services

@@ -10,7 +10,7 @@ enum ResponseStatus { SUCCESS, FAILURE }
 class SafeResponse<T> {
   late final ResponseStatus status;
   late final T? data;
-  late final dynamic? error;
+  late final dynamic error;
 
   bool get isSuccessful => status == ResponseStatus.SUCCESS;
 

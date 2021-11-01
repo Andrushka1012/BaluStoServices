@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:balu_sto/features/firestore/models/role.dart';
 import 'package:balu_sto/features/firestore/models/user.dart';
 import 'package:balu_sto/helpers/preferences/preferences_provider.dart';
-import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,13 +10,14 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:meta/meta.dart';
 
 part 'registration_event.dart';
+
 part 'registration_state.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
-  RegistrationBloc(this._firebaseAuth, this._userIdentity, this._preferencesProvider) : super(RegistrationStateInput());
+  RegistrationBloc(this._firebaseAuth, this._firestore, this._preferencesProvider) : super(RegistrationStateInput());
 
   final FirebaseAuth _firebaseAuth;
-  final UserIdentity _userIdentity;
+  final FirebaseFirestore _firestore;
   final PreferencesProvider _preferencesProvider;
 
   @override
@@ -65,7 +65,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         role: Role.EMPLOYEE,
       );
 
-      FirebaseFirestore.instance
+      _firestore
           .collection(AppUser.COLLECTION_NAME)
           .add(user.toJsonApi())
           .then((value) => print('Account created'))

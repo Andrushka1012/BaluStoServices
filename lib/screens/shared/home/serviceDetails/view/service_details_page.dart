@@ -6,7 +6,6 @@ import 'package:balu_sto/helpers/styles/text_styles.dart';
 import 'package:balu_sto/widgets/app_card.dart';
 import 'package:balu_sto/widgets/balu_appbar.dart';
 import 'package:balu_sto/widgets/balu_image.dart';
-import 'package:balu_sto/widgets/containers/web_constraints_container.dart';
 import 'package:flutter/material.dart';
 
 class ServiceDetailsPage extends StatelessWidget {

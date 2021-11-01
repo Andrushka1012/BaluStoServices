@@ -1,6 +1,5 @@
 import 'package:balu_sto/features/firestore/models/service_status.dart';
 import 'package:balu_sto/helpers/extensions/date_extensions.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Service {
   Service({
@@ -29,6 +28,7 @@ class Service {
       : null;
 
   String get formattedDate => date.formatted();
+
   String? get formattedModifiedDate => modifiedDate?.formatted();
 
   Service.fromJson(dynamic json) {

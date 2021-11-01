@@ -4,7 +4,6 @@ import 'package:balu_sto/helpers/styles/colors.dart';
 import 'package:balu_sto/screens/shared/home/transactionDetails/bloc/transaction_details_bloc.dart';
 import 'package:balu_sto/screens/shared/home/transactionDetails/view/transaction_details_from.dart';
 import 'package:balu_sto/widgets/balu_appbar.dart';
-import 'package:balu_sto/widgets/pages/koin_page.dart';
 import 'package:balu_sto/widgets/pages/koin_with_params_page.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +31,6 @@ class TransactionDetailsPage extends KoinWithParamsPage<TransactionDetailsBloc, 
         ),
         body: TransactionDetailsFrom(),
       );
-
 }
 
 class TransactionDetailsPageArgs {

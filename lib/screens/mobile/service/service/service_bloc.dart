@@ -64,6 +64,10 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
         }
         break;
       case ServiceEventRemovePhoto:
+        if (previousState.photo != null) {
+          previousState.photo!.delete();
+        }
+
         yield previousState.copyWith()..photo = null;
         break;
       case ServiceEventDelete:
