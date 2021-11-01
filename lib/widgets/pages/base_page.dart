@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Abstract class for base ummadum page. Wrap page with a [BlocProvider] specified to this page
 @immutable
-abstract class BasePage<T extends Bloc> extends StatelessWidget {
+abstract class BasePage<T extends BlocBase> extends StatelessWidget {
   BasePage()
       : assert(
             T != Bloc,

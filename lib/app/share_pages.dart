@@ -2,6 +2,7 @@ import 'package:balu_sto/screens/shared/home/employeesList/view/employees_list_p
 import 'package:balu_sto/screens/shared/home/serviceDetails/view/service_details_page.dart';
 import 'package:balu_sto/screens/shared/home/serviceModification/view/services_modification_page.dart';
 import 'package:balu_sto/screens/shared/home/servicesList/view/services_list_page.dart';
+import 'package:balu_sto/screens/shared/home/statistic/view/statistic_page.dart';
 import 'package:balu_sto/screens/shared/home/transactionDetails/view/transaction_details_page.dart';
 import 'package:balu_sto/screens/shared/home/transactionsList/view/transactions_list_page.dart';
 import 'package:balu_sto/screens/shared/home/userPage/view/user_profile_page.dart';
@@ -42,6 +43,10 @@ final Widget Function(RouteSettings) getGenerateSharedRoutePage = (RouteSettings
   }
   if (settings.name!.contains(TransactionsListPage.PAGE_NAME)) {
     return TransactionsListPage();
+  }
+
+  if (settings.name!.contains(StatisticPage.PAGE_NAME)) {
+    return StatisticPage(settings.arguments as StatisticPageArgs);
   }
 
   throw Exception('Not screen specified to route ${settings.name}');

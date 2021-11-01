@@ -8,6 +8,7 @@ import 'package:balu_sto/screens/shared/intro/forgotPassword/view/forgot_passwor
 import 'package:balu_sto/screens/shared/intro/registration/view/registration_page.dart';
 import 'package:balu_sto/screens/shared/sharedModule.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:koin/koin.dart';
 
 import 'app_module.dart';
@@ -20,6 +21,12 @@ class App extends StatelessWidget {
       theme: createTheme(context),
       initialRoute: SplashScreenMobilePage.PAGE_NAME,
       routes: routes,
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate
+      ],
+      supportedLocales: [
+        const Locale('ru'),
+      ],
       onGenerateRoute: (RouteSettings settings) => PageRouteBuilder(
         pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
           return getGenerateRoutePage(settings);

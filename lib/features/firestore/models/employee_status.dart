@@ -15,4 +15,10 @@ class EmployeeStatusModel {
       services.where((service) => service.status == ServiceStatus.NOT_CONFIRMED).toList();
 
   List<Service> get toPayment => services.where((service) => service.status == ServiceStatus.CONFIRMED).toList();
+
+  List<Service> get payed => services.where((service) => service.status == ServiceStatus.PAYED).toList();
+
+  int get obtainedAmount => payed.fold(0, (previousValue, element) => previousValue + element.moneyAmount);
+
+  double get payedAmount => obtainedAmount / 2;
 }

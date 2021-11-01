@@ -5,6 +5,7 @@ import 'package:balu_sto/infrastructure/auth/user_identity.dart';
 import 'package:balu_sto/screens/mobile/login/view/login_page.dart';
 import 'package:balu_sto/screens/shared/home/employeesList/view/employees_list_page.dart';
 import 'package:balu_sto/screens/shared/home/serviceModification/view/services_modification_page.dart';
+import 'package:balu_sto/screens/shared/home/statistic/view/statistic_page.dart';
 import 'package:balu_sto/screens/shared/home/transactionsList/view/transactions_list_page.dart';
 import 'package:balu_sto/screens/web/login/view/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,6 +31,24 @@ class MainDrawer extends StatelessWidget {
                   fit: BoxFit.cover,
                 )),
                 child: Container(),
+              ),
+              ListTile(
+                title: Text(
+                  'Статистика',
+                  style: AppTextStyles.bodyText1w500,
+                ),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushNamed(
+                    StatisticPage.PAGE_NAME,
+                    arguments: StatisticPageArgs(
+                      userId: _userIdentity.isAdmin ? null : _userIdentity.requiredCurrentUser.userId,
+                    ),
+                  );
+                },
+              ),
+              Divider(
+                color: AppColors.white,
               ),
               if (_userIdentity.isAdmin) ...[
                 ListTile(
