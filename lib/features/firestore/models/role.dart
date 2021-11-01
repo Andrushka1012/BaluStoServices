@@ -1,1 +1,1 @@
-enum Role { ADMIN, EMPLOYEE }
+enum Role { ADMIN, EMPLOYEE, SUPER_ADMIN }

@@ -34,13 +34,4 @@ class AppUser {
     return map;
   }
 
-  Map<String, Object?> toJsonLocal() {
-    final map = <String, dynamic>{};
-    map['documentId'] = documentId;
-    map['userId'] = userId;
-    map['name'] = name;
-    map['email'] = email;
-    map['role'] = role == Role.ADMIN ? 'ADMIN' : 'EMPLOYEE';
-    return map;
-  }
 }

@@ -7,7 +7,7 @@ class UserIdentity {
 
   AppUser get requiredCurrentUser => currentUser!;
 
-  bool get isAdmin => currentUser?.role == Role.ADMIN;
+  bool get isAdmin => currentUser?.role == Role.ADMIN || currentUser?.role == Role.SUPER_ADMIN;
 
   void obtainUserData(AppUser user, bool offlineMode) {
     currentUser = user;

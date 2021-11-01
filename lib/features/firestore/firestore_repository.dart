@@ -160,7 +160,12 @@ class FirestoreRepository {
   Future<SafeResponse<List<EmployeeStatusModel>>> getEmployees() => fetchSafety(
         () async {
           assert(_userIdentity.isAdmin, 'Это доступно только администратору');
-          final usersDocuments = await _usersCollection.get();
+          final usersDocuments = await _usersCollection
+              .where(
+                'role',
+                isNotEqualTo: 'SUPER_ADMIN',
+              )
+              .get();
 
           final List<EmployeeStatusModel> statuses = [];
 
