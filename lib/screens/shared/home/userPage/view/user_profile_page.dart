@@ -1,5 +1,6 @@
 import 'package:balu_sto/features/firestore/models/user.dart';
 import 'package:balu_sto/helpers/styles/colors.dart';
+import 'package:balu_sto/screens/shared/home/debit/view/debit_page.dart';
 import 'package:balu_sto/screens/shared/home/serviceDetails/view/service_details_page.dart';
 import 'package:balu_sto/screens/shared/home/serviceModification/view/services_modification_page.dart';
 import 'package:balu_sto/screens/shared/home/servicesList/view/services_list_page.dart';
@@ -8,6 +9,7 @@ import 'package:balu_sto/screens/shared/home/transactionsList/view/transactions_
 import 'package:balu_sto/screens/shared/home/userServices/view/user_services_form.dart';
 import 'package:balu_sto/widgets/balu_appbar.dart';
 import 'package:balu_sto/widgets/containers/app_popup_menu_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class UserProfilePage extends StatelessWidget {
@@ -56,6 +58,10 @@ class UserProfilePage extends StatelessWidget {
                     userId: _args.userId,
                   ),
                 ),
+              ),
+              AppPopupMenuButtonItem(
+                text: 'Дать в долг',
+                onPressed: () => showAddDebitDialog(context, _args.userId),
               ),
             ],
             child: IconButton(

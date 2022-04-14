@@ -1,5 +1,6 @@
 import 'package:balu_sto/features/firestore/firestore_repository.dart';
 import 'package:balu_sto/helpers/pair.dart';
+import 'package:balu_sto/screens/shared/home/bloc/debit_cubit.dart';
 import 'package:koin/koin.dart';
 
 import 'home/employeesList/bloc/employees_management_bloc.dart';
@@ -20,6 +21,7 @@ final sharedModule = Module()
         scope.get(),
       ))
   ..factory((scope) => LoginBloc(scope.get(), scope.get()))
+  ..factory((scope) => DebitCubit(scope.get()))
   ..factory((scope) => RegistrationBloc(scope.get(), scope.get(), scope.get()))
   ..factoryWithParam<RecentServicesBloc, String>((scope, String arg) => RecentServicesBloc(arg, scope.get()))
   ..factoryWithParam<ServicesListBloc, String>((scope, String args) => ServicesListBloc(

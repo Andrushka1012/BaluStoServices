@@ -10,7 +10,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:meta/meta.dart';
 
 part 'registration_event.dart';
-
 part 'registration_state.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
@@ -63,6 +62,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         name: inputState.name,
         email: inputState.email,
         role: Role.EMPLOYEE,
+        debit: 0,
       );
 
       _firestore

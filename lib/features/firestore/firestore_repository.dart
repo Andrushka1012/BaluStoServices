@@ -354,4 +354,30 @@ class FirestoreRepository {
           return servicesDocument.docs.map((doc) => doc.data()).toList();
         },
       );
+
+  Future<SafeResponse> addDebit(String userId, int debitAmount) => fetchSafety(
+        () async {
+          assert(_userIdentity.isAdmin, 'Только админ может делать єто');
+
+          final userDocument =
+              (await _usersCollection.where('userId', isEqualTo: userId).get().timeout(Duration(seconds: 5)))
+                  .docs
+                  .first;
+          final user = userDocument.data();
+          user.debit += debitAmount;
+
+          await userDocument.reference.update(user.toJsonApi()).timeout(Duration(seconds: 5));
+        },
+      );
+
+  Future<SafeResponse<AppUser>> getUser(String userId) => fetchSafety(
+        () async {
+
+          final userDocument =
+              (await _usersCollection.where('userId', isEqualTo: userId).get().timeout(Duration(seconds: 5)))
+                  .docs
+                  .first;
+          return userDocument.data();
+        },
+      );
 }

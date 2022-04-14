@@ -26,38 +26,59 @@ class UserServicesForm extends KoinWithParamsPage<RecentServicesBloc, String> {
   }
 
   Widget _getServicesStatisticItem(BuildContext context, UserServicesStateDataReady state) => AppCard(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Row(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: ConstrainedBox(
+            constraints: new BoxConstraints(
+              minWidth: MediaQuery.of(context).size.width - 32,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(
-                  'Сума к потверждению:  ',
-                  style: AppTextStyles.bodyText1.copyWith(color: AppColors.gray),
+                Row(
+                  children: [
+                    Text(
+                      'Сума к потверждению:  ',
+                      style: AppTextStyles.bodyText1.copyWith(color: AppColors.gray),
+                    ),
+                    Text(
+                      '${state.toConfirmationAmount}',
+                      style: AppTextStyles.headline3,
+                    ),
+                  ],
                 ),
-                Text(
-                  '${state.toConfirmationAmount}',
-                  style: AppTextStyles.headline3,
+                Row(
+                  children: [
+                    Text(
+                      'Сума к оплате:  ',
+                      style: AppTextStyles.bodyText1.copyWith(color: AppColors.gray),
+                    ),
+                    Text(
+                      '${state.toPaymentAmount / 2}',
+                      style: AppTextStyles.headline3,
+                    ),
+                    Text(
+                      '(${state.toPaymentAmount})',
+                      style: AppTextStyles.bodyText1.copyWith(color: AppColors.gray),
+                    ),
+                  ],
                 ),
+                if (state.user.debit > 0)
+                  Row(
+                    children: [
+                      Text(
+                        'Долг: ',
+                        style: AppTextStyles.bodyText1.copyWith(color: AppColors.gray),
+                      ),
+                      Text(
+                        state.user.debit.toString(),
+                        style: AppTextStyles.headline3,
+                      ),
+                    ],
+                  ),
               ],
             ),
-            Row(
-              children: [
-                Text(
-                  'Сума к оплате:  ',
-                  style: AppTextStyles.bodyText1.copyWith(color: AppColors.gray),
-                ),
-                Text(
-                  '${state.toPaymentAmount / 2}',
-                  style: AppTextStyles.headline3,
-                ),
-                Text(
-                  '(${state.toPaymentAmount})',
-                  style: AppTextStyles.bodyText1.copyWith(color: AppColors.gray),
-                ),
-              ],
-            ),
-          ],
+          ),
         ),
       );
 
