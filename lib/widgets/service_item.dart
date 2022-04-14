@@ -51,7 +51,7 @@ class ServiceItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        service.serviceName,
+                        '${service.serviceName} - ${service.moneyAmount} грн',
                         style: AppTextStyles.bodyText1,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
