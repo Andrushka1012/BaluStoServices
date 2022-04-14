@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:balu_sto/features/firestore/dao/assets_dao.dart';
 import 'package:balu_sto/features/firestore/models/employee_status.dart';
@@ -256,7 +257,7 @@ class FirestoreRepository {
                     userId: group.key,
                     services: group.value.map((e) => e.id).toList(),
                   ),
-                )
+            )
                 .toList();
 
             workTransaction = WorkTransaction(
@@ -267,6 +268,12 @@ class FirestoreRepository {
 
             final transactionDocument = _transactionsCollection.doc(workTransaction.id);
 
+            if (status == ServiceStatus.PAYED) {
+              for (var entry in services.groupBy((item) => item.userId).entries) {
+                final amount = entry.value.fold(0, (int previousValue, element) => previousValue + element.moneyAmount);
+                await payDebit(entry.key, (amount / 2).round());
+              }
+            }
             transaction.set(transactionDocument, workTransaction);
           });
 
@@ -370,9 +377,24 @@ class FirestoreRepository {
         },
       );
 
+  Future<SafeResponse> payDebit(String userId, int debitAmount) => fetchSafety(
+        () async {
+          assert(_userIdentity.isAdmin, 'Только админ может делать єто');
+
+          final userDocument =
+              (await _usersCollection.where('userId', isEqualTo: userId).get().timeout(Duration(seconds: 5)))
+                  .docs
+                  .first;
+          final user = userDocument.data();
+          final currentDebit = (max(user.debit - debitAmount, 0));
+          user.debit = currentDebit;
+
+          await userDocument.reference.update(user.toJsonApi()).timeout(Duration(seconds: 5));
+        },
+      );
+
   Future<SafeResponse<AppUser>> getUser(String userId) => fetchSafety(
         () async {
-
           final userDocument =
               (await _usersCollection.where('userId', isEqualTo: userId).get().timeout(Duration(seconds: 5)))
                   .docs
