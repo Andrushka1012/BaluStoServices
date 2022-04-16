@@ -17,3 +17,9 @@ class EmployeesManagementEventUnselect extends EmployeesManagementEvent {
 }
 
 class EmployeesManagementEventApply extends EmployeesManagementEvent {}
+
+class EmployeesManagementEventUpdateState extends EmployeesManagementEvent {
+  final bool payDebit;
+
+  EmployeesManagementEventUpdateState({required this.payDebit});
+}

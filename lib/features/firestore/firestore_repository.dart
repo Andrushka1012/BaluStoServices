@@ -243,7 +243,12 @@ class FirestoreRepository {
         },
       );
 
-  Future<SafeResponse<WorkTransaction>> performTransaction(List<Service> services, ServiceStatus status) => fetchSafety(
+  Future<SafeResponse<WorkTransaction>> performTransaction(
+    List<Service> services,
+    ServiceStatus status, {
+    bool payDebits = false,
+  }) =>
+      fetchSafety(
         () async {
           late WorkTransaction workTransaction;
           await _firestore.runTransaction((transaction) async {
@@ -257,7 +262,7 @@ class FirestoreRepository {
                     userId: group.key,
                     services: group.value.map((e) => e.id).toList(),
                   ),
-            )
+                )
                 .toList();
 
             workTransaction = WorkTransaction(
@@ -268,7 +273,7 @@ class FirestoreRepository {
 
             final transactionDocument = _transactionsCollection.doc(workTransaction.id);
 
-            if (status == ServiceStatus.PAYED) {
+            if (status == ServiceStatus.PAYED && payDebits) {
               for (var entry in services.groupBy((item) => item.userId).entries) {
                 final amount = entry.value.fold(0, (int previousValue, element) => previousValue + element.moneyAmount);
                 await payDebit(entry.key, (amount / 2).round());

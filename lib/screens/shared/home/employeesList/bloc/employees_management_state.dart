@@ -7,12 +7,16 @@ class EmployeesListStateDefault extends EmployeesManagementState {
   EmployeesListStateDefault._({
     required this.statuses,
     required this.selections,
+    required this.payDebit,
   });
 
   List<Triple<Service, bool, AppUser>> get selectedSelections => selections.where((element) => element.second).toList();
 
   int get selectedAmount =>
       selectedSelections.map((e) => e.first).fold(0, (previousValue, element) => previousValue + element.moneyAmount);
+
+  int get debitAmount =>
+      selectedSelections.map((e) => e.third).fold(0, (previousValue, element) => previousValue + element.debit);
 
   static EmployeesListStateDefault create(List<EmployeeStatusModel> statuses) => EmployeesListStateDefault._(
         statuses: statuses,
@@ -21,10 +25,12 @@ class EmployeesListStateDefault extends EmployeesManagementState {
               (status) => status.services.map((e) => Triple(e, false, status.user)).toList(),
             )
             .toList(),
+        payDebit: false,
       );
 
   final List<EmployeeStatusModel> statuses;
   final List<Triple<Service, bool, AppUser>> selections;
+  final bool payDebit;
 
   List<Service> filterServicesBy(ServicesModificationMode mode) => mode == ServicesModificationMode.CONFIRMATION
       ? statuses.expand((status) => status.toConfirmation).toList()
@@ -40,6 +46,7 @@ class EmployeesListStateDefault extends EmployeesManagementState {
     return EmployeesListStateDefault._(
       statuses: this.statuses,
       selections: newSelections,
+      payDebit: this.payDebit,
     );
   }
 
@@ -53,8 +60,15 @@ class EmployeesListStateDefault extends EmployeesManagementState {
     return EmployeesListStateDefault._(
       statuses: this.statuses,
       selections: newSelections,
+      payDebit: this.payDebit,
     );
   }
+
+  EmployeesListStateDefault copyWith({bool? payDebit}) => EmployeesListStateDefault._(
+        statuses: this.statuses,
+        selections: this.selections,
+        payDebit: payDebit ?? this.payDebit,
+      );
 }
 
 class EmployeesListStateProcessing extends EmployeesManagementState {}

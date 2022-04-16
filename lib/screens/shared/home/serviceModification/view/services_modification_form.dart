@@ -49,6 +49,7 @@ class ServicesModificationForm extends StatelessWidget {
           ? ListView(
               children: [
                 _getSummaryItem(context, state),
+                if (_args.mode == ServicesModificationMode.PAYMENT) _getPayDebitItem(context, state),
                 _getSelectAllItem(context, state),
                 ...state.statuses.map((employee) => _getEmployeeSection(context, employee, state)),
               ],
@@ -67,48 +68,57 @@ class ServicesModificationForm extends StatelessWidget {
               .groupBy((triple) => triple.third)
               .map((key, value) => MapEntry(key, value.map((triple) => triple.first).toList()))
               .entries
-              .map((item) => _getUserSummaryItem(context, item))
+              .map((item) => _getUserSummaryItem(
+                    context,
+                    item,
+                    state,
+                  ))
               .toList(),
             ],
           ));
 
   Widget _getModeAmountItem(EmployeesListStateDefault state) => _args.mode == ServicesModificationMode.CONFIRMATION
       ? Text(
-    state.selectedAmount.toString(),
-    style: AppTextStyles.headline0,
-  )
+          state.selectedAmount.toString(),
+          style: AppTextStyles.headline0,
+        )
       : Row(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      Text(
-        'Прийнято:',
-        style: AppTextStyles.bodyText1.copyWith(color: AppColors.gray),
-      ),
-      SizedBox(
-        width: Dimens.spanSmall,
-      ),
-      Text(
-        state.selectedAmount.toString(),
-        style: AppTextStyles.headline0,
-      ),
-      SizedBox(
-        width: Dimens.spanBig,
-      ),
-      Text(
-        'Выдать:',
-        style: AppTextStyles.bodyText1.copyWith(color: AppColors.gray),
-      ),
-      SizedBox(
-        width: Dimens.spanSmall,
-      ),
-      Text(
-        (state.selectedAmount / 2).toString(),
-        style: AppTextStyles.headline0,
-      ),
-    ],
-  );
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Прийнято:',
+              style: AppTextStyles.bodyText1.copyWith(color: AppColors.gray),
+            ),
+            SizedBox(
+              width: Dimens.spanSmall,
+            ),
+            Text(
+              state.selectedAmount.toString(),
+              style: AppTextStyles.headline0,
+            ),
+            SizedBox(
+              width: Dimens.spanBig,
+            ),
+            Text(
+              'Выдать:',
+              style: AppTextStyles.bodyText1.copyWith(color: AppColors.gray),
+            ),
+            SizedBox(
+              width: Dimens.spanSmall,
+            ),
+            Text(
+              ((state.selectedAmount / 2) - (state.payDebit ? state.debitAmount : 0)).toString(),
+              style: AppTextStyles.headline0,
+            ),
+          ],
+        );
 
-  Widget _getUserSummaryItem(BuildContext context, MapEntry<AppUser, List<Service>> userSummary) => Padding(
+  Widget _getUserSummaryItem(
+    BuildContext context,
+    MapEntry<AppUser, List<Service>> userSummary,
+    EmployeesListStateDefault state,
+  ) =>
+      Padding(
         padding: const EdgeInsets.symmetric(vertical: Dimens.spanSmall),
         child: Row(
           children: [
@@ -144,7 +154,7 @@ class ServicesModificationForm extends StatelessWidget {
                     constraints: BoxConstraints(
                       maxWidth: MediaQuery.of(context).size.width - 150,
                     ),
-                    child: _getUserSummaryStatisticItem(userSummary),
+                    child: _getUserSummaryStatisticItem(userSummary, state),
                   ),
                 ],
               ),
@@ -153,7 +163,7 @@ class ServicesModificationForm extends StatelessWidget {
         ),
       );
 
-  Widget _getUserSummaryStatisticItem(MapEntry<AppUser, List<Service>> userSummary) {
+  Widget _getUserSummaryStatisticItem(MapEntry<AppUser, List<Service>> userSummary, EmployeesListStateDefault state) {
     if (_args.mode == ServicesModificationMode.CONFIRMATION)
       return Text(
         'прийнять: ${userSummary.value.fold(0, (int previousValue, element) => previousValue + element.moneyAmount)}  количество услуг: ${userSummary.value.length}',
@@ -166,7 +176,7 @@ class ServicesModificationForm extends StatelessWidget {
         userSummary.value.fold(0, (int previousValue, element) => previousValue + element.moneyAmount) / 2;
 
     final debit = userSummary.key.debit;
-    final debitInfo = debit > 0 ? "- долг($debit) = ${max(amountToGive - debit, 0)}" : '';
+    final debitInfo = debit > 0 && state.payDebit ? "- долг($debit) = ${max(amountToGive - debit, 0)}" : '';
 
     return Text(
       'выдать: $amountToGive $debitInfo прийнято: ${userSummary.value.fold(0, (int previousValue, element) => previousValue + element.moneyAmount)} количество услуг: ${userSummary.value.length}',
@@ -208,46 +218,75 @@ class ServicesModificationForm extends StatelessWidget {
     );
   }
 
+  Widget _getPayDebitItem(BuildContext context, EmployeesListStateDefault state) {
+    return Padding(
+      padding: const EdgeInsets.all(Dimens.spanBig),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: Dimens.spanHuge,
+            height: Dimens.spanHuge,
+            child: Checkbox(
+                value: state.payDebit,
+                onChanged: (isSelected) {
+                  context.read<EmployeesManagementBloc>().add(EmployeesManagementEventUpdateState(
+                        payDebit: isSelected == true,
+                      ));
+                }),
+          ),
+          SizedBox(
+            width: Dimens.spanBig,
+          ),
+          Text(
+            'Списывать долги',
+            style: AppTextStyles.bodyText1,
+          )
+        ],
+      ),
+    );
+  }
+
   Widget _getEmployeeSection(BuildContext context, EmployeeStatusModel employee, EmployeesListStateDefault state) {
     final elements = _args.mode == ServicesModificationMode.CONFIRMATION ? employee.toConfirmation : employee.toPayment;
 
     return elements.isNotEmpty
         ? Theme(
-      data: Theme.of(context).copyWith(accentColor: AppColors.white),
-      child: ExpansionTile(
-        initiallyExpanded: true,
-        title: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: Dimens.spanBig),
-              child: SizedBox(
-                width: Dimens.spanHuge,
-                height: Dimens.spanHuge,
-                child: Checkbox(
-                  value: elements.every(
-                        (element) => state.selections.firstWhere((selection) => selection.first == element).second,
+            data: Theme.of(context).copyWith(accentColor: AppColors.white),
+            child: ExpansionTile(
+              initiallyExpanded: true,
+              title: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: Dimens.spanBig),
+                    child: SizedBox(
+                      width: Dimens.spanHuge,
+                      height: Dimens.spanHuge,
+                      child: Checkbox(
+                        value: elements.every(
+                          (element) => state.selections.firstWhere((selection) => selection.first == element).second,
+                        ),
+                        onChanged: (isSelected) {
+                          final event = isSelected == true
+                              ? EmployeesManagementEventSelect(elements)
+                              : EmployeesManagementEventUnselect(elements);
+                          context.read<EmployeesManagementBloc>().add(event);
+                        },
+                      ),
+                    ),
                   ),
-                  onChanged: (isSelected) {
-                    final event = isSelected == true
-                        ? EmployeesManagementEventSelect(elements)
-                        : EmployeesManagementEventUnselect(elements);
-                    context.read<EmployeesManagementBloc>().add(event);
-                  },
-                ),
-              ),
-            ),
-            Text(
+                  Text(
                     employee.user.debit > 0 && _args.mode == ServicesModificationMode.PAYMENT
                         ? '${employee.user.name} - долг ${employee.user.debit}'
                         : employee.user.name,
                     style: AppTextStyles.bodyText1,
                   ),
-          ],
-        ),
-        children: elements
-            .map(
-              (service) => Row(
-            children: [
+                ],
+              ),
+              children: elements
+                  .map(
+                    (service) => Row(
+                      children: [
               SizedBox(
                 width: Dimens.spanBig,
               ),

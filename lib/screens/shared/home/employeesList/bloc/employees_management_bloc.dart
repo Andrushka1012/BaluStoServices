@@ -13,7 +13,6 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 part 'employees_management_event.dart';
-
 part 'employees_management_state.dart';
 
 class EmployeesManagementBloc extends Bloc<EmployeesManagementEvent, EmployeesManagementState> {
@@ -52,6 +51,14 @@ class EmployeesManagementBloc extends Bloc<EmployeesManagementEvent, EmployeesMa
           yield* apply();
         }
         break;
+      case EmployeesManagementEventUpdateState:
+        final currentState = state;
+        if (currentState is EmployeesListStateDefault) {
+          yield currentState.copyWith(
+            payDebit: (event as EmployeesManagementEventUpdateState).payDebit,
+          );
+        }
+        break;
     }
   }
 
@@ -88,7 +95,11 @@ class EmployeesManagementBloc extends Bloc<EmployeesManagementEvent, EmployeesMa
         service.status = status;
       });
 
-      final updateResult = await firestoreRepository.performTransaction(selectedServices, status);
+      final updateResult = await firestoreRepository.performTransaction(
+        selectedServices,
+        status,
+        payDebits: previousState.payDebit,
+      );
       if (updateResult.isSuccessful) {
         yield EmployeesListStateSuccess(updateResult.requiredData);
       } else {
