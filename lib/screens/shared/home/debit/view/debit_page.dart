@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:koin/internals.dart';
 
-showAddDebitDialog(BuildContext context, String userId) {
+showDebitDialog(BuildContext context, String userId, {required bool addDebit}) {
   final _textFieldController = TextEditingController();
   final DebitCubit cubit = KoinContextHandler.get().get();
   showDialog(
@@ -30,7 +30,7 @@ showAddDebitDialog(BuildContext context, String userId) {
                 isProcessing: state is DebitProcessing,
                 child: AlertDialog(
                   title: Text(
-                    'Записать в список',
+                    addDebit ? 'Дать в долг' : 'Забрать долг',
                     style: AppTextStyles.headline1,
                   ),
                   backgroundColor: AppColors.background,
@@ -65,7 +65,10 @@ showAddDebitDialog(BuildContext context, String userId) {
                       onPressed: () {
                         try {
                           final int debitAmount = int.parse(_textFieldController.value.text);
-                          cubit.addDebit(
+                          addDebit ? cubit.addDebit(
+                            userId,
+                            debitAmount,
+                          ) : cubit.payDebit(
                             userId,
                             debitAmount,
                           );

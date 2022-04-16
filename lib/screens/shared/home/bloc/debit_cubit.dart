@@ -21,4 +21,16 @@ class DebitCubit extends Cubit<DebitState> {
     emit(AddDebitResult(addDebitResponse));
     emit(currentState);
   }
+
+  Future payDebit(String userId, int debitAmount) async {
+    final currentState = state;
+    if (state is! DebitInitial) return;
+
+    emit(DebitProcessing());
+
+    final addDebitResponse = await _firestoreRepository.payDebit(userId, debitAmount);
+
+    emit(AddDebitResult(addDebitResponse));
+    emit(currentState);
+  }
 }

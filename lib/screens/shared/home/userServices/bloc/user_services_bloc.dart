@@ -12,12 +12,15 @@ part 'user_services_state.dart';
 
 class RecentServicesBloc extends Bloc<UserServicesEvent, UserServicesState> {
   RecentServicesBloc(this.userId, this._firestoreRepository) : super(InitialRecentServicesState()) {
-    _servicesSubscription = _firestoreRepository.getUserServicesStream(userId)?.listen((_) => add(UserServicesEvent.INIT));
+    _servicesSubscription =
+        _firestoreRepository.getUserServicesStream(userId)?.listen((_) => add(UserServicesEvent.INIT));
+    _userDataSubscription = _firestoreRepository.getUserStream(userId)?.listen((_) => add(UserServicesEvent.INIT));
   }
 
   final String userId;
   final FirestoreRepository _firestoreRepository;
   StreamSubscription? _servicesSubscription;
+  StreamSubscription? _userDataSubscription;
 
   @override
   Stream<UserServicesState> mapEventToState(UserServicesEvent event) async* {
@@ -40,6 +43,7 @@ class RecentServicesBloc extends Bloc<UserServicesEvent, UserServicesState> {
   @override
   Future<void> close() {
     _servicesSubscription?.cancel();
+    _userDataSubscription?.cancel();
     return super.close();
   }
 }

@@ -61,7 +61,19 @@ class UserProfilePage extends StatelessWidget {
               ),
               AppPopupMenuButtonItem(
                 text: 'Дать в долг',
-                onPressed: () => showAddDebitDialog(context, _args.userId),
+                onPressed: () => showDebitDialog(
+                  context,
+                  _args.userId,
+                  addDebit: true,
+                ),
+              ),
+              AppPopupMenuButtonItem(
+                text: 'Забрать долг',
+                onPressed: () => showDebitDialog(
+                  context,
+                  _args.userId,
+                  addDebit: false,
+                ),
               ),
             ],
             child: IconButton(
