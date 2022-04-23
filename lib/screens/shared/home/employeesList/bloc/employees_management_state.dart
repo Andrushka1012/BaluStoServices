@@ -16,7 +16,7 @@ class EmployeesListStateDefault extends EmployeesManagementState {
       selectedSelections.map((e) => e.first).fold(0, (previousValue, element) => previousValue + element.moneyAmount);
 
   int get debitAmount =>
-      selectedSelections.map((e) => e.third).fold(0, (previousValue, element) => previousValue + element.debit);
+      selectedSelections.groupBy((e) => e.third).entries.fold(0, (previousValue, element) => previousValue + element.key.debit);
 
   static EmployeesListStateDefault create(List<EmployeeStatusModel> statuses) => EmployeesListStateDefault._(
         statuses: statuses,
