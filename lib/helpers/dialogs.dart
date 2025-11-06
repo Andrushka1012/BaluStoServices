@@ -3,26 +3,44 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void showErrorDialog(BuildContext context, dynamic error) {
-  print(error);
+  final errorMessage = error?.toString() ?? 'Unknown error';
+  print('=== ERROR DIALOG ===');
+  print(errorMessage);
+  print('===================');
+
   showDialog(
       context: context,
       builder: (_) => AlertDialog(
             backgroundColor: AppColors.secondary,
-            title: Text(
-              "Ошибка",
-              style: TextStyle(color: AppColors.white),
+            title: Row(
+              children: [
+                Icon(Icons.error_outline, color: AppColors.redTart),
+                SizedBox(width: 8),
+                Text(
+                  "Error",
+                  style: TextStyle(
+                      color: AppColors.white, fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
-            content: Text(
-              "Что то пошо не так :( \n$error",
-              style: TextStyle(color: AppColors.white),
+            content: SingleChildScrollView(
+              child: SelectableText(
+                errorMessage,
+                style: TextStyle(
+                  color: AppColors.white,
+                  fontSize: 14,
+                  height: 1.4,
+                ),
+              ),
             ),
             actions: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextButton(
                   child: Text(
-                    'Закрыть',
-                    style: TextStyle(color: AppColors.white),
+                    'Close',
+                    style: TextStyle(
+                        color: AppColors.white, fontWeight: FontWeight.bold),
                   ),
                   onPressed: () {
                     Navigator.of(context).pop();
