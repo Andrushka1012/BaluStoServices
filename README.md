@@ -1,16 +1,29 @@
 # balu_sto
 
-A new Flutter project.
+Flutter project for Balu STO services.
 
-## Getting Started
+## Setup
 
-This project is a starting point for a Flutter application.
+**Flutter version**: 2.10.3 (managed via FVM)
 
-A few resources to get you started if this is your first Flutter project:
+**Java version**: Java 11 required for Android builds
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Build Commands
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+# Get dependencies
+fvm flutter pub get
+
+# Build debug APK
+export JAVA_HOME=$(/usr/libexec/java_home -v 11) && fvm flutter build apk --debug
+
+# Run on emulator
+export JAVA_HOME=$(/usr/libexec/java_home -v 11) && fvm flutter run
+
+export JAVA_HOME=$(/usr/libexec/java_home -v 11) && fvm flutter build apk --release
+```
+
+## Notes
+
+- Always set `JAVA_HOME` to Java 11 before running Android builds
+- FVM is configured to use Flutter 2.10.3 (see `.fvmrc`)
