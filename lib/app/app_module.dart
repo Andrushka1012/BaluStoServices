@@ -28,7 +28,8 @@ final appModule = Module()
   ..single((scope) {
     return FirebaseFirestore.instance
       ..settings = Settings(
-        persistenceEnabled: false,
+        persistenceEnabled: true,
+        cacheSizeBytes: 50 * 1024 * 1024, // 10 MB cache limit
       );
   })
   ..single((scope) => FirestoreRepository(
