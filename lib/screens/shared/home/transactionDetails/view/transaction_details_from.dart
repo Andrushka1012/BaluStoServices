@@ -14,20 +14,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TransactionDetailsFrom extends StatelessWidget {
-  Widget _getSummaryItem(BuildContext context, TransactionDetailsStateDefault state) => AppCard(
+  Widget _getSummaryItem(
+          BuildContext context, TransactionDetailsStateDefault state) =>
+      AppCard(
         child: Column(
           children: [
             Text(
-              state.details.transaction.status == ServiceStatus.CONFIRMED ? 'Принято' : 'Оплачено',
+              state.details.transaction.status == ServiceStatus.CONFIRMED
+                  ? 'Принято'
+                  : 'Оплачено',
               style: AppTextStyles.bodyText1.copyWith(color: AppColors.gray),
             ),
             _getModeAmountItem(state),
-            ...state.details.relatedUsers.map((user) => _getUserSummaryItem(state, user)).toList()
+            ...state.details.relatedUsers
+                .map((user) => _getUserSummaryItem(state, user))
+                .toList()
           ],
         ),
       );
 
-  Widget _getUserSummaryItem(TransactionDetailsStateDefault state, AppUser user) => Padding(
+  Widget _getUserSummaryItem(
+          TransactionDetailsStateDefault state, AppUser user) =>
+      Padding(
         padding: const EdgeInsets.symmetric(vertical: Dimens.spanSmall),
         child: Row(
           children: [
@@ -49,7 +57,8 @@ class TransactionDetailsFrom extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: Dimens.spanMedium, right: Dimens.spanHuge),
+              padding: const EdgeInsets.only(
+                  left: Dimens.spanMedium, right: Dimens.spanHuge),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -60,7 +69,10 @@ class TransactionDetailsFrom extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   _getUserSummaryStatisticItem(
-                      state, state.details.relatedServices.where((service) => service.userId == user.userId).toList()),
+                      state,
+                      state.details.relatedServices
+                          .where((service) => service.userId == user.userId)
+                          .toList()),
                 ],
               ),
             ),
@@ -68,17 +80,20 @@ class TransactionDetailsFrom extends StatelessWidget {
         ),
       );
 
-  Widget _getUserSummaryStatisticItem(TransactionDetailsStateDefault state, List<Service> userSummary) =>
+  Widget _getUserSummaryStatisticItem(
+          TransactionDetailsStateDefault state, List<Service> userSummary) =>
       state.details.transaction.status == ServiceStatus.CONFIRMED
           ? Text(
               'принято: ${userSummary.fold(0, (int previousValue, element) => previousValue + element.moneyAmount)}  количество услуг: ${userSummary.length}',
-              style: TextStyle(color: AppColors.gray, fontSize: Dimens.fontSizeCaption),
+              style: TextStyle(
+                  color: AppColors.gray, fontSize: Dimens.fontSizeCaption),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             )
           : Text(
               'выдано: ${userSummary.fold(0, (int previousValue, element) => previousValue + element.moneyAmount) / 2} прийнято: ${userSummary.fold(0, (int previousValue, element) => previousValue + element.moneyAmount)} количество услуг: ${userSummary.length}',
-              style: TextStyle(color: AppColors.gray, fontSize: Dimens.fontSizeCaption),
+              style: TextStyle(
+                  color: AppColors.gray, fontSize: Dimens.fontSizeCaption),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             );
@@ -101,33 +116,36 @@ class TransactionDetailsFrom extends StatelessWidget {
               children: [
                 Text(
                   'Прийнято:',
-                  style: AppTextStyles.bodyText1.copyWith(color: AppColors.gray),
+                  style:
+                      AppTextStyles.bodyText1.copyWith(color: AppColors.gray),
                 ),
                 SizedBox(
                   width: Dimens.spanSmall,
                 ),
                 Text(
                   state.details.selectedAmount.toString(),
-                  style: AppTextStyles.headline0,
+                  style: AppTextStyles.headline1,
                 ),
                 SizedBox(
                   width: Dimens.spanBig,
                 ),
                 Text(
                   'Выплачено:',
-                  style: AppTextStyles.bodyText1.copyWith(color: AppColors.gray),
+                  style:
+                      AppTextStyles.bodyText1.copyWith(color: AppColors.gray),
                 ),
                 SizedBox(
                   width: Dimens.spanSmall,
                 ),
                 Text(
                   (state.details.selectedAmount / 2).toString(),
-                  style: AppTextStyles.headline0,
+                  style: AppTextStyles.headline1,
                 ),
               ],
             );
 
-  Widget _getEmployeeSection(BuildContext context, TransactionDetailsStateDefault state, AppUser user) {
+  Widget _getEmployeeSection(BuildContext context,
+      TransactionDetailsStateDefault state, AppUser user) {
     return Theme(
       data: Theme.of(context).copyWith(accentColor: AppColors.white),
       child: ExpansionTile(
@@ -155,11 +173,15 @@ class TransactionDetailsFrom extends StatelessWidget {
     );
   }
 
-  Widget _getTransactionDetailer(BuildContext context, TransactionDetailsStateDefault state) => SingleChildScrollView(
+  Widget _getTransactionDetailer(
+          BuildContext context, TransactionDetailsStateDefault state) =>
+      SingleChildScrollView(
         child: Column(
           children: [
             _getSummaryItem(context, state),
-            ...state.details.relatedUsers.map((user) => _getEmployeeSection(context, state, user)).toList()
+            ...state.details.relatedUsers
+                .map((user) => _getEmployeeSection(context, state, user))
+                .toList()
           ],
         ),
       );
@@ -169,10 +191,13 @@ class TransactionDetailsFrom extends StatelessWidget {
     return BlocConsumer<TransactionDetailsBloc, TransactionDetailsState>(
       listener: _handleEvents,
       buildWhen: (_, current) =>
-          current is TransactionDetailsStateProcessing || current is TransactionDetailsStateDefault,
+          current is TransactionDetailsStateProcessing ||
+          current is TransactionDetailsStateDefault,
       builder: (_, state) => ProgressContainer(
         isProcessing: state is TransactionDetailsStateProcessing,
-        child: state is TransactionDetailsStateDefault ? _getTransactionDetailer(context, state) : Container(),
+        child: state is TransactionDetailsStateDefault
+            ? _getTransactionDetailer(context, state)
+            : Container(),
       ),
     );
   }
